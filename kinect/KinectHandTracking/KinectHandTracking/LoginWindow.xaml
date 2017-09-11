@@ -1,0 +1,25 @@
+﻿<Window x:Class="KinectHandTracking.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="LoginWindow" Height="180" Width="400">
+    <Grid Margin="40">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" FontWeight="Bold" Width="100" HorizontalAlignment="Center" VerticalAlignment="Center">用户名：</TextBlock>
+        <TextBox x:Name="username" Grid.Row="0" Grid.Column="1" FontWeight="Bold" Width="100" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center"></TextBox>
+
+        <Button x:Name="login" Click="login_Click" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.ColumnSpan="2" Width="104" Grid.Row="1" Margin="104,7,104,6" IsDefault="True">登录</Button>
+    </Grid>
+</Window>
