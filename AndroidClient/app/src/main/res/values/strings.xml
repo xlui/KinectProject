@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">AndroidClient</string>
+    <string name="username">用户名：</string>
+    <string name="register">注册</string>
+    <string name="login">登录</string>
+    <string name="state">State: </string>
+    <string name="default_state">Undetected!</string>
+    <string name="get_state">获取状态</string>
+</resources>
