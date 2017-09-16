@@ -79,7 +79,7 @@ class Server(object):
         # flag = 0, continue loop
         # to_send is a string which will be sent to client
 
-        decode_data = data.decode('utf-8').lower().strip('\n')
+        decode_data = data.decode('utf-8').strip('\n')
         # get decode data and transform to lowercase
         to_send = 'Get data: {}\n[{}]'.format(data.decode('utf-8'), ctime())
         # set default to_send
@@ -142,9 +142,20 @@ class Server(object):
                 jpush.push_message_registration_id(registration_id, to_push)
 
         if 'register' in decode_data:
-            # todo: feature: android client register
-            pass
+            _, username, _, registration_id = decode_data.split(':')
+            print(username, registration_id)
+            with closing(MySQL()) as mysql:
+                found = mysql.find_username(username)
 
+            if found:
+                return 0, "already_registered"
+            else:
+                mysql = MySQL()
+                try:
+                    mysql.save(username, registration_id)
+                except Exception:
+                    return 0, "register_failed"
+                return 0, "register_success"
 
         return 0, to_send
 
