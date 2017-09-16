@@ -18,6 +18,7 @@ class SocketClient {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
+				// 在后台新建一个线程向服务器发送数据，并用 handler 封装发送服务器返回的数据
 				try {
 					Socket socket = null;
 					BufferedReader reader = null;
@@ -34,26 +35,25 @@ class SocketClient {
 					reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 					response = reader.readLine();
 					System.out.println("Get server response: " + response);
-					// send message to main thread
-					Message msg = handler.obtainMessage();
-					msg.what = Config.HANDLER_MESSAGE_RECEIVE;
-					msg.obj = response;
-					handler.sendMessage(msg);
+					sendMessageByHandler(response, handler);
 
 					socket.close();
 					reader.close();
 					writer.close();
 
 				} catch (ConnectException e) {
-					// e.printStackTrace();
-					Message msg = handler.obtainMessage();
-					msg.what = Config.HANDLER_MESSAGE_RECEIVE;
-					msg.obj = "connectRefuse";
-					handler.sendMessage(msg);
+					sendMessageByHandler("connectRefuse", handler);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
 		}).start();
+	}
+
+	private void sendMessageByHandler(final String string, final Handler handler) {
+		Message message = handler.obtainMessage();
+		message.what = Config.HANDLER_MESSAGE_RECEIVE;
+		message.obj = string;
+		handler.sendMessage(message);
 	}
 }
