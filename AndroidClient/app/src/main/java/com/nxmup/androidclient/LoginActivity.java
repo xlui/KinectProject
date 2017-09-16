@@ -57,17 +57,17 @@ public class LoginActivity extends AppCompatActivity {
 		register.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// todo: 该部分功能尚未实现完全，也未经测试。
 				SocketClient socketClient = new SocketClient();
-
 				String username = editText.getText().toString();
+
 				if (username.isEmpty()) {
 					Toast.makeText(LoginActivity.this, "用户名不能为空！", Toast.LENGTH_SHORT).show();
 				} else {
 					try {
 						Config.loginUser = Integer.parseInt(username);
-						// start sending data to server to login
-						socketClient.sendToServer("registration" + username, handler);
+						// 限制注册用户名只能是数字
+						socketClient.sendToServer("register:" + username +
+								":registrationID:" + Config.registerationID, handler);
 					} catch (NumberFormatException e) {
 						Toast.makeText(LoginActivity.this, "用户名中不能包含特殊字符！", Toast.LENGTH_SHORT).show();
 						editText.setText("");
@@ -117,6 +117,20 @@ public class LoginActivity extends AppCompatActivity {
 						System.out.println("Connect Refused!");
 						Toast.makeText(LoginActivity.this, "无法连接服务器，请确认服务器状态！", Toast.LENGTH_SHORT).show();
 						break;
+
+					case "already_registered":
+						System.out.println("Already registered!");
+						Toast.makeText(LoginActivity.this, "用户名已注册！", Toast.LENGTH_SHORT).show();
+						break;
+					case "register_failed":
+						System.out.println("Failed to register!");
+						Toast.makeText(LoginActivity.this, "注册失败！", Toast.LENGTH_SHORT).show();
+						break;
+					case "register_success":
+						System.out.println("Successfully register!");
+						Toast.makeText(LoginActivity.this, "成功注册！", Toast.LENGTH_SHORT).show();
+						break;
+
 					default:
 						Toast.makeText(LoginActivity.this, "Unknown code!", Toast.LENGTH_SHORT).show();
 				}
