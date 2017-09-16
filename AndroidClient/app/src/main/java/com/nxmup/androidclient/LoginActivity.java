@@ -10,11 +10,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.net.Socket;
+import cn.jpush.android.api.JPushInterface;
+
 
 public class LoginActivity extends AppCompatActivity {
-
-	private int loginUser = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -24,21 +23,30 @@ public class LoginActivity extends AppCompatActivity {
 		final EditText editText = (EditText) findViewById(R.id.username);
 		Button login = (Button)findViewById(R.id.login);
 		Button register = (Button)findViewById(R.id.register);
+		// 下面几行代码获取该设备的唯一标识 id，如果不为空（成功获取）就打印出来
+		Config.registerationID = JPushInterface.getRegistrationID(this);
+		if (Config.registerationID != null) {
+			System.out.println("Successfully get registration id!");
+			System.out.println("Registration id is: " + Config.registerationID);
+		}
+
 
 		login.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				SocketClient socketClient = new SocketClient();
-
 				String username = editText.getText().toString();
+
 				if (username.isEmpty()) {
 					Toast.makeText(LoginActivity.this, "用户名不能为空！", Toast.LENGTH_SHORT).show();
 				} else {
 					try {
-						loginUser = Integer.parseInt(username);
-						// start sending data to server to login
+						Config.loginUser = Integer.parseInt(username);
+						// 限制用户名只能是整数
 						socketClient.sendToServer("id:" + username, handler);
+						// 发送处理后的登录字符串给服务器，同时发送 handler，用于发送服务器返回消息
 					} catch (NumberFormatException e) {
+						// 如果用户名包含非数字字符，上面 Integer.parseInt 就不会成功，这里捕捉错误并处理
 						Toast.makeText(LoginActivity.this, "用户名中不能包含特殊字符！", Toast.LENGTH_SHORT).show();
 						editText.setText("");
 					}
@@ -49,7 +57,6 @@ public class LoginActivity extends AppCompatActivity {
 		register.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// 这里只是简单的注册，没有另外新建activity
 				// todo: 该部分功能尚未实现完全，也未经测试。
 				SocketClient socketClient = new SocketClient();
 
@@ -58,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
 					Toast.makeText(LoginActivity.this, "用户名不能为空！", Toast.LENGTH_SHORT).show();
 				} else {
 					try {
-						loginUser = Integer.parseInt(username);
+						Config.loginUser = Integer.parseInt(username);
 						// start sending data to server to login
 						socketClient.sendToServer("registration" + username, handler);
 					} catch (NumberFormatException e) {
@@ -72,8 +79,8 @@ public class LoginActivity extends AppCompatActivity {
 
 	Handler handler = new Handler() {
 		public void handleMessage(Message message) {
-			int HANDLER_MESSAGE_RECEIVE = 0x124;
-			if (message.what == HANDLER_MESSAGE_RECEIVE)
+			// 处理服务器返回的信息，确认登陆成功或者失败
+			if (message.what == Config.HANDLER_MESSAGE_RECEIVE)
 			{
 				String result = (String) message.obj;
 
@@ -85,25 +92,29 @@ public class LoginActivity extends AppCompatActivity {
 
 				switch (result) {
 					case "success":
-						// if username in database, the server will return 'success', now start MainActivity
+						// 如果用户名在数据库中，服务器会返回 success 字符串。
 						System.out.println("Get result: " + result);
 						Toast.makeText(LoginActivity.this, "登陆成功！", Toast.LENGTH_SHORT).show();
-						// modify config variables;
+						// 更新 Config 类中用户状态
 						Config.loginState = true;
-						Config.loginUser = loginUser;
-						// start main thread
+						// 启动 MainActivity 并结束 LoginActivity
 						Intent mainActivity = new Intent(LoginActivity.this, MainActivity.class);
 						startActivity(mainActivity);
 						finish();
 						break;
 					case "already":
+						// 服务器维护一个登录列表，如果发送给服务器的用户名已经在登录列表中，服务器返回 already 字符串
 						System.out.println("Already login!");
 						Toast.makeText(LoginActivity.this, "用户已登录！", Toast.LENGTH_SHORT).show();
+						break;
 					case "failed":
+						// 如果服务器并没有在数据库中查询到用户名，服务器返回 failed
 						System.out.println("Get result: " + result);
 						Toast.makeText(LoginActivity.this, "用户名未注册到数据库！", Toast.LENGTH_SHORT).show();
 						break;
 					case "connectRefuse":
+						// socket 发送数据到服务器失败，服务器无法连接
+						System.out.println("Connect Refused!");
 						Toast.makeText(LoginActivity.this, "无法连接服务器，请确认服务器状态！", Toast.LENGTH_SHORT).show();
 						break;
 					default:
