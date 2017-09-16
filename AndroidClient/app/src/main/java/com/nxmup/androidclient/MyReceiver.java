@@ -3,24 +3,20 @@ package com.nxmup.androidclient;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import cn.jpush.android.api.JPushInterface;
 
 
 public class MyReceiver extends BroadcastReceiver {
-
-	Handler handler = new Handler() {
+	// 自定义的广播接收器
+	final Handler handler = new Handler() {
 		public void handleMessage(Message message) {
-			switch (message.what) {
-				case Config.HANDLER_MESSAGE_RECEIVE:
+			if (message.what == Config.HANDLER_MESSAGE_RECEIVE) {
 					String result = (String)message.obj;
 					System.out.println("Get result: " + result);
-					break;
 			}
 		}
 	};
@@ -28,51 +24,51 @@ public class MyReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		if (intent.getAction().equals(JPushInterface.ACTION_MESSAGE_RECEIVED)) {
-			if (Config.registerationID == null) {
-				Config.registerationID = JPushInterface.getRegistrationID(context);
-				System.out.println("successfully set registrationID, RegistrationID is: " + Config.registerationID);
-			}
-
-			Bundle bundle = intent.getExtras();
-			String message = bundle.getString(JPushInterface.EXTRA_MESSAGE);
+			// 接收 message 推送
+			String message = intent.getExtras().getString(JPushInterface.EXTRA_MESSAGE);
 			System.out.println("Receive message: " + message);
 
-			// TODO: 2017/8/18 Add user detect, only login user can receive message. Only special user can receive special message
 			if (Config.loginState) {
+				// 只有登录的用户才会接收到消息
 				Toast.makeText(context, "Message Received: " + message, Toast.LENGTH_SHORT).show();
-				onResponse(message);
+				onResponse(message, context);
 			}
 		}
 	}
 
-	public void onResponse (final String signal) {
+	public void onResponse (final String signal, Context context) {
 		SocketClient socketClient = new SocketClient();
 		System.out.println("Deal with message(code) received!");
 		switch (signal) {
-			// TODO: 2017/8/17 If server want get registration id from android device, send 'registrationID' to client, and client will get and send registrationID to server
 			case "registrationID":
 				socketClient.sendToServer("registrationID" + Config.registerationID, handler);
 				break;
-			// TODO: 2017/8/17 Detect android client's login status
-//			case "login":
-//				if (Config.state) {
-//					socketClient.sendToServer();
-//				}
 			case "code:1":
-				// symbols hand open
+				// 象征手势 打开
 				System.out.println("Set state to open");
-				Config.state = Config.HANDSTATE_OPEN;
+				sendBroadcast(Config.HANDSTATE_OPEN, context);
 				break;
 			case "code:2":
-				// symbols hand close
+				// 象征手势 关闭
 				System.out.println("Set state to Close");
-				Config.state = Config.HANDSTATE_CLOSE;
+				sendBroadcast(Config.HANDSTATE_CLOSE, context);
 				break;
 			case "code:3":
-				// symbols hand lasso
+				// 象征手势 剪刀手
 				System.out.println("Set state to Lasso");
-				Config.state = Config.HANDSTATE_LASSO;
+				sendBroadcast(Config.HANDSTATE_LASSO, context);
+				break;
+			// TODO: 2017/9/16 如果 Kinect端有新的手势支持，直接在这里按照上面的格式新建即可
+			default:
 				break;
 		}
+	}
+
+	public void sendBroadcast(String handState, Context context) {
+		// 发送使用 Action 封装的广播，在 MainActivity 中接收，处理。
+		Intent renderIntent = new Intent();
+		renderIntent.setAction(Config.ACTION_HAND_STATE_CHANGE);
+		renderIntent.putExtra(Config.INTENT_EXTRA_KEY, handState);
+		context.sendBroadcast(renderIntent);
 	}
 }
