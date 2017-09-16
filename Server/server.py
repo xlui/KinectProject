@@ -63,10 +63,10 @@ class Server(object):
             self.send(connection, to_send + '\n')
 
         connection.close()
-        # try:
-        #     self.__login.remove(user)
-        # except ValueError:
-        #     pass
+        try:
+            self.__login.remove(user)
+        except ValueError:
+            pass
         print("Connection from %s:%s closed." % address)
 
     def send(self, connection, to_send):
