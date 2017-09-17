@@ -1,7 +1,7 @@
 # module mysql -- to save data into mysql or query data from database
 import contextlib
 import pymysql
-from conf import host as database_host, username as database_username, password as database_password, database
+from config import host as database_host, username as database_username, password as database_password, database
 # todo: use sqlite instead of mysql
 
 

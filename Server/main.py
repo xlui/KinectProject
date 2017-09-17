@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 # coding:utf-8
-# main module, to run server project
 
-import server
-
+from app.server import Server
 
 try:
-    server.Server().run()
+    server = Server()
+    server.run()
 except KeyboardInterrupt as e:
     print('Exit!')
