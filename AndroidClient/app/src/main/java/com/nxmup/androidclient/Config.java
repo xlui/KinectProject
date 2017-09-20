@@ -13,7 +13,7 @@ class Config {
 
 	// 服务器地址与端口
 	//	final static String SERVERHOST = "111.231.1.210";		// 部署地址
-	final static String SERVERHOST = "10.100.67.235";			// 测试用的本机地址
+	final static String SERVERHOST = "192.168.0.3";			// 测试用的本机地址
 	final static int SERVERPORT = 21567;						// 端口号
 
 	static String registerationID = null;

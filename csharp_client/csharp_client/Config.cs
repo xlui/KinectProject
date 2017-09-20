@@ -15,7 +15,7 @@ namespace csharp_client
         // public const String SERVER_IP = "111.231.1.210";
 
         // 测试用的本机 IP 地址
-        public const String SERVER_IP = "10.100.67.235";
+        public const String SERVER_IP = "192.168.0.3";
         public const int SERVER_PORT = 21567;
 	}
 }
