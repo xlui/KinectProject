@@ -33,6 +33,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         login = (Button) findViewById(R.id.login);
         register = (Button) findViewById(R.id.register);
         Config.registerationID = JPushInterface.getRegistrationID(this);
+        System.out.println("Registration id: " + Config.registerationID);
         setListener();
     }
 
