@@ -35,8 +35,9 @@ public class MainFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_main, container, false);
 
-		Button buttonGetState = (Button)view.findViewById(R.id.get_state);
+//		Button buttonGetState = (Button)view.findViewById(R.id.get_state);
 		editTextState = (EditText)view.findViewById(R.id.state);
+
 
 		// 自定义一个广播接收器，用于接收 MyReceiver广播接收器中发出的广播。
 		// 因为 MyReceiver 中不能直接更新 ui，所以通过 MainActivity 中的 Receiver 使用 handler 更新 ui
@@ -48,6 +49,7 @@ public class MainFragment extends Fragment {
 					Message message = new Message();
 					message.what = Config.HANDLER_MESSAGE_HAND_STATE;
 					message.obj = stringMessage;
+
 					handler.sendMessage(message);
 				}
 			}
