@@ -1,4 +1,4 @@
-package com.nxmup.androidclient;
+package com.nxmup.androidclient.application;
 
 import android.app.Application;
 import cn.jpush.android.api.JPushInterface;

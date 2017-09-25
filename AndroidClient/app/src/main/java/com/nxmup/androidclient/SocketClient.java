@@ -12,9 +12,9 @@ import java.io.OutputStreamWriter;
 import java.net.ConnectException;
 import java.net.Socket;
 
-class SocketClient {
+public class SocketClient {
 
-	void sendToServer(final String toSend, final Handler handler) {
+	public void sendToServer(final String toSend, final Handler handler) {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
