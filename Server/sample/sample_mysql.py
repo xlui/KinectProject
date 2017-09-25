@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# coding:utf-8
 # 使用 MySQL 数据库的例子
 # create table TABLE_NAME ()
 # alter table TABLE_NAME add/change/drop COLUMN

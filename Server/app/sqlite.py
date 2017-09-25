@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# coding:utf-8
 # sqlite 模块，对一些数据库相关的操作进行封装
 import sqlite3
 from contextlib import closing

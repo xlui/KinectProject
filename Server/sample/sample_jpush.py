@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# coding:utf-8
 # 使用极光推送的简单例子
 import os
 import sys

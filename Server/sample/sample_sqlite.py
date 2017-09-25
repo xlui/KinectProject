@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# coding:utf-8
 # 使用 sqlite 数据库的例子
 import sqlite3
 
