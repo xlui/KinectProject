@@ -12,8 +12,8 @@ public class Config {
     // 用于封装 Intent 的key
 
     // 服务器地址与端口
-    //	final static String SERVERHOST = "111.231.1.210";		// 部署地址
-    public final static String SERVERHOST = "10.100.67.27";            // 测试用的本机地址
+//    public final static String SERVERHOST = "111.231.1.210";		// 部署地址
+    public final static String SERVERHOST = "10.100.66.107";            // 测试用的本机地址
     public final static int SERVERPORT = 21567;                        // 端口号
 
     public static String registerationID = null;

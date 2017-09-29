@@ -30,6 +30,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_layout);
         LogUtil.show(JPushInterface.getRegistrationID(this));
+        Config.registerationID = JPushInterface.getRegistrationID(this);
         initViews();
         setListener();
     }
