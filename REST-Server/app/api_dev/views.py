@@ -1,7 +1,6 @@
 from flask import jsonify
 
 from . import api
-from .. import db
 from ..models import State
 
 
