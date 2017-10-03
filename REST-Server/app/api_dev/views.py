@@ -1,10 +1,13 @@
 from flask import jsonify
 
 from . import api
+from .authentication import auth
 from ..models import State
 
 
 @api.route('/')
+@auth.login_required
 def index():
-    states = State.query.all()
-    return jsonify({'states': [state.get_json() for state in states]})
+    """Will only show the latest hand state"""
+    state = State.query.order_by(State.timestamp.desc()).first()
+    return jsonify({'state': state.get_json()})
