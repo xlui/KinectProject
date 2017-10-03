@@ -7,13 +7,13 @@ from config import Config
 
 class User(db.Model):
     __tablename__ = 'users'
-    username = db.Column(db.String(64), unique=True, index=True, primary_key=True)
+    username = db.Column(db.Integer, unique=True, index=True, primary_key=True)
     # must have a `primary_key` when creating new table
     password_hash = db.Column(db.String(128))
 
     @staticmethod
     def init():
-        default_user = User(username='dev', password='dev')
+        default_user = User(username=1, password='dev')
         db.session.add(default_user)
         db.session.commit()
 
@@ -36,7 +36,7 @@ class User(db.Model):
     def verify_auth_token(token):
         serializer = Serializer(Config.SECRET_KEY)
         try:
-            data = serializer.load(token)
+            data = serializer.loads(token)
         except:
             return None
         return User.query.get(data.get('username'))
