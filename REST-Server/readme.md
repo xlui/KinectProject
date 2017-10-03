@@ -23,7 +23,7 @@ RESTful 服务器端，提供给 C# 端更新数据和安卓端查询数据的 A
 
 服务器端已经部署在我的个人云服务器（111.231.1.210）上，所以可以通过固定 IP 访问 API，在本地不需要任何配置。
 
-下表列出了支持的 API 以及使用说明：
+下表列出了支持的 API 以及说明：
 
 API|说明
 ---|---
@@ -38,7 +38,7 @@ http://111.231.1.210/api/dev/token|获取 token
 
 示例：
 
-> 本示例在 Windowns10 下用 git bash 提供的 curl 命令进行
+> 本示例在 Windowns10 下用 git bash 提供的 curl 命令成功进行
 
 ```
 # 获取最新手势
@@ -58,7 +58,7 @@ token 的默认有效时间是一个小时。
 
 获取 token 的方法上边已经列出。
 
-使用 token：
+使用 token 登陆：
 
 ```bash
 curl -X GET -H "Authorization:Dev 获取到的token" http://111.231.1.210/api/dev
