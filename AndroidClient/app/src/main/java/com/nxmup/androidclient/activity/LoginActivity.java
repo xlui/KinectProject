@@ -1,43 +1,43 @@
 package com.nxmup.androidclient.activity;
 
-import android.content.Intent;
-import android.os.Handler;
-import android.os.Message;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
+import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.nxmup.androidclient.R;
-import com.nxmup.androidclient.SocketClient;
-import com.nxmup.androidclient.constant.Config;
+import com.nxmup.androidclient.util.HttpUtil;
 import com.nxmup.androidclient.util.LogUtil;
+import com.nxmup.androidclient.util.PreferenceUtil;
 
+import java.io.IOException;
+
+import at.markushi.ui.CircleButton;
 import cn.jpush.android.api.JPushInterface;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     public static final int TYPE_LOGIN = 0;
     public static final int TYPE_REGISTER = 1;
-    private EditText etEditText;
-    private Button btnLogin;
-    private Button btnRegister;
-
+    private Snackbar mSnackbar;
+    private CircleButton btnLogin;
+    private CircleButton btnRegister;
+    private Toolbar tbToolbar;
+    private EditText etId;
+    private EditText etPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_layout);
-        LogUtil.show(JPushInterface.getRegistrationID(this));
         initViews();
         setListener();
-    }
-
-    private void initViews() {
-        etEditText = (EditText) findViewById(R.id.et_usr_name);
-        btnLogin = (Button) findViewById(R.id.btn_login);
-        btnRegister = (Button) findViewById(R.id.btn_registered);
     }
 
     private void setListener() {
@@ -45,89 +45,59 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         btnRegister.setOnClickListener(this);
     }
 
-    private Handler handler = new Handler() {
-        public void handleMessage(Message message) {
-            // 处理服务器返回的信息，确认登陆成功或者失败
-            if (message.what == Config.HANDLER_MESSAGE_RECEIVE) {
-                String result = (String) message.obj;
-
-                if (result == null) {
-                    System.out.println("None result");
-                    Toast.makeText(LoginActivity.this, "服务器无响应！", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                switch (result) {
-                    case "success":
-                        // 如果用户名在数据库中，服务器会返回 success 字符串。
-                        Toast.makeText(LoginActivity.this, "登陆成功！", Toast.LENGTH_SHORT).show();
-                        // 更新 Config 类中用户状态
-                        Config.loginState = true;
-                        // 启动 MainActivity 并结束 LoginActivity
-                        Intent mainActivity = new Intent(LoginActivity.this, MainActivity.class);
-                        startActivity(mainActivity);
-                        finish();
-                        break;
-                    case "already":
-                        // 服务器维护一个登录列表，如果发送给服务器的用户名已经在登录列表中，服务器返回 already 字符串
-                        Toast.makeText(LoginActivity.this, "用户已登录！", Toast.LENGTH_SHORT).show();
-                        break;
-                    case "failed":
-                        // 如果服务器并没有在数据库中查询到用户名，服务器返回 failed
-                        Toast.makeText(LoginActivity.this, "用户名未注册到数据库！", Toast.LENGTH_SHORT).show();
-                        break;
-                    case "connectRefuse":
-                        // socket 发送数据到服务器失败，服务器无法连接
-                        Toast.makeText(LoginActivity.this, "无法连接服务器，请确认服务器状态！", Toast.LENGTH_SHORT).show();
-                        break;
-
-                    case "already_registered":
-                        Toast.makeText(LoginActivity.this, "用户名已注册！", Toast.LENGTH_SHORT).show();
-                        break;
-                    case "register_failed":
-                        Toast.makeText(LoginActivity.this, "注册失败！", Toast.LENGTH_SHORT).show();
-                        break;
-                    case "register_success":
-                        Toast.makeText(LoginActivity.this, "成功注册！", Toast.LENGTH_SHORT).show();
-                        break;
-
-                    default:
-                        Toast.makeText(LoginActivity.this, "Unknown code!", Toast.LENGTH_SHORT).show();
-                }
-            }
+    private void initViews() {
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        tbToolbar = (Toolbar) findViewById(R.id.tb_toolbar);
+        etId = (EditText) findViewById(R.id.et_id);
+        etPassword = (EditText) findViewById(R.id.et_password);
+        btnLogin = (CircleButton) findViewById(R.id.btn_login);
+        btnRegister = (CircleButton) findViewById(R.id.btn_registered);
+        mSnackbar = Snackbar.make(tbToolbar, "", Snackbar.LENGTH_SHORT);
+        setSupportActionBar(tbToolbar);
+        String lastId = PreferenceUtil.getLastId();
+        if (!TextUtils.isEmpty(lastId)) {
+            //显示上次的账号
+            etId.setText(lastId);
         }
-    };
+    }
+
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_login:
-                dealWithMessage(TYPE_LOGIN);
+                String id = etId.getText().toString();
+                //点击登录之后存储上一次的账号
+                PreferenceUtil.saveLastId(id);
+                String password = etPassword.getText().toString();
+                if (TextUtils.isEmpty(id)) {
+                    mSnackbar.setText(getString(R.string.emptyIdError)).show();
+                    return;
+                }
+                try {
+                    Long.parseLong(id);
+                    if (TextUtils.isEmpty(password)) {
+                        mSnackbar.setText(getString(R.string.emptyPasswordError)).show();
+                    } else {
+                        HttpUtil.login(id, password, new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+
+                            }
+                        });
+                    }
+                } catch (Exception e) {
+                    mSnackbar.setText(getString(R.string.idInputTypeError)).show();
+                }
                 break;
             case R.id.btn_registered:
-                dealWithMessage(TYPE_REGISTER);
-                break;
-        }
-    }
-
-    public void dealWithMessage(int type) {
-        SocketClient socketClient = new SocketClient();
-        String username = etEditText.getText().toString();
-        if (username.isEmpty()) {
-            Toast.makeText(LoginActivity.this, "用户名不能为空！", Toast.LENGTH_SHORT).show();
-        } else {
-            try {
-                Config.loginUser = Integer.parseInt(username);
-                if (type == TYPE_REGISTER) {
-                    socketClient.sendToServer("register:" + username +
-                            ":registrationID:" + Config.registerationID, handler);
-                } else if (type == TYPE_LOGIN) {
-                    socketClient.sendToServer("id:" + username, handler);
-                }
-            } catch (NumberFormatException e) {
-                Toast.makeText(LoginActivity.this, "用户名中不能包含特殊字符！", Toast.LENGTH_SHORT).show();
-                etEditText.setText("");
-            }
+                mSnackbar.setText("还没写。。。。。。").show();
         }
     }
 }

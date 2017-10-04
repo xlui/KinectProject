@@ -1,68 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/darker_gray"
-    tools:context="com.nxmup.androidclient.activity.LoginActivity">
+    android:background="@color/colorPrimary"
+    tools:context="com.nxmup.androidclient.activity.LoginActivity"
+    tools:layout_editor_absoluteX="0dp"
+    tools:layout_editor_absoluteY="25dp">
 
-    <android.support.v7.widget.CardView
-        android:layout_width="280dp"
-        android:layout_height="240dp"
-        android:layout_gravity="center"
-        app:cardCornerRadius="8dp">
+    <com.github.florent37.materialtextfield.MaterialTextField
+        android:id="@+id/materialTextField2"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/materialTextField"
+        app:mtf_image="@android:drawable/ic_lock_idle_lock"
+        app:mtf_labelColor="@color/white">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+
+        <EditText
+            android:id="@+id/et_password"
+            android:layout_width="368dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:gravity="clip_horizontal"
-            android:orientation="vertical">
+            android:hint="password"
+            android:inputType="textPassword"
+            android:textColor="#333"
+            android:textSize="15sp" />
+    </com.github.florent37.materialtextfield.MaterialTextField>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+    <com.github.florent37.materialtextfield.MaterialTextField
+        android:id="@+id/materialTextField"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.25"
+        app:mtf_image="@android:drawable/ic_menu_help"
+        app:mtf_labelColor="@color/white">
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_weight="1"
-                    android:text="用户名:"
-                    android:textSize="18sp" />
 
-                <EditText
-                    android:id="@+id/et_usr_name"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="8dp"
-                    android:layout_weight="3"
-                    android:hint="只能输入数字哦"
-                    android:inputType="number" />
-            </LinearLayout>
+        <EditText
+            android:id="@+id/et_id"
+            android:layout_width="368dp"
+            android:layout_height="wrap_content"
+            android:hint="id"
+            android:inputType="number"
+            android:textColor="#333"
+            android:textSize="15sp" />
+    </com.github.florent37.materialtextfield.MaterialTextField>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tb_toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="0dp"
+        android:background="?attr/actionModeSplitBackground"
+        android:elevation="4dp"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-                <Button
-                    android:id="@+id/btn_registered"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_weight="1"
-                    android:text="注册" />
+    <at.markushi.ui.CircleButton
+        android:id="@+id/btn_login"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="32dp"
+        android:src="@android:drawable/ic_menu_send"
+        app:cb_color="#99CC00"
+        app:cb_pressedRingWidth="8dip"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/materialTextField2" />
 
-                <Button
-                    android:id="@+id/btn_login"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="8dp"
-                    android:layout_weight="1"
-                    android:text="登录" />
-            </LinearLayout>
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
-</FrameLayout>
+    <at.markushi.ui.CircleButton
+        android:id="@+id/btn_registered"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="32dp"
+        android:src="@android:drawable/ic_input_add"
+        app:cb_color="#393939"
+        app:cb_pressedRingWidth="8dip"
+        app:layout_constraintRight_toLeftOf="@+id/btn_login"
+        app:layout_constraintTop_toBottomOf="@+id/materialTextField2" />
+</android.support.constraint.ConstraintLayout>

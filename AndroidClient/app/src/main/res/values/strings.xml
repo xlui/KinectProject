@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">AndroidClient</string>
+    <string name="app_name">Kinect</string>
+    <string name="lastId">Lastid</string>
+    <string name="emptyIdError">账号不能为空</string>
+    <string name="emptyPasswordError">密码不能为空</string>
+    <string name="idInputTypeError">账号只能为数字</string>
+
 </resources>

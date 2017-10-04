@@ -13,8 +13,9 @@ public class Config {
 
     // 服务器地址与端口
     //	final static String SERVERHOST = "111.231.1.210";		// 部署地址
-    public final static String SERVERHOST = "10.100.67.27";            // 测试用的本机地址
-    public final static int SERVERPORT = 21567;                        // 端口号
+//    public final static String SERVERHOST = "10.100.67.27";            // 测试用的本机地址
+//    public final static int SERVERPORT = 21567;                        // 端口号
+
 
     public static String registerationID = null;
     // 每个设备唯一标识 id
