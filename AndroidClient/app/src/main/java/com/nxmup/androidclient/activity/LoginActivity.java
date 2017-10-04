@@ -23,8 +23,6 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
-    public static final int TYPE_LOGIN = 0;
-    public static final int TYPE_REGISTER = 1;
     private Snackbar mSnackbar;
     private CircleButton btnLogin;
     private CircleButton btnRegister;
@@ -36,7 +34,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_layout);
-        LogUtil.show(JPushInterface.getRegistrationID(this));
         initViews();
         setListener();
     }
