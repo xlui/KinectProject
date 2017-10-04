@@ -36,6 +36,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_layout);
+<<<<<<< HEAD
+=======
+        LogUtil.show(JPushInterface.getRegistrationID(this));
+        Config.registerationID = JPushInterface.getRegistrationID(this);
+>>>>>>> 0d7eaa18059d1d4ef0d0337c1cce367ee74302fe
         initViews();
         setListener();
     }
