@@ -10,8 +10,8 @@ namespace csharp_client
         {
             Client client = new Client();
 
-            string latestUrl = "http://127.0.0.1:5000/api/dev/";
-            string updateUrl = "http://127.0.0.1:5000/api/dev/update";
+            string latestUrl = "http://111.231.1.210/api/dev/";
+            string updateUrl = "http://111.231.1.210/api/dev/update";
 
             string username = "1", password = "dev";
             string authorization = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(username + ":" + password));
