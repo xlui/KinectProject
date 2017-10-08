@@ -1,7 +1,6 @@
 package com.liuqi.client;
 
 import com.liuqi.json.JSONObject;
-import netscape.javascript.JSObject;
 import okhttp3.*;
 import sun.misc.BASE64Encoder;
 
@@ -9,7 +8,7 @@ import java.io.IOException;
 
 public class Client {
     public static void main(String[] args) {
-        String rootUrl = "http://localhost:5000";
+        String rootUrl = "http://111.231.1.210";
         String latestUrl = rootUrl + "/api/dev";
         String updateUrl = rootUrl + "/api/dev/update";
 
@@ -22,8 +21,8 @@ public class Client {
         handState.put("state", "TEST_STATE");
 
         Client client = new Client();
-//        client.getLatest(latestUrl, authorization);
-        client.post(updateUrl, handState, authorization);
+        client.getLatest(latestUrl, authorization);
+//        client.post(updateUrl, handState, authorization);
     }
 
     private void getLatest(String url, String authorization) {
