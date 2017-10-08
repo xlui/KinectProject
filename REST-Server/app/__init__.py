@@ -2,7 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from config import Config
 
-__version__ = 'v0.2.0'
+__version__ = 'v0.3.0'
 db = SQLAlchemy()
 
 

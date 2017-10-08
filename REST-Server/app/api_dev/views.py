@@ -17,8 +17,8 @@ def index():
 @api.route('/update', methods=['POST'])
 def update():
     """update latest hand state"""
-    # if not request.json or not 'state' in request.json:
-    #     abort(400)
+    if not request.json or not 'state' in request.json:
+        abort(400)
     state = State(state=request.json.get('state'))
     db.session.add(state)
     db.session.commit()
