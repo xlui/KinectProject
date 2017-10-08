@@ -1,3 +1,4 @@
+# 数据库模块
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
@@ -28,7 +29,7 @@ class User(db.Model):
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-    def generate_auth_token(self, expiration):
+    def generate_auth_token(self, expiration=3600):
         serializer = Serializer(Config.SECRET_KEY, expires_in=expiration)
         return serializer.dumps({'username': self.username})
 
