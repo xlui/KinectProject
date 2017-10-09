@@ -30,7 +30,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.MainActivity"></activity>
+        <activity android:name=".activity.MainActivity" />
+
+        <service
+            android:name=".service.StateService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>

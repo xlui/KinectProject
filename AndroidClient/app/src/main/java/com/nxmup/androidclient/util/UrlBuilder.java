@@ -12,4 +12,8 @@ public class UrlBuilder {
     public static String getRegisterUrl() {
         return "http://111.231.1.210/api/dev/register";
     }
+
+    public static String getUpdateStateUrl() {
+        return "http://111.231.1.210/api/dev/latest";
+    }
 }
