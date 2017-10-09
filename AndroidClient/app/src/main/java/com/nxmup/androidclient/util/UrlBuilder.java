@@ -8,4 +8,8 @@ public class UrlBuilder {
     public static String getTokenUrl() {
         return "http://111.231.1.210/api/dev/token";
     }
+
+    public static String getRegisterUrl() {
+        return "http://111.231.1.210/api/dev/register";
+    }
 }

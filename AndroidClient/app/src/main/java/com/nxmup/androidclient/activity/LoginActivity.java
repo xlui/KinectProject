@@ -1,5 +1,6 @@
 package com.nxmup.androidclient.activity;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +15,9 @@ import com.nxmup.androidclient.R;
 import com.nxmup.androidclient.util.HttpUtil;
 import com.nxmup.androidclient.util.LogUtil;
 import com.nxmup.androidclient.util.PreferenceUtil;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -65,43 +69,66 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View view) {
+        String id = etId.getText().toString();
+        String password = etPassword.getText().toString();
+        if (TextUtils.isEmpty(id)) {
+            mSnackbar.setText(getString(R.string.emptyIdError)).show();
+            return;
+        }
+        if (TextUtils.isEmpty(password)) {
+            mSnackbar.setText(getString(R.string.emptyPasswordError)).show();
+            return;
+        }
+        //点击登录之后存储上一次的账号
+        PreferenceUtil.saveLastId(id);
         switch (view.getId()) {
             case R.id.btn_login:
-                String id = etId.getText().toString();
-                //点击登录之后存储上一次的账号
-                PreferenceUtil.saveLastId(id);
-                String password = etPassword.getText().toString();
-                if (TextUtils.isEmpty(id)) {
-                    mSnackbar.setText(getString(R.string.emptyIdError)).show();
-                    return;
-                }
-                try {
-                    Long.parseLong(id);
-                    if (TextUtils.isEmpty(password)) {
-                        mSnackbar.setText(getString(R.string.emptyPasswordError)).show();
-                    } else {
-                        HttpUtil.login(id, password, new Callback() {
-                            @Override
-                            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                HttpUtil.login(id, password, new Callback() {
+                    @Override
+                    public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                        ResponseBody responseBody = response.body();
+                        if (responseBody != null) {
+                            String responseData = responseBody.string();
+                            JSONObject jsonObject = null;
+                            try {
+                                jsonObject = new JSONObject(responseData);
+                                String result = jsonObject.optString("login");
+                                LogUtil.show(result);
+                                if (result.equals(getString(R.string.success))) {
+                                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                } else if (result.equals(getString(R.string.failed))) {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            mSnackbar.setText(getString(R.string.errorIdOrPassword)).show();
+                                        }
+                                    });
+                                }
+                            } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-
-                            @Override
-                            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-								ResponseBody responseBody = response.body();
-								if (responseBody != null) {
-									String responseData = responseBody.string();
-									System.out.println(responseData);
-								}
-                            }
-                        });
+                        }
                     }
-                } catch (Exception e) {
-                    mSnackbar.setText(getString(R.string.idInputTypeError)).show();
-                }
+                });
+
                 break;
             case R.id.btn_registered:
-                mSnackbar.setText("还没写。。。。。。").show();
+                HttpUtil.register(id, password, new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        LogUtil.show(response.body().string());
+                    }
+                });
         }
     }
 }
