@@ -4,53 +4,31 @@ RESTful 服务器端，提供给 C# 端更新数据和安卓端查询数据的 A
 
 <br>
 
-## 目前进度
-
-1. 用户名、密码登陆模块
-2. token 登陆模块
-3. 安卓查询接口
-4. POST 方法可用
-5. C#/Java 客户端示例代码已经上传 
-
-<br>
-
 ## API 使用方法
-
-服务器端已经部署在我的个人云服务器（111.231.1.210）上，所以可以通过固定 IP 访问 API，在本地不需要任何配置。
 
 下表列出了支持的 API 以及说明：
 
 API|说明
 ---|---
-http://111.231.1.210/api/dev/|获取当前手势状态，默认显示最新手势
+http://111.231.1.210/api/dev/login|登录
 http://111.231.1.210/api/dev/token|获取 token
-http://111.231.1.210/api/dev/update|通过POST方法更新手势
+http://111.231.1.210/api/dev/latest|获取最新手势
+http://111.231.1.210/api/dev/update|更新手势
 
-##### 使用说明：
+#### 使用说明：
 
-前两个 API 均以 GET 方法获取，返回数据为 JSON 格式。  
-每次访问前都需要登录。  
-默认用户名：1，密码：dev。  
-更新手势 API 接收 POST 方法和一个 json 格式的手势字符串（例：`{"state":"TEST"}`）。无需太过关心，示例代码已经给出。 
-
-##### 示例：
-
-> 本示例在 Windowns10 下用 git bash 提供的 curl 命令成功进行
-
-```
-# 获取最新手势
-curl -X GET -u 1:dev http://111.231.1.210/api/dev/
-```
-
-```
-获取 token
-curl -X GET -u 1:dev http://111.231.1.210/api/dev/token
-```
-
-```
-# 发送新手势
-curl -X POST -u 1:dev -H "Content-Type: application/json" -d '{"state":"TEST"}' http://111.231.1.210/api/dev/update
-```
+- 默认用户名 1 密码 dev
+- 所有的 API 请求都需要验证用户身份，即在 request 中附件 Authorization 信息（用户名密码或者 token 认证）
+- API login 接收 GET 方法。返回数据：成功 `{"login": "success"}`、失败 `{"login": "failed"}`
+- API token 接收 GET 方法。返回数据：成功 `{"expiration": 3600, "token": TOKEN字符串}`、失败 `{"token": "Invalid credentials"}`
+- API latest 接收 GET 方法。返回数据：成功 `{
+  "state": {
+    "id": 4,
+    "state": "TEST",
+    "time": "Sun, 08 Oct 2017 14:06:44 GMT"
+  }
+}`、失败 `{"login": "failed"}`
+- API update 接收 POST 方法。以及一个 json 格式的 body（例：`{"state":"TEST"}`）。无需太过关心，示例代码已经给出。 
 
 **关于 token 登录的说明[重要！]**
 
