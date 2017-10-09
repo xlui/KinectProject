@@ -8,8 +8,8 @@ import java.io.IOException;
 
 public class Client {
     public static void main(String[] args) {
-        String rootUrl = "http://111.231.1.210";
-        String latestUrl = rootUrl + "/api/dev";
+        String rootUrl = "http://127.0.0.1:5000";
+        String latestUrl = rootUrl + "/api/dev/latest";
         String updateUrl = rootUrl + "/api/dev/update";
 
         String username = "1";
