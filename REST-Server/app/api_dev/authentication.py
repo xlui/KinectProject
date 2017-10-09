@@ -41,13 +41,13 @@ def verify_token(token):
 @basic_auth.error_handler
 def basic_auth_error():
     """username-password auth Error handler"""
-    return make_response(jsonify({'error': 'unknown username or password'}), 401)
+    return make_response(jsonify({'login': 'failed'}), 401)
 
 
 @token_auth.error_handler
 def token_auth_error():
     """token auth error handler"""
-    return make_response(jsonify({'error': 'unknown username or password'}), 401)
+    return make_response(jsonify({'login': 'failed'}), 401)
 
 
 @api.before_request
@@ -55,12 +55,12 @@ def token_auth_error():
 def before_request():
     """Before all request, user must login!"""
     if not g.current_user:
-        return jsonify({'error': 'login required!'})
+        return make_response(jsonify({'error': 'login required!'}), 403)
 
 
-@api.route('/token')
+@api.route('/token', methods=['GET'])
 def get_token():
     """Generate a new token when token not used"""
     if g.token_used:
-        return make_response(jsonify({'error': 'Invalid credentials'}), 405)
-    return jsonify({'token': g.current_user.generate_auth_token(3600).decode('utf-8'), 'expiration': 3600})
+        return make_response(jsonify({'token': 'Invalid credentials'}), 405)
+    return make_response(jsonify({'token': g.current_user.generate_auth_token(3600).decode('utf-8'), 'expiration': 3600}), 200)

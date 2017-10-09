@@ -1,5 +1,6 @@
 package com.nxmup.androidclient.activity;
 
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import cn.jpush.android.api.JPushInterface;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     private Snackbar mSnackbar;
@@ -80,13 +82,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     } else {
                         HttpUtil.login(id, password, new Callback() {
                             @Override
-                            public void onFailure(Call call, IOException e) {
-
+                            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                                e.printStackTrace();
                             }
 
                             @Override
-                            public void onResponse(Call call, Response response) throws IOException {
-
+                            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+								ResponseBody responseBody = response.body();
+								if (responseBody != null) {
+									String responseData = responseBody.string();
+									System.out.println(responseData);
+								}
                             }
                         });
                     }
