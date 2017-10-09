@@ -50,15 +50,16 @@ def token_auth_error():
     return make_response(jsonify({'login': 'failed'}), 401)
 
 
-@api.before_request
-@multi_auth.login_required
-def before_request():
-    """Before all request, user must login!"""
-    if not g.current_user:
-        return make_response(jsonify({'error': 'login required!'}), 403)
+# @api.before_request
+# @multi_auth.login_required
+# def before_request():
+#     """Before all request, user must login!"""
+#     if not g.current_user:
+#         return make_response(jsonify({'error': 'login required!'}), 403)
 
 
 @api.route('/token', methods=['GET'])
+@multi_auth.login_required
 def get_token():
     """Generate a new token when token not used"""
     if g.token_used:
