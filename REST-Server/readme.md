@@ -14,6 +14,7 @@ http://111.231.1.210/api/dev/login|登录
 http://111.231.1.210/api/dev/token|获取 token
 http://111.231.1.210/api/dev/latest|获取最新手势
 http://111.231.1.210/api/dev/update|更新手势
+http://111.231.1.210/api/dev/register|注册
 
 #### 使用说明：
 
@@ -28,7 +29,8 @@ http://111.231.1.210/api/dev/update|更新手势
     "time": "Sun, 08 Oct 2017 14:06:44 GMT"
   }
 }`、失败 `{"login": "failed"}`
-- API update 接收 POST 方法。以及一个 json 格式的 body（例：`{"state":"TEST"}`）。无需太过关心，示例代码已经给出。 
+- API update 接收 POST 方法。以及一个 json 格式的 body（例：`{"state":"TEST"}`）。示例代码已经给出。 
+- API register 接收 POST 方法。该 API 不需要认证。body 需要设置为包含 `username` 和 `password` 的 json 字符串（例：`{"password":"dev2","username":2}`）。示例代码也已经给出。
 
 **关于 token 登录的说明[重要！]**
 
@@ -52,6 +54,8 @@ curl -X GET -H "Authorization:Dev 获取到的token" http://111.231.1.210/api/de
 
 C#： [主程序 Program.cs](https://github.com/xlui/KinectProject/blob/master/csharp_client/csharp_client/Program.cs)&nbsp;&nbsp;&nbsp;&nbsp;
 [具体实现（需和主程序在同一 namespace）](https://github.com/xlui/KinectProject/blob/master/csharp_client/csharp_client/Client.cs)  
-Java: [Client.java](https://github.com/xlui/KinectProject/blob/master/JavaClient/src/main/java/com/liuqi/client/Client.java)&nbsp;&nbsp;&nbsp;&nbsp;需要引用 json 包，在 GitHub 上下载相应的 [JSON-java](https://github.com/stleary/JSON-java) 包，然后作为本地包导入。
+Java:  
+[Client.java](https://github.com/xlui/KinectProject/blob/master/JavaClient/src/main/java/com/liuqi/client/Client.java) &nbsp;&nbsp; [Register.java](https://github.com/xlui/KinectProject/blob/master/JavaClient/src/main/java/com/liuqi/client/Register.java)  
+需要引用 json 包，在 GitHub 上下载相应的 [JSON-java](https://github.com/stleary/JSON-java) 包，然后作为本地包导入。
 
 
