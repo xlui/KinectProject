@@ -1,6 +1,9 @@
 package com.nxmup.androidclient.activity;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +15,8 @@ import android.view.WindowManager;
 import android.widget.EditText;
 
 import com.nxmup.androidclient.R;
+import com.nxmup.androidclient.application.AppCache;
+import com.nxmup.androidclient.service.StateService;
 import com.nxmup.androidclient.util.HttpUtil;
 import com.nxmup.androidclient.util.LogUtil;
 import com.nxmup.androidclient.util.PreferenceUtil;
@@ -40,9 +45,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_layout);
+        bindService();
         initViews();
         setListener();
     }
+
+    private void bindService() {
+        Intent intent = new Intent(this, StateService.class);
+        bindService(intent, mConnect, BIND_AUTO_CREATE);
+    }
+
 
     private void setListener() {
         btnLogin.setOnClickListener(this);
@@ -69,8 +81,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View view) {
-        String id = etId.getText().toString();
-        String password = etPassword.getText().toString();
+        final String id = etId.getText().toString();
+        final String password = etPassword.getText().toString();
         if (TextUtils.isEmpty(id)) {
             mSnackbar.setText(getString(R.string.emptyIdError)).show();
             return;
@@ -98,8 +110,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             try {
                                 jsonObject = new JSONObject(responseData);
                                 String result = jsonObject.optString("login");
-                                LogUtil.show(result);
                                 if (result.equals(getString(R.string.success))) {
+                                    AppCache.getStateService().setCurrentIdAndPassword(id, password);
                                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
                                 } else if (result.equals(getString(R.string.failed))) {
                                     runOnUiThread(new Runnable() {
@@ -130,5 +142,25 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     }
                 });
         }
+    }
+
+    private ServiceConnection mConnect = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            StateService stateService = ((StateService.SingleHolder) service).getStateService();
+            AppCache.setStateService(stateService);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbindService(mConnect);
+
     }
 }

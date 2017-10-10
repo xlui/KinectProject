@@ -12,7 +12,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nxmup.androidclient.R;
+import com.nxmup.androidclient.application.AppCache;
 import com.nxmup.androidclient.listener.OnStateChangeListener;
+import com.nxmup.androidclient.util.LogUtil;
 
 public class FirstTabFragment extends Fragment implements OnStateChangeListener {
     private ImageView ivImageState;
@@ -20,12 +22,20 @@ public class FirstTabFragment extends Fragment implements OnStateChangeListener 
     private Button btnOldManState;
     private Button btnEscortService;
     private Button btnMe;
+    private String lastState = "state";
+
+    public FirstTabFragment() {
+        super();
+        AppCache.getStateService().updateStateConstantly();
+        AppCache.getStateService().setOnStateChangeListener(this);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tab_1, container, false);
         ivImageState = view.findViewById(R.id.iv_image_state);
         tvState = view.findViewById(R.id.tv_state);
+        tvState.setText(lastState);
         btnOldManState = view.findViewById(R.id.btn_old_man_state);
         btnMe = view.findViewById(R.id.btn_me);
         btnEscortService = view.findViewById(R.id.btn_escort_service);
@@ -33,9 +43,14 @@ public class FirstTabFragment extends Fragment implements OnStateChangeListener 
     }
 
 
-
     @Override
-    public void onStateChange() {
-
+    public void onStateChange(final String newState) {
+        lastState = newState;
+        ivImageState.post(new Runnable() {
+            @Override
+            public void run() {
+                tvState.setText(newState);
+            }
+        });
     }
 }

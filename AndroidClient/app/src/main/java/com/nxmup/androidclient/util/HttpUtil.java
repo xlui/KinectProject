@@ -34,12 +34,22 @@ public class HttpUtil {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        LogUtil.show(user.toString());
         OkHttpClient client = new OkHttpClient();
         RequestBody body = RequestBody.create(JSON, user.toString());
         Request request = new Request.Builder()
                 .url(registerUrl)
                 .post(body)
+                .build();
+        client.newCall(request).enqueue(callback);
+    }
+
+    public static void updateState(String id, String password, Callback callback) {
+        String str = id + ":" + password;
+        String base64 = new String(Base64.encode(str.getBytes(), Base64.DEFAULT));
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(UrlBuilder.getUpdateStateUrl())
+                .header("Authorization", "Basic " + base64.trim())
                 .build();
         client.newCall(request).enqueue(callback);
     }

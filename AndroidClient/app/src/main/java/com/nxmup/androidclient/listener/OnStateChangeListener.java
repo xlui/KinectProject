@@ -1,5 +1,5 @@
 package com.nxmup.androidclient.listener;
 
 public interface OnStateChangeListener {
-    void onStateChange();
+    void onStateChange(String newState);
 }
