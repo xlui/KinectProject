@@ -8,7 +8,11 @@ import java.io.IOException;
 
 public class Client {
     public static void main(String[] args) {
+<<<<<<< HEAD
         String rootUrl = "http://127.0.0.1:5000";
+=======
+        String rootUrl = "https://nxmup.com";
+>>>>>>> bcfcc8634f4f8dc3e623592bf090caf22c4f7e47
         String latestUrl = rootUrl + "/api/dev/latest";
         String updateUrl = rootUrl + "/api/dev/update";
 

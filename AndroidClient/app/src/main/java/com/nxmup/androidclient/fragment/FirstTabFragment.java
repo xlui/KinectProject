@@ -41,6 +41,11 @@ public class FirstTabFragment extends Fragment implements OnStateChangeListener 
         btnEscortService = view.findViewById(R.id.btn_escort_service);
         return view;
     }
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> bcfcc8634f4f8dc3e623592bf090caf22c4f7e47
     @Override
     public void onStateChange(final String newState) {
         lastState = newState;
