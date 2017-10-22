@@ -29,7 +29,7 @@ def register():
 @api.route('/pictures/<name>', methods=['GET'])
 @multi_auth.login_required
 def picture(name):
-    root_url = 'http://127.0.0.1:5000'
+    root_url = 'https://nxmup.com'
     return redirect(root_url + url_for('static', filename='images/test.png'))
 
 
