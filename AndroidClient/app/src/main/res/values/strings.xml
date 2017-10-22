@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Kinect</string>
+    <string name="lastId">Lastid</string>
+    <string name="emptyIdError">账号不能为空</string>
+    <string name="emptyPasswordError">密码不能为空</string>
+    <string name="idInputTypeError">账号只能为数字</string>
+    <string name="errorIdOrPassword">账号密码不正确</string>
+    <string name="tab1">实时</string>
+    <string name="tab2">康复计划</string>
+    <string name="tab3">任务</string>
+    <string name="oldManState">老人状态</string>
+    <string name="escortService">陪护服务</string>
+    <string name="me">我</string>
+    <string name="success">success</string>
+    <string name="failed">failed</string>
+</resources>
