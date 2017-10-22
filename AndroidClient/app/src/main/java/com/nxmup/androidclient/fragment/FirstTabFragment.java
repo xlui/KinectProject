@@ -19,9 +19,6 @@ import com.nxmup.androidclient.util.LogUtil;
 public class FirstTabFragment extends Fragment implements OnStateChangeListener {
     private ImageView ivImageState;
     private TextView tvState;
-    private Button btnOldManState;
-    private Button btnEscortService;
-    private Button btnMe;
     private String lastState = "state";
 
     public FirstTabFragment() {
@@ -36,12 +33,8 @@ public class FirstTabFragment extends Fragment implements OnStateChangeListener 
         ivImageState = view.findViewById(R.id.iv_image_state);
         tvState = view.findViewById(R.id.tv_state);
         tvState.setText(lastState);
-        btnOldManState = view.findViewById(R.id.btn_old_man_state);
-        btnMe = view.findViewById(R.id.btn_me);
-        btnEscortService = view.findViewById(R.id.btn_escort_service);
         return view;
     }
-
 
     @Override
     public void onStateChange(final String newState) {

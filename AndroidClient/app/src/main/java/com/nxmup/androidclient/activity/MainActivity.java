@@ -10,9 +10,11 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.nxmup.androidclient.R;
 import com.nxmup.androidclient.adapter.FragmentAdapter;
@@ -24,18 +26,14 @@ import com.nxmup.androidclient.service.StateService;
 import com.nxmup.androidclient.util.LogUtil;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
-    private ImageView icMenu;
+    private ImageView ivMenu;
     private DrawerLayout dlSlideMenu;
-    private FrameLayout flTab1;
-    private FrameLayout flTab2;
-    private FrameLayout flTab3;
-    private View tabSelect1;
-    private View tabSelect2;
-    private View tabSelect3;
     private ViewPager vpViewPager;
     private Fragment firstTab;
     private Fragment secondTab;
     private Fragment thirdTab;
+    private TextView tvTab1;
+    private TextView tvTab2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,45 +44,44 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void initViews() {
-        icMenu = (ImageView) findViewById(R.id.iv_menu);
+        ivMenu = (ImageView) findViewById(R.id.iv_menu);
         dlSlideMenu = (DrawerLayout) findViewById(R.id.dl_slide_menu);
-        flTab1 = (FrameLayout) findViewById(R.id.fl_tab1);
-        flTab2 = (FrameLayout) findViewById(R.id.fl_tab2);
-        flTab3 = (FrameLayout) findViewById(R.id.fl_tab3);
-        tabSelect1 = findViewById(R.id.tab_select1);
-        tabSelect2 = findViewById(R.id.tab_select2);
-        tabSelect3 = findViewById(R.id.tab_select3);
         vpViewPager = (ViewPager) findViewById(R.id.vp_view_pager);
-
+        tvTab1 = (TextView) findViewById(R.id.tv_tab_1);
+        tvTab2 = (TextView) findViewById(R.id.tv_tab_2);
         firstTab = new FirstTabFragment();
         secondTab = new SecondTabFragment();
-        thirdTab = new ThirdTabFragment();
         FragmentAdapter adapter = new FragmentAdapter(getSupportFragmentManager());
         adapter.addFragment(firstTab);
         adapter.addFragment(secondTab);
-        adapter.addFragment(thirdTab);
+
         vpViewPager.setAdapter(adapter);
-        tabSelect1.setVisibility(View.VISIBLE);
+        vpViewPager.setCurrentItem(0);
+        tvTab1.setSelected(true);
     }
 
     private void setListener() {
-        flTab1.setOnClickListener(this);
-        flTab2.setOnClickListener(this);
-        flTab3.setOnClickListener(this);
+        tvTab1.setOnClickListener(this);
+        tvTab2.setOnClickListener(this);
+        ivMenu.setOnClickListener(this);
         vpViewPager.setOnPageChangeListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.fl_tab1:
+            case R.id.tv_tab_1:
+                tvTab1.setSelected(true);
+                tvTab2.setSelected(false);
                 vpViewPager.setCurrentItem(0);
                 break;
-            case R.id.fl_tab2:
+            case R.id.tv_tab_2:
+                tvTab1.setSelected(false);
+                tvTab2.setSelected(true);
                 vpViewPager.setCurrentItem(1);
                 break;
-            case R.id.fl_tab3:
-                vpViewPager.setCurrentItem(2);
+            case R.id.iv_menu:
+                dlSlideMenu.openDrawer(Gravity.START);
                 break;
         }
     }
@@ -96,21 +93,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onPageSelected(int position) {
-        switch (position) {
-            case 0:
-                tabSelect1.setVisibility(View.VISIBLE);
-                tabSelect2.setVisibility(View.GONE);
-                tabSelect3.setVisibility(View.GONE);
-                break;
-            case 1:
-                tabSelect2.setVisibility(View.VISIBLE);
-                tabSelect1.setVisibility(View.GONE);
-                tabSelect3.setVisibility(View.GONE);
-                break;
-            case 2:
-                tabSelect3.setVisibility(View.VISIBLE);
-                tabSelect2.setVisibility(View.GONE);
-                tabSelect1.setVisibility(View.GONE);
+        if (position == 0) {
+            tvTab1.setSelected(true);
+            tvTab2.setSelected(false);
+        } else if (position == 1) {
+            tvTab2.setSelected(true);
+            tvTab1.setSelected(false);
         }
     }
 
