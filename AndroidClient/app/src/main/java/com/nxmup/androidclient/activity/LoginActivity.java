@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.nxmup.androidclient.R;
@@ -35,9 +36,8 @@ import okhttp3.ResponseBody;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     private Snackbar mSnackbar;
-    private CircleButton btnLogin;
-    private CircleButton btnRegister;
-    private Toolbar tbToolbar;
+    private Button btnLogin;
+    private Button btnRegister;
     private EditText etId;
     private EditText etPassword;
 
@@ -64,13 +64,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void initViews() {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        tbToolbar = (Toolbar) findViewById(R.id.tb_toolbar);
         etId = (EditText) findViewById(R.id.et_id);
         etPassword = (EditText) findViewById(R.id.et_password);
-        btnLogin = (CircleButton) findViewById(R.id.btn_login);
-        btnRegister = (CircleButton) findViewById(R.id.btn_registered);
-        mSnackbar = Snackbar.make(tbToolbar, "", Snackbar.LENGTH_SHORT);
-        setSupportActionBar(tbToolbar);
+        btnLogin = (Button) findViewById(R.id.btn_login);
+        btnRegister = (Button) findViewById(R.id.btn_registered);
+        mSnackbar = Snackbar.make(etPassword, "", Snackbar.LENGTH_SHORT);
         String lastId = PreferenceUtil.getLastId();
         if (!TextUtils.isEmpty(lastId)) {
             //显示上次的账号
