@@ -47,4 +47,13 @@ if __name__ == '__main__':
         cursor.close()
         connect.close()
 
+    @manager.command
+    def init(drop=False):
+        if drop:
+            db.drop_all()
+            db.session.commit()
+        db.create_all()
+        User.init()
+        State.init()
+
     manager.run()
