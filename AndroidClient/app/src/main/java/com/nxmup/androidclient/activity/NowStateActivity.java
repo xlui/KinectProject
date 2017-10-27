@@ -1,5 +1,6 @@
 package com.nxmup.androidclient.activity;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,12 +25,18 @@ import com.nxmup.androidclient.application.AppCache;
 import com.nxmup.androidclient.listener.OnStateChangeListener;
 import com.nxmup.androidclient.service.StateService;
 import com.nxmup.androidclient.util.LogUtil;
+import com.nxmup.androidclient.util.StateSelector;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class NowStateActivity extends AppCompatActivity implements OnStateChangeListener, NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout dlDrawerLayout;
     private TextView tvNowStateInfo;
     private ImageView ivNowStateImage;
     private StateService mStateService;
+    private TextView tvDetail;
+    private TextView tvUpdateTime;
     private RecyclerView rvNowStateHistoryStateList;
     private NavigationView nvNowStateNavigationView;
 
@@ -57,6 +65,8 @@ public class NowStateActivity extends AppCompatActivity implements OnStateChange
         dlDrawerLayout = (DrawerLayout) findViewById(R.id.dl_drawer_layout);
         ivNowStateImage = (ImageView) findViewById(R.id.iv_now_state_image);
         tvNowStateInfo = (TextView) findViewById(R.id.tv_now_state_info);
+        tvDetail = (TextView) findViewById(R.id.tv_detail);
+        tvUpdateTime = (TextView) findViewById(R.id.tv_update_time);
 
         rvNowStateHistoryStateList = (RecyclerView) findViewById(R.id.rv_now_state_history_state_list);
         HistoryStateListAdapter adapter = new HistoryStateListAdapter();
@@ -70,7 +80,6 @@ public class NowStateActivity extends AppCompatActivity implements OnStateChange
         TextView tvNowStateUserId = view.findViewById(R.id.tv_now_state_user_id);
         tvNowStateUserId.setText("当前用户ID   " + mStateService.getCurrentId());
         nvNowStateNavigationView.setNavigationItemSelectedListener(this);
-        Glide.with(NowStateActivity.this).load(picUrl).into(ivNowStateImage);
     }
 
     @Override
@@ -86,16 +95,33 @@ public class NowStateActivity extends AppCompatActivity implements OnStateChange
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日   HH:mm:ss");
+                Date curDate = new Date(System.currentTimeMillis());
+                String time = formatter.format(curDate);
                 tvNowStateInfo.setText(newState);
+                String stateDetail = StateSelector.getState(newState);
+                if (TextUtils.isEmpty(stateDetail)) {
+                    tvDetail.setText("");
+                } else {
+                    tvDetail.setText(stateDetail);
+                }
+                tvUpdateTime.setText("最后更新于" + time);
+                Glide.with(NowStateActivity.this).load(picUrl).into(ivNowStateImage);
             }
         });
-     //   Glide.with(NowStateActivity.this).load(picUrl).into(ivNowStateImage);
+
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         dlDrawerLayout.closeDrawers();
-
+        switch (item.getItemId()) {
+            case R.id.all_state_info:
+                startActivity(new Intent(this, HandStateInfoActivity.class));
+                break;
+        }
         return true;
     }
+
+
 }

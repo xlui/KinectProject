@@ -22,6 +22,9 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 public class StateService extends Service {
+
+    public static String currentState;
+
     private Handler mHandler = new Handler(Looper.getMainLooper());
     private OnStateChangeListener onStateChangeListener;
     private String id;

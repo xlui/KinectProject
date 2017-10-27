@@ -41,6 +41,9 @@
             android:name=".activity.NowStateActivity"
             android:theme="@style/NowStateTheme" />
         <activity android:name=".activity.RecoverTaskActivity" />
+        <activity android:name=".activity.HandStateInfoActivity"
+            android:parentActivityName=".activity.NowStateActivity"
+            />
     </application>
 
 </manifest>
