@@ -37,8 +37,10 @@
             android:exported="true" />
 
         <activity android:name=".activity.SelectActivity" />
-        <activity android:name=".activity.NowStateActivity" />
-        <activity android:name=".activity.RecoverTaskActivity"></activity>
+        <activity
+            android:name=".activity.NowStateActivity"
+            android:theme="@style/NowStateTheme" />
+        <activity android:name=".activity.RecoverTaskActivity" />
     </application>
 
 </manifest>

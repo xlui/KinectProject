@@ -8,4 +8,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="NowStateTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@android:color/holo_orange_light</item>
+        <item name="colorPrimaryDark">@android:color/holo_orange_light</item>
+        <item name="colorAccent">@android:color/holo_orange_light</item>
+    </style>
 </resources>

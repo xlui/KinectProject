@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/all_state_info"
+        android:icon="@android:drawable/ic_input_get"
+        android:title="手势说明" />
+
+    <item
+        android:id="@+id/change_to_recover_task"
+        android:title="转换到康复计划"
+        android:icon="@android:drawable/ic_menu_send" />
+
+</menu>
