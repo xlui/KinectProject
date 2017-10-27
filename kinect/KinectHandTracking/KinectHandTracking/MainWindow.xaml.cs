@@ -2,6 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using Newtonsoft.Json;
 
 namespace KinectHandTracking
 {
@@ -15,40 +18,41 @@ namespace KinectHandTracking
         KinectSensor _sensor;
         MultiSourceFrameReader _reader;
         IList<Body> _bodies;
-		//private String lastLeftHandState = "";
-		private String lastRightHandState = "";
-		public string username { get; set; }
-		// 定义该变量用于登录对话框向主对话框传递用户名
+        Client client = new Client();
+        private String lastHandState = "-";
+        private string AllHandState = "-";
+       
+        #endregion
 
-		#endregion
+        #region Constructor
 
-		#region Constructor
-
-		public MainWindow()
+        public MainWindow()
         {
             InitializeComponent();
         }
 
         #endregion
 
-		private void Send(int toSend) 
-		{
-			SocketClient socketClient = new SocketClient();
-			string receive = null;
+        private void Send(String HandState)
+        {
+            string latestUrl = "http://111.231.1.210/api/dev/latest";
+            string updateUrl = "http://111.231.1.210/api/dev/update";
 
-			receive = socketClient.Send("code:" + toSend.ToString() + "username:" + username);
-			// Send 函数将发送框的数据发送给服务器，并接受服务器的回应 
-			// code 代表不同的手势，username 是登录的用户
-			// 请注意：目前安卓客户端只响应 code:1 code:2 code3 只检测右手状态
-			// 所以 Send 的内容为： 1 2 3 时，安卓会响应；其他安卓不做响应。
+            string username = "1", password = "dev";
+            string authorization = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(username + ":" + password));
 
-			if (receive.Length == 0)
-				MessageBox.Show("服务器连接异常！", "Error");
-		}
+            // 对要发送给服务器的数据进行包装
+            Dictionary<string, string> state = new Dictionary<string, string>();
+            state.Add("state", AllHandState);
+            // 转换成 Json 格式。
+            string json = JsonConvert.SerializeObject(state);
+            // 向服务器发送新手势
+            client.Post(updateUrl, json, authorization);
+        }
 
-		#region Event handlers
+        #region Event handlers
 
-		private void Window_Loaded(object sender, RoutedEventArgs e)
+        private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             _sensor = KinectSensor.GetDefault();
 
@@ -111,17 +115,23 @@ namespace KinectHandTracking
                                 Joint handLeft = body.Joints[JointType.HandLeft];
                                 Joint thumbLeft = body.Joints[JointType.ThumbLeft];
 
-                                // Draw hands and thumbs
+                                Joint ElbowLeft = body.Joints[JointType.ElbowLeft];
+                                Joint ElbowRight = body.Joints[JointType.ElbowRight];
+
+                                // Draw hands and thumbs and wrist and ELbow
                                 canvas.DrawHand(handRight, _sensor.CoordinateMapper);
                                 canvas.DrawHand(handLeft, _sensor.CoordinateMapper);
                                 canvas.DrawThumb(thumbRight, _sensor.CoordinateMapper);
                                 canvas.DrawThumb(thumbLeft, _sensor.CoordinateMapper);
+                                canvas.DrawPoint(ElbowLeft, _sensor.CoordinateMapper);
+                                canvas.DrawPoint(ElbowRight, _sensor.CoordinateMapper);
 
                                 // Find the hand states
                                 string rightHandState = "-";
 								string leftHandState = "-";
+                                
 								// record hand state code
-								int rightHandStateCode = 0;
+								int leftHandStateCode = 0, rightHandStateCode = 0;
 
                                 switch (body.HandRightState)
                                 {
@@ -139,9 +149,11 @@ namespace KinectHandTracking
                                         break;
                                     case HandState.Unknown:
                                         rightHandState = "Unknown...";
+                                        rightHandStateCode = 0;
                                         break;
                                     case HandState.NotTracked:
                                         rightHandState = "Not tracked";
+                                        rightHandStateCode = -1;
                                         break;
                                     default:
                                         break;
@@ -151,39 +163,82 @@ namespace KinectHandTracking
                                 {
                                     case HandState.Open:
                                         leftHandState = "Open";
+                                        leftHandStateCode = 1;
                                         break;
                                     case HandState.Closed:
                                         leftHandState = "Closed";
+                                        leftHandStateCode = 2;
                                         break;
                                     case HandState.Lasso:
                                         leftHandState = "Lasso";
+                                        leftHandStateCode = 3;
                                         break;
                                     case HandState.Unknown:
                                         leftHandState = "Unknown...";
+                                        leftHandStateCode = 0;
                                         break;
                                     case HandState.NotTracked:
                                         leftHandState = "Not tracked";
+                                        leftHandStateCode = -1;
                                         break;
                                     default:
                                         break;
                                 }
 
-                                tblRightHandState.Text = rightHandState;
-								tblLeftHandState.Text = leftHandState;
+                                if(leftHandStateCode == 1 && rightHandStateCode == 1)
+                                {
+                                    AllHandState = "signal1";
+                                }
+                                else if(leftHandStateCode == 1 && rightHandStateCode == 2)
+                                {
+                                    AllHandState = "signal2";
+                                }
+                                else if (leftHandStateCode == 1 && rightHandStateCode == 3)
+                                {
+                                    AllHandState = "signal3";
+                                }
+                                else if(leftHandStateCode == 2 && rightHandStateCode == 1)
+                                {
+                                    AllHandState = "signal4";
+                                }
+                                else if(leftHandStateCode == 2 && rightHandStateCode == 2)
+                                {
+                                    AllHandState = "signal5";
+                                }
+                                else if(leftHandStateCode == 2 && rightHandStateCode == 3)
+                                {
+                                    AllHandState = "signal6";
+                                }
+                                else if(leftHandStateCode == 3 && rightHandStateCode == 1)
+                                {
+                                    AllHandState = "signal7";
+                                }
+                                else if (leftHandStateCode == 3 && rightHandStateCode == 2)
+                                {
+                                    AllHandState = "signal8";
+                                }
+                                else if (leftHandStateCode == 3 && rightHandStateCode == 3)
+                                {
+                                    AllHandState = "signal9";
+                                }
 
-								if (!rightHandState.Equals(lastRightHandState))
-								{
-									// 如果当前手势与之前记录的不同，则发送当前手势的代码到服务器端
-									lastRightHandState = rightHandState;
-									Send(rightHandStateCode);
-								}
+                                tblRightHandState.Text = rightHandState;
+                                tblLeftHandState.Text = leftHandState;
+                                tblhandState.Text = AllHandState;
+
+                                if (!AllHandState.Equals(lastHandState))
+                                {
+                                    // 如果当前手势与之前记录的不同，则发送当前手势的代码到服务器端
+                                    lastHandState = AllHandState;
+                                    Send(AllHandState);
+                                }
                             }
                         }
                     }
                 }
             }
         }
-
         #endregion
     }
+
 }

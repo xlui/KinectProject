@@ -19,6 +19,10 @@
                     <TextBlock Text="Left hand state:" Style="{StaticResource TitleStyle}" />
                     <TextBlock Name="tblLeftHandState" Text="-" Style="{StaticResource StateStyle}" />
                 </StackPanel>
+                <StackPanel Margin="0,50,0,0">
+                    <TextBlock Text="State" Style="{StaticResource TitleStyle}" />
+                    <TextBlock Name="tblhandState" Text="-----" Style="{StaticResource StateStyle}" />
+                </StackPanel>
             </StackPanel>
         </Grid>
     </Grid>
