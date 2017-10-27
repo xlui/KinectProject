@@ -95,18 +95,21 @@ public class NowStateActivity extends AppCompatActivity implements OnStateChange
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日   HH:mm:ss");
-                Date curDate = new Date(System.currentTimeMillis());
-                String time = formatter.format(curDate);
-                tvNowStateInfo.setText(newState);
-                String stateDetail = StateSelector.getState(newState);
-                if (TextUtils.isEmpty(stateDetail)) {
-                    tvDetail.setText("");
-                } else {
-                    tvDetail.setText(stateDetail);
+                if (!newState.equals(AppCache.getStateService().getCurrentState())) {
+                    AppCache.getStateService().setCurrentState(newState);
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日   HH:mm:ss");
+                    Date curDate = new Date(System.currentTimeMillis());
+                    String time = formatter.format(curDate);
+                    tvNowStateInfo.setText(newState);
+                    String stateDetail = StateSelector.getState(newState);
+                    if (TextUtils.isEmpty(stateDetail)) {
+                        tvDetail.setText("");
+                    } else {
+                        tvDetail.setText(stateDetail);
+                    }
+                    tvUpdateTime.setText("最新手势获取于" + time);
+                    Glide.with(NowStateActivity.this).load(picUrl).into(ivNowStateImage);
                 }
-                tvUpdateTime.setText("最后更新于" + time);
-                Glide.with(NowStateActivity.this).load(picUrl).into(ivNowStateImage);
             }
         });
 

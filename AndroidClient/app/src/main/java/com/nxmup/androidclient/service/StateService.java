@@ -23,7 +23,7 @@ import okhttp3.Response;
 
 public class StateService extends Service {
 
-    public static String currentState;
+    private  String currentState = "close_close";
 
     private Handler mHandler = new Handler(Looper.getMainLooper());
     private OnStateChangeListener onStateChangeListener;
@@ -93,5 +93,13 @@ public class StateService extends Service {
 
     public String getCurrentPassword() {
         return password;
+    }
+
+    public String getCurrentState() {
+        return currentState;
+    }
+
+    public  void setCurrentState(String currentState) {
+        this.currentState = currentState;
     }
 }
