@@ -214,3 +214,6 @@ venv.bak/
 
 # idea
 .idea/
+
+# database
+*.sqlite
