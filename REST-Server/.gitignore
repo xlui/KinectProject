@@ -214,7 +214,3 @@ venv.bak/
 
 # idea
 .idea/
-
-# sqlite
-/dev.sqlite
->>>>>>> bcfcc8634f4f8dc3e623592bf090caf22c4f7e47

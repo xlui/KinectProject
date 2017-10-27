@@ -1,4 +1,4 @@
-from flask import jsonify, request, abort, make_response
+from flask import jsonify, request, abort, make_response, url_for, redirect
 from sqlalchemy import func
 
 from . import api
@@ -24,6 +24,13 @@ def register():
     db.session.add(user)
     db.session.commit()
     return make_response(jsonify({'register': 'success'}), 200)
+
+
+@api.route('/pictures/<name>', methods=['GET'])
+@multi_auth.login_required
+def picture(name):
+    root_url = 'https://nxmup.com'
+    return root_url + url_for('static', filename='images/' + name)
 
 
 @api.route('/latest', methods=['GET'])

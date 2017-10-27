@@ -17,8 +17,6 @@ def make_shell_context():
 if __name__ == '__main__':
     manager.add_command('shell', Shell(make_context=make_shell_context))
     manager.add_command('db', MigrateCommand)
-<<<<<<< HEAD
-=======
 
     @manager.command
     def show():
@@ -49,5 +47,4 @@ if __name__ == '__main__':
         cursor.close()
         connect.close()
 
->>>>>>> bcfcc8634f4f8dc3e623592bf090caf22c4f7e47
     manager.run()
