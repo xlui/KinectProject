@@ -50,7 +50,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginRight="8dp"
-                android:layout_weight="5" />
+                android:layout_weight="5"
+                android:inputType="textPassword" />
         </LinearLayout>
 
         <Button
@@ -65,16 +66,16 @@
             android:textColor="@android:color/white"
             android:textSize="22sp" />
 
-        <Button
+        <TextView
             android:id="@+id/btn_registered"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="24dp"
-            android:background="@android:color/holo_green_light"
+            android:gravity="end|center_vertical"
             android:text="@string/register"
-            android:textColor="@android:color/white"
-            android:textSize="22sp" />
+            android:textColor="@android:color/holo_blue_dark"
+             />
     </LinearLayout>
 </FrameLayout>

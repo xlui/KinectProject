@@ -14,6 +14,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nxmup.androidclient.R;
 import com.nxmup.androidclient.application.AppCache;
@@ -35,7 +37,7 @@ import okhttp3.ResponseBody;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     private Snackbar mSnackbar;
     private Button btnLogin;
-    private Button btnRegister;
+    private TextView btnRegister;
     private EditText etId;
     private EditText etPassword;
 
@@ -65,7 +67,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         etId = (EditText) findViewById(R.id.et_id);
         etPassword = (EditText) findViewById(R.id.et_password);
         btnLogin = (Button) findViewById(R.id.btn_login);
-        btnRegister = (Button) findViewById(R.id.btn_registered);
+        btnRegister = (TextView) findViewById(R.id.btn_registered);
         mSnackbar = Snackbar.make(etPassword, "", Snackbar.LENGTH_SHORT);
         String lastId = PreferenceUtil.getLastId();
         if (!TextUtils.isEmpty(lastId)) {
@@ -77,6 +79,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View view) {
+        if(view.getId()==R.id.btn_registered){
+            Toast.makeText(this, "还没写", Toast.LENGTH_SHORT).show();
+            return;
+        }
         final String id = etId.getText().toString();
         final String password = etPassword.getText().toString();
         if (TextUtils.isEmpty(id)) {
@@ -124,19 +130,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         }
                     }
                 });
-
                 break;
-            case R.id.btn_registered:
-                HttpUtil.register(id, password, new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-
-                    }
-
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                    }
-                });
         }
     }
 
