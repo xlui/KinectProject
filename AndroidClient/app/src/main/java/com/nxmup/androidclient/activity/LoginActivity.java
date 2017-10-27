@@ -27,8 +27,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
-import at.markushi.ui.CircleButton;
-import cn.jpush.android.api.JPushInterface;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -110,7 +108,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 String result = jsonObject.optString("login");
                                 if (result.equals(getString(R.string.success))) {
                                     AppCache.getStateService().setCurrentIdAndPassword(id, password);
-                                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                    startActivity(new Intent(LoginActivity.this, SelectActivity.class));
+                                    finish();
                                 } else if (result.equals(getString(R.string.failed))) {
                                     runOnUiThread(new Runnable() {
                                         @Override
@@ -136,7 +135,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        LogUtil.show(response.body().string());
                     }
                 });
         }
@@ -159,6 +157,5 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onDestroy() {
         super.onDestroy();
         unbindService(mConnect);
-
     }
 }

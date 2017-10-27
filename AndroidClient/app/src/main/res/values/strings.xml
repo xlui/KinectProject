@@ -7,14 +7,10 @@
     <string name="errorIdOrPassword">账号密码不正确</string>
     <string name="login">登录</string>
     <string name="register">注册</string>
-    <string name="tab1">实时</string>
-    <string name="tab2">康复计划</string>
-    <string name="tab3">任务</string>
     <string name="userId">账号</string>
     <string name="password">密码</string>
-    <string name="oldManState">老人状态</string>
-    <string name="escortService">陪护服务</string>
-    <string name="me">我</string>
+    <string name="nowState">实时监控</string>
+    <string name="recoveryTask">康复计划</string>
     <string name="success">success</string>
     <string name="failed">failed</string>
 </resources>

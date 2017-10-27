@@ -57,11 +57,9 @@ public class StateService extends Service {
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     String json = response.body().string();
-                    LogUtil.show(json);
                     try {
                         JSONObject jsonObject = new JSONObject(json);
                         JSONObject state = jsonObject.optJSONObject("state");
-                        LogUtil.show(state.toString());
                         String newState = state.optString("state");
                         onStateChangeListener.onStateChange(newState);
                     } catch (JSONException e) {
