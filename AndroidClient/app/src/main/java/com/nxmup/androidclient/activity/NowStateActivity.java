@@ -26,6 +26,7 @@ import com.nxmup.androidclient.listener.OnStateChangeListener;
 import com.nxmup.androidclient.service.StateService;
 import com.nxmup.androidclient.util.LogUtil;
 import com.nxmup.androidclient.util.StateSelector;
+import com.nxmup.androidclient.util.UrlBuilder;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -39,8 +40,6 @@ public class NowStateActivity extends AppCompatActivity implements OnStateChange
     private TextView tvUpdateTime;
     private RecyclerView rvNowStateHistoryStateList;
     private NavigationView nvNowStateNavigationView;
-
-    private static final String picUrl = "https://nxmup.com/static/images/test.png";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +108,7 @@ public class NowStateActivity extends AppCompatActivity implements OnStateChange
                     }
                     tvUpdateTime.setText("最新手势获取于" + time);
                 }
-                Glide.with(NowStateActivity.this).load(picUrl).into(ivNowStateImage);
+                Glide.with(NowStateActivity.this).load(UrlBuilder.getStateImageUrl(newState)).into(ivNowStateImage);
             }
         });
 

@@ -16,4 +16,8 @@ public class UrlBuilder {
     public static String getUpdateStateUrl() {
         return "http://111.231.1.210/api/dev/latest";
     }
+
+    public static String getStateImageUrl(String state) {
+        return "https://nxmup.com/static/images/" + state + ".png";
+    }
 }
