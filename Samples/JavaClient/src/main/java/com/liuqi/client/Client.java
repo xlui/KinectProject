@@ -18,11 +18,11 @@ public class Client {
 
         // JSON 格式化的数据。state 为 key，必需。
         JSONObject handState = new JSONObject();
-        handState.put("state", "TEST_STATE");
+        handState.put("state", "open_close");
 
         Client client = new Client();
-        client.getLatest(latestUrl, authorization);
-//        client.post(updateUrl, handState, authorization);
+//        client.getLatest(latestUrl, authorization);
+        client.post(updateUrl, handState, authorization);
     }
 
     private void getLatest(String url, String authorization) {
