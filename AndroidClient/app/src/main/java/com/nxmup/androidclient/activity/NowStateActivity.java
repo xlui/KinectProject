@@ -108,8 +108,8 @@ public class NowStateActivity extends AppCompatActivity implements OnStateChange
                         tvDetail.setText(stateDetail);
                     }
                     tvUpdateTime.setText("最新手势获取于" + time);
-                    Glide.with(NowStateActivity.this).load(picUrl).into(ivNowStateImage);
                 }
+                Glide.with(NowStateActivity.this).load(picUrl).into(ivNowStateImage);
             }
         });
 
