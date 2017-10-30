@@ -8,6 +8,7 @@ import com.nxmup.androidclient.R;
 
 public class PreferenceUtil {
     private static Context sContext;
+    private static final String TOKEN = "Token";
 
     public static void init(Context context) {
         sContext = context;
@@ -23,5 +24,13 @@ public class PreferenceUtil {
 
     public static String getLastId() {
         return getInstance().getString(sContext.getString(R.string.lastId), null);
+    }
+
+    public static String getToken() {
+        return getInstance().getString(TOKEN, null);
+    }
+
+    public static void saveToken(String token) {
+        getInstance().edit().putString(TOKEN, token).apply();
     }
 }

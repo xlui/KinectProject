@@ -10,6 +10,7 @@ import android.os.Looper;
 import com.nxmup.androidclient.listener.OnStateChangeListener;
 import com.nxmup.androidclient.util.HttpUtil;
 import com.nxmup.androidclient.util.LogUtil;
+import com.nxmup.androidclient.util.PreferenceUtil;
 import com.nxmup.androidclient.util.UrlBuilder;
 
 import org.json.JSONException;
@@ -23,7 +24,7 @@ import okhttp3.Response;
 
 public class StateService extends Service {
 
-    private  String currentState = "close_close";
+    private String currentState = null;
 
     private Handler mHandler = new Handler(Looper.getMainLooper());
     private OnStateChangeListener onStateChangeListener;
@@ -51,7 +52,7 @@ public class StateService extends Service {
     private Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            HttpUtil.updateState(getCurrentId(), getCurrentPassword(), new Callback() {
+            Callback callback = new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
 
@@ -63,18 +64,26 @@ public class StateService extends Service {
                     try {
                         JSONObject jsonObject = new JSONObject(json);
                         JSONObject state = jsonObject.optJSONObject("state");
+                        String userId = jsonObject.optString("userId");
+                        id = userId;
                         String newState = state.optString("state");
                         onStateChangeListener.onStateChange(newState);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
-            });
+            };
+            if (PreferenceUtil.getToken() == null) {
+                HttpUtil.updateState(id, password, callback);
+            } else {
+                HttpUtil.updateState(PreferenceUtil.getToken(), callback);
+            }
             mHandler.postDelayed(runnable, 5000);
         }
     };
 
     public void updateStateConstantly() {
+        mHandler.removeCallbacks(runnable);
         mHandler.post(runnable);
     }
 
@@ -91,15 +100,33 @@ public class StateService extends Service {
         return id;
     }
 
-    public String getCurrentPassword() {
-        return password;
-    }
-
     public String getCurrentState() {
         return currentState;
     }
 
-    public  void setCurrentState(String currentState) {
+    public void setCurrentState(String currentState) {
         this.currentState = currentState;
+    }
+
+    public void saveToken() {
+        HttpUtil.getToken(id, password, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String json = response.body().string();
+                LogUtil.show(json);
+                try {
+                    JSONObject jsonObject = new JSONObject(json);
+                    String token = jsonObject.optString("token");
+                    PreferenceUtil.saveToken(token);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }

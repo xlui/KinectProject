@@ -1,7 +1,7 @@
 package com.nxmup.androidclient.util;
 
 public class UrlBuilder {
-    public static String getStateUrl() {
+    public static String getLoginUrl() {
         return "http://111.231.1.210/api/dev/login";
     }
 
