@@ -4,7 +4,7 @@ from sqlalchemy import func
 from . import api
 from .authentication import multi_auth
 from .. import db
-from ..models import User, State
+from ..models import User, State, History
 
 
 @api.route('/login', methods=['GET'])
@@ -52,3 +52,11 @@ def update():
     db.session.add(state)
     db.session.commit()
     return make_response(jsonify({'state': state.get_json()}), 200)
+
+
+@api.route('/history', methods=['GET'])
+@multi_auth.login_required
+def history():
+    """show history hand state of user."""
+    histories = [_history.get_json() for _history in History.query.all()]
+    return make_response(jsonify(histories))
