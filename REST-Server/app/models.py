@@ -58,17 +58,17 @@ class State(db.Model):
         default_data = [
             {
                 'id': 1,
-                'state': 'Open',
+                'state': 'open_open',
                 'time': datetime.utcnow()
             },
             {
                 'id': 2,
-                'state': 'Close',
+                'state': 'open_close',
                 'time': datetime.now()
             },
             {
                 'id': 3,
-                'state': 'Lasso',
+                'state': 'open_lasso',
                 'time': datetime.now()
             },
         ]

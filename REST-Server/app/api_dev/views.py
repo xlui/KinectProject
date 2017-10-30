@@ -1,4 +1,4 @@
-from flask import jsonify, request, abort, make_response, url_for, redirect
+from flask import jsonify, request, abort, make_response, url_for
 from sqlalchemy import func
 
 from . import api
@@ -39,7 +39,8 @@ def index():
     """Will only show the latest hand state"""
     latest = db.session.query(func.max(State.id)).first()[0]
     state = State.query.get(latest)
-    return make_response(jsonify({'state': state.get_json()}), 200)
+    from flask import g
+    return make_response(jsonify({'state': state.get_json(), 'userId': str(g.current_user.username)}), 200)
 
 
 @api.route('/update', methods=['POST'])
