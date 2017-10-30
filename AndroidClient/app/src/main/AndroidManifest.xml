@@ -23,7 +23,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.LoginActivity">
+        <activity android:name=".activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -41,9 +41,10 @@
             android:name=".activity.NowStateActivity"
             android:theme="@style/NowStateTheme" />
         <activity android:name=".activity.RecoverTaskActivity" />
-        <activity android:name=".activity.HandStateInfoActivity"
-            android:parentActivityName=".activity.NowStateActivity"
-            />
+        <activity
+            android:name=".activity.HandStateInfoActivity"
+            android:parentActivityName=".activity.NowStateActivity" />
+        <activity android:name=".activity.LoginActivity" />
     </application>
 
 </manifest>

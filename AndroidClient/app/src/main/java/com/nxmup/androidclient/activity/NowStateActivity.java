@@ -40,6 +40,7 @@ public class NowStateActivity extends AppCompatActivity implements OnStateChange
     private TextView tvUpdateTime;
     private RecyclerView rvNowStateHistoryStateList;
     private NavigationView nvNowStateNavigationView;
+    private TextView tvNowStateUserId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,8 +77,7 @@ public class NowStateActivity extends AppCompatActivity implements OnStateChange
 
         nvNowStateNavigationView = (NavigationView) findViewById(R.id.nv_now_state_navigation_view);
         View view = nvNowStateNavigationView.getHeaderView(0);
-        TextView tvNowStateUserId = view.findViewById(R.id.tv_now_state_user_id);
-        tvNowStateUserId.setText("当前用户ID   " + mStateService.getCurrentId());
+        tvNowStateUserId = view.findViewById(R.id.tv_now_state_user_id);
         nvNowStateNavigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -107,6 +107,7 @@ public class NowStateActivity extends AppCompatActivity implements OnStateChange
                         tvDetail.setText(stateDetail);
                     }
                     tvUpdateTime.setText("最新手势获取于" + time);
+                    tvNowStateUserId.setText("当前用户ID   " + mStateService.getCurrentId());
                 }
                 Glide.with(NowStateActivity.this).load(UrlBuilder.getStateImageUrl(newState)).into(ivNowStateImage);
             }

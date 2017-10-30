@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nxmup.androidclient.R;
+import com.nxmup.androidclient.application.App;
 import com.nxmup.androidclient.application.AppCache;
 import com.nxmup.androidclient.service.StateService;
 import com.nxmup.androidclient.util.HttpUtil;
@@ -45,14 +46,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_layout);
-        bindService();
         initViews();
         setListener();
-    }
-
-    private void bindService() {
-        Intent intent = new Intent(this, StateService.class);
-        bindService(intent, mConnect, BIND_AUTO_CREATE);
     }
 
 
@@ -79,7 +74,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View view) {
-        if(view.getId()==R.id.btn_registered){
+        if (view.getId() == R.id.btn_registered) {
             Toast.makeText(this, "还没写", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -115,6 +110,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 if (result.equals(getString(R.string.success))) {
                                     AppCache.getStateService().setCurrentIdAndPassword(id, password);
                                     startActivity(new Intent(LoginActivity.this, SelectActivity.class));
+                                    AppCache.getStateService().saveToken();
                                     finish();
                                 } else if (result.equals(getString(R.string.failed))) {
                                     runOnUiThread(new Runnable() {
@@ -132,24 +128,5 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 });
                 break;
         }
-    }
-
-    private ServiceConnection mConnect = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            StateService stateService = ((StateService.SingleHolder) service).getStateService();
-            AppCache.setStateService(stateService);
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-
-        }
-    };
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unbindService(mConnect);
     }
 }
