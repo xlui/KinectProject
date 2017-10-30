@@ -50,7 +50,7 @@ public class Client {
         handleResponse(client, request);
     }
 
-    private void handleResponse(OkHttpClient client, Request request) {
+    public void handleResponse(OkHttpClient client, Request request) {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
