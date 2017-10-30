@@ -40,17 +40,20 @@ def index():
     latest = db.session.query(func.max(State.id)).first()[0]
     state = State.query.get(latest)
     from flask import g
-    return make_response(jsonify({'state': state.get_json(), 'userId': str(g.current_user.username)}), 200)
+    return make_response(jsonify({'state': state.get_json(), 'userId': int(g.current_user.username)}), 200)
 
 
 @api.route('/update', methods=['POST'])
 @multi_auth.login_required
 def update():
     """update latest hand state"""
+    from flask import g
     if not request.json or not 'state' in request.json:
         abort(400)
     state = State(state=request.json.get('state'))
+    _history = History(userId=int(g.current_user.username), state=request.json.get('state'))
     db.session.add(state)
+    db.session.add(_history)
     db.session.commit()
     return make_response(jsonify({'state': state.get_json()}), 200)
 
