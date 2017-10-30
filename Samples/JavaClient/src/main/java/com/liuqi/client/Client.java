@@ -18,11 +18,11 @@ public class Client {
 
         // JSON 格式化的数据。state 为 key，必需。
         JSONObject handState = new JSONObject();
-        handState.put("state", "TEST_STATE");
+        handState.put("state", "open_close");
 
         Client client = new Client();
-        client.getLatest(latestUrl, authorization);
-//        client.post(updateUrl, handState, authorization);
+//        client.getLatest(latestUrl, authorization);
+        client.post(updateUrl, handState, authorization);
     }
 
     private void getLatest(String url, String authorization) {
@@ -50,7 +50,7 @@ public class Client {
         handleResponse(client, request);
     }
 
-    private void handleResponse(OkHttpClient client, Request request) {
+    public void handleResponse(OkHttpClient client, Request request) {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {

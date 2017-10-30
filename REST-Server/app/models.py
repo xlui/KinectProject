@@ -30,6 +30,7 @@ class User(db.Model):
         return check_password_hash(self.password_hash, password)
 
     def generate_auth_token(self, expiration=3600):
+        # default 1 hour: 3600
         serializer = Serializer(Config.SECRET_KEY, expires_in=expiration)
         return serializer.dumps({'username': self.username})
 
@@ -50,24 +51,24 @@ class State(db.Model):
     __tablename__ = 'state'
     id = db.Column(db.Integer, primary_key=True)
     state = db.Column(db.String(10), index=True, default='')
-    timestamp = db.Column(db.DateTime(), default=datetime.utcnow)
+    timestamp = db.Column(db.DateTime(), default=datetime.now)
 
     @staticmethod
     def init():
         default_data = [
             {
                 'id': 1,
-                'state': 'Open',
+                'state': 'open_open',
                 'time': datetime.utcnow()
             },
             {
                 'id': 2,
-                'state': 'Close',
+                'state': 'open_close',
                 'time': datetime.now()
             },
             {
                 'id': 3,
-                'state': 'Lasso',
+                'state': 'open_lasso',
                 'time': datetime.now()
             },
         ]
@@ -89,3 +90,26 @@ class State(db.Model):
 
     def __repr__(self):
         return '<State {}>'.format(self.state)
+
+
+class History(db.Model):
+    __tablename__ = 'history'
+    id = db.Column(db.Integer, primary_key=True, index=True)
+    date = db.Column(db.Date(), default=datetime.now)
+    state = db.Column(db.String(10), index=True, default='')
+
+    @staticmethod
+    def init():
+        history = History(state='init_state')
+        db.session.add(history)
+        db.session.commit()
+
+    def get_json(self):
+        return {
+            'id': self.id,
+            'date': self.date,
+            'state': self.state,
+        }
+
+    def __repr__(self):
+        return '<History {}>'.format(self.date)

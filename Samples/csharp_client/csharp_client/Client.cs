@@ -17,7 +17,8 @@ namespace csharp_client
             try
             {
                 response = (HttpWebResponse)request.GetResponse();
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 Console.WriteLine(e);
                 return;
