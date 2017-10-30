@@ -1,4 +1,4 @@
-from flask import jsonify, request, abort, make_response, url_for
+from flask import jsonify, request, abort, make_response, url_for, g
 from sqlalchemy import func
 
 from . import api
@@ -39,7 +39,6 @@ def index():
     """Will only show the latest hand state"""
     latest = db.session.query(func.max(State.id)).first()[0]
     state = State.query.get(latest)
-    from flask import g
     return make_response(jsonify({'state': state.get_json(), 'userId': int(g.current_user.username)}), 200)
 
 
@@ -47,7 +46,6 @@ def index():
 @multi_auth.login_required
 def update():
     """update latest hand state"""
-    from flask import g
     if not request.json or not 'state' in request.json:
         abort(400)
     state = State(state=request.json.get('state'))
@@ -62,5 +60,7 @@ def update():
 @multi_auth.login_required
 def history():
     """show history hand state of user."""
-    histories = [_history.get_json() for _history in History.query.all()]
+    user_id = int(g.current_user.username)
+    user_histories = History.query.filter_by(userId=user_id)
+    histories = [_history.get_json() for _history in user_histories]
     return make_response(jsonify(histories))
