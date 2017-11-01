@@ -2,16 +2,18 @@
 using System;
 using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
 using Newtonsoft.Json;
+using System.Drawing;
+using System.IO;
+using System.Threading;
+using System.Windows.Media.Imaging;
 
 namespace KinectHandTracking
 {
-	/// <summary>
-	/// Interaction logic for MainWindow.xaml
-	/// </summary>
-	public partial class MainWindow : Window
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window
     {
         #region Members
 
@@ -19,8 +21,10 @@ namespace KinectHandTracking
         MultiSourceFrameReader _reader;
         IList<Body> _bodies;
         Client client = new Client();
+        
+
         private String lastHandState = "-";
-        private string AllHandState = "-";
+        private String AllHandState = "-";
        
         #endregion
 
@@ -35,7 +39,7 @@ namespace KinectHandTracking
 
         private void Send(String HandState)
         {
-            string latestUrl = "http://111.231.1.210/api/dev/latest";
+            //string latestUrl = "http://111.231.1.210/api/dev/latest";
             string updateUrl = "http://111.231.1.210/api/dev/update";
 
             string username = "1", password = "dev";
@@ -50,6 +54,31 @@ namespace KinectHandTracking
             client.Post(updateUrl, json, authorization);
         }
 
+        private void BmpToJpg(Bitmap bmp) //图片转jpg
+        {
+            //Thread.Sleep(5000);
+            if (!Directory.Exists(" F:\\屏幕截图"))  //判断目录是否存在,不存在就创建 
+            {
+                DirectoryInfo directoryInfo = new DirectoryInfo(" F:\\屏幕截图");
+                directoryInfo.Create();
+            }
+    
+            String time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff");//获得系统时间
+            time = System.Text.RegularExpressions.Regex.Replace(time, @"[^0-9]+", "");//提取数字
+            String fileName = time + ".bmp"; //创建文件名
+            bmp.Save("F:\\屏幕截图\\" + fileName); //保存为文件.
+            bmp.Dispose(); //关闭对象
+
+            String BMPFiles = "F:\\屏幕截图\\" + fileName;
+            BitmapImage BitImage = new BitmapImage(new Uri(BMPFiles, UriKind.Absolute));
+            JpegBitmapEncoder encoder = new JpegBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(BitImage));
+            String JpegImage = time + ".png";
+            //JPG文件件路径
+            FileStream fileStream = new FileStream("F:\\屏幕截图\\"+JpegImage, FileMode.Create, FileAccess.ReadWrite);
+            encoder.Save(fileStream);
+            fileStream.Close();
+        }
         #region Event handlers
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -185,58 +214,75 @@ namespace KinectHandTracking
                                         break;
                                 }
 
-                                if(leftHandStateCode == 1 && rightHandStateCode == 1)
+                                if (leftHandStateCode == 1 && rightHandStateCode == 1)
                                 {
-                                    AllHandState = "signal1";
+                                    AllHandState = "打开设备";
                                 }
-                                else if(leftHandStateCode == 1 && rightHandStateCode == 2)
+                                else if (leftHandStateCode == 1 && rightHandStateCode == 2)
                                 {
-                                    AllHandState = "signal2";
+                                    AllHandState = "口渴";
                                 }
                                 else if (leftHandStateCode == 1 && rightHandStateCode == 3)
                                 {
-                                    AllHandState = "signal3";
+                                    AllHandState = "上厕所";
                                 }
-                                else if(leftHandStateCode == 2 && rightHandStateCode == 1)
+                                else if (leftHandStateCode == 2 && rightHandStateCode == 1)
                                 {
                                     AllHandState = "signal4";
                                 }
-                                else if(leftHandStateCode == 2 && rightHandStateCode == 2)
+                                else if (leftHandStateCode == 2 && rightHandStateCode == 2)
                                 {
                                     AllHandState = "signal5";
                                 }
-                                else if(leftHandStateCode == 2 && rightHandStateCode == 3)
+                                else if (leftHandStateCode == 2 && rightHandStateCode == 3)
                                 {
-                                    AllHandState = "signal6";
+                                    AllHandState = "联系亲友";
                                 }
-                                else if(leftHandStateCode == 3 && rightHandStateCode == 1)
+                                else if (leftHandStateCode == 3 && rightHandStateCode == 1)
                                 {
-                                    AllHandState = "signal7";
+                                    AllHandState = "饥饿";
                                 }
                                 else if (leftHandStateCode == 3 && rightHandStateCode == 2)
                                 {
-                                    AllHandState = "signal8";
+                                    AllHandState = "身体不适";
                                 }
                                 else if (leftHandStateCode == 3 && rightHandStateCode == 3)
                                 {
-                                    AllHandState = "signal9";
+                                    AllHandState = "关闭设备";
                                 }
 
                                 tblRightHandState.Text = rightHandState;
                                 tblLeftHandState.Text = leftHandState;
                                 tblhandState.Text = AllHandState;
-
+                              
                                 if (!AllHandState.Equals(lastHandState))
                                 {
-                                    // 如果当前手势与之前记录的不同，则发送当前手势的代码到服务器端
                                     lastHandState = AllHandState;
                                     Send(AllHandState);
+                                    
                                 }
                             }
                         }
                     }
                 }
             }
+
+            //Scrennshot
+            using (var frame = reference.ColorFrameReference.AcquireFrame())
+            {
+                if (frame != null)
+                {
+
+                    System.IO.MemoryStream ms = new System.IO.MemoryStream();
+                    BmpBitmapEncoder encoder = new BmpBitmapEncoder();
+                    encoder.Frames.Add(BitmapFrame.Create((BitmapSource)frame.ToBitmap()));
+                    encoder.Save(ms);
+                    Bitmap bp = new Bitmap(ms);
+                    BmpToJpg(bp);
+                    ms.Close();
+                }
+            }
+
         }
         #endregion
     }
