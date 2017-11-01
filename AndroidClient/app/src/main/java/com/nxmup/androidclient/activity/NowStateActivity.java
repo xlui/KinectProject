@@ -157,6 +157,7 @@ public class NowStateActivity extends AppCompatActivity implements OnStateChange
 
     }
 
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         dlDrawerLayout.closeDrawers();
