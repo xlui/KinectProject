@@ -16,10 +16,6 @@ public class HttpUtil {
         sendRequest(id, password, callback, UrlBuilder.getLoginUrl());
     }
 
-    public static void updateState(String id, String password, Callback callback) {
-        sendRequest(id, password, callback, UrlBuilder.getUpdateStateUrl());
-    }
-
     public static void getToken(String id, String password, Callback callback) {
         sendRequest(id, password, callback, UrlBuilder.getTokenUrl());
     }
@@ -30,6 +26,10 @@ public class HttpUtil {
 
     public static void updateState(String token, Callback callback) {
         sendRequest(token, callback, UrlBuilder.getUpdateStateUrl());
+    }
+
+    public static void getHistoryState(String token, Callback callback) {
+        sendRequest(token, callback, UrlBuilder.getHistoryStateUrl());
     }
 
 //    public static void register(String id, String password, Callback callback) {

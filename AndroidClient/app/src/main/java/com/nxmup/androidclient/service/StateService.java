@@ -73,11 +73,7 @@ public class StateService extends Service {
                     }
                 }
             };
-            if (PreferenceUtil.getToken() == null) {
-                HttpUtil.updateState(id, password, callback);
-            } else {
-                HttpUtil.updateState(PreferenceUtil.getToken(), callback);
-            }
+            HttpUtil.updateState(PreferenceUtil.getToken(), callback);
             mHandler.postDelayed(runnable, 5000);
         }
     };
@@ -118,7 +114,6 @@ public class StateService extends Service {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String json = response.body().string();
-                LogUtil.show(json);
                 try {
                     JSONObject jsonObject = new JSONObject(json);
                     String token = jsonObject.optString("token");

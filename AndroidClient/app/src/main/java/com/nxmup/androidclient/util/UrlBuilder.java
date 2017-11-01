@@ -2,22 +2,26 @@ package com.nxmup.androidclient.util;
 
 public class UrlBuilder {
     public static String getLoginUrl() {
-        return "http://111.231.1.210/api/dev/login";
+        return "https://nxmup.com/api/dev/login";
     }
 
     public static String getTokenUrl() {
-        return "http://111.231.1.210/api/dev/token";
+        return "https://nxmup.com/api/dev/token";
     }
 
     public static String getRegisterUrl() {
-        return "http://111.231.1.210/api/dev/register";
+        return "https://nxmup.com/api/dev/register";
     }
 
     public static String getUpdateStateUrl() {
-        return "http://111.231.1.210/api/dev/latest";
+        return "https://nxmup.com/api/dev/latest";
     }
 
     public static String getStateImageUrl(String state) {
         return "https://nxmup.com/static/images/" + state + ".png";
+    }
+
+    public static String getHistoryStateUrl() {
+        return "https://nxmup.com/api/dev/history";
     }
 }

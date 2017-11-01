@@ -24,12 +24,25 @@ import com.nxmup.androidclient.adapter.HistoryStateListAdapter;
 import com.nxmup.androidclient.application.AppCache;
 import com.nxmup.androidclient.listener.OnStateChangeListener;
 import com.nxmup.androidclient.service.StateService;
+import com.nxmup.androidclient.util.HttpUtil;
 import com.nxmup.androidclient.util.LogUtil;
+import com.nxmup.androidclient.util.PreferenceUtil;
 import com.nxmup.androidclient.util.StateSelector;
 import com.nxmup.androidclient.util.UrlBuilder;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class NowStateActivity extends AppCompatActivity implements OnStateChangeListener, NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout dlDrawerLayout;
@@ -69,11 +82,40 @@ public class NowStateActivity extends AppCompatActivity implements OnStateChange
         tvUpdateTime = (TextView) findViewById(R.id.tv_update_time);
 
         rvNowStateHistoryStateList = (RecyclerView) findViewById(R.id.rv_now_state_history_state_list);
-        HistoryStateListAdapter adapter = new HistoryStateListAdapter();
-        LinearLayoutManager manager = new LinearLayoutManager(this);
-        manager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        rvNowStateHistoryStateList.setAdapter(adapter);
-        rvNowStateHistoryStateList.setLayoutManager(manager);
+        HttpUtil.getHistoryState(PreferenceUtil.getToken(), new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String json = response.body().string();
+                final List<String> history = new ArrayList<>();
+                try {
+                    JSONArray jsonArray = new JSONArray(json);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        String state = jsonObject.optString("state");
+                        String date = jsonObject.optString("date");
+                        history.add(state + "@" + date);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        HistoryStateListAdapter adapter = new HistoryStateListAdapter(history);
+                        LinearLayoutManager manager = new LinearLayoutManager(NowStateActivity.this);
+                        manager.setOrientation(LinearLayoutManager.HORIZONTAL);
+                        rvNowStateHistoryStateList.setAdapter(adapter);
+                        rvNowStateHistoryStateList.setLayoutManager(manager);
+                    }
+                });
+            }
+        });
 
         nvNowStateNavigationView = (NavigationView) findViewById(R.id.nv_now_state_navigation_view);
         View view = nvNowStateNavigationView.getHeaderView(0);
@@ -114,6 +156,7 @@ public class NowStateActivity extends AppCompatActivity implements OnStateChange
         });
 
     }
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
