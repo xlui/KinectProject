@@ -217,3 +217,7 @@ venv.bak/
 
 # database
 *.sqlite
+
+# static
+images/
+uploads/

@@ -9,11 +9,11 @@ _basedir = os.path.abspath(os.path.dirname(__file__))
 # platform
 _platform = platform.platform()
 # database location
-_linux_database = '/tmp/dev.sqlite'
+_linux_database = '/var/www/data/dev.sqlite'
 _windows_database = os.path.join(_basedir, 'dev.sqlite')
 database = _windows_database if 'Windows' in _platform else _linux_database
 # upload folder
-_linux_uploads = '/tmp/static/uploads'
+_linux_uploads = '/var/www/static/uploads'
 _windows_uploads = reduce(os.path.join, [_basedir, 'app', 'static', 'uploads'])
 uploads = _windows_uploads if 'Windows' in _platform else _linux_uploads
 
