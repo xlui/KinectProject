@@ -71,8 +71,10 @@ def pictures(name):
 @multi_auth.login_required
 def upload():
     from .. import photos
+    from datetime import datetime
     if request.method == 'POST' and 'photo' in request.files:
-        filename = photos.save(request.files['photo'])
+        saved_name = 'user_' + str(g.current_user.username) + datetime.now().strftime('_%Y_%m_%d.')
+        filename = photos.save(request.files['photo'], name=saved_name)
         return redirect(url_for('api_dev.show', name=filename))
     return render_template('upload.html')
 
