@@ -98,7 +98,7 @@ class History(db.Model):
     __tablename__ = 'history'
     id = db.Column(db.Integer, primary_key=True, index=True)
     userId = db.Column(db.Integer, index=True)
-    date = db.Column(db.String(10), default=datetime.now().strftime('%Y-%m-%d'))
+    date = db.Column(db.String(10), default=datetime.now().strftime('%Y-%m-%d %H:%M'))
     state = db.Column(db.String(10), index=True, default='')
 
     @staticmethod

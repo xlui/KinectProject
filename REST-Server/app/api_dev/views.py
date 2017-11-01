@@ -98,4 +98,6 @@ def show(name):
 def current_picture():
     from .. import photos
     _picture = Picture.query.order_by(Picture.filename.desc()).first()
+    if not _picture:
+        abort(404)
     return render_template('show.html', url=photos.url(_picture.filename))
