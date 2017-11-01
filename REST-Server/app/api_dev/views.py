@@ -4,7 +4,7 @@ from sqlalchemy import func
 from . import api
 from .authentication import multi_auth
 from .. import db
-from ..models import User, State, History
+from ..models import User, State, History, Picture
 
 
 @api.route('/login', methods=['GET'])
@@ -72,10 +72,12 @@ def pictures(name):
 def upload():
     from .. import photos
     from datetime import datetime
-    saved_name = 'user_' + str(g.current_user.username) + datetime.now().strftime('_%Y_%m_%d.')
+    saved_name = 'user_' + str(g.current_user.username) + datetime.now().strftime('_%Y_%m_%d_%H_%M.')
     file = request.files.get('file')
     if file:
         filename = photos.save(file, name=saved_name)
+        picture = Picture(user=g.current_user, filename=filename)
+        db.session.add(picture)
         return jsonify({'upload': 'success', 'imageUrl': photos.url(filename)})
     return jsonify({'upload': 'failed', 'imageUrl': None})
 
@@ -90,3 +92,10 @@ def show(name):
     print(url)
     return render_template('show.html', url=url, name=name)
 
+
+@api.route('/current_picture', methods=['GET'])
+@multi_auth.login_required
+def current_picture():
+    from .. import photos
+    _picture = Picture.query.order_by(Picture.filename.desc()).first()
+    return render_template('show.html', url=photos.url(_picture.filename))

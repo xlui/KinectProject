@@ -8,9 +8,11 @@ from config import Config
 
 class User(db.Model):
     __tablename__ = 'users'
-    username = db.Column(db.Integer, unique=True, index=True, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.Integer, unique=True, index=True)
     # must have a `primary_key` when creating new table
     password_hash = db.Column(db.String(128))
+    picture = db.relationship('Picture', backref='user', lazy='dynamic')
 
     @staticmethod
     def init():
@@ -115,3 +117,20 @@ class History(db.Model):
 
     def __repr__(self):
         return '<History {}, user {}, date {}, state {}>'.format(self.id, self.userId, self.date, self.state)
+
+
+class Picture(db.Model):
+    __tablename__ = 'picture'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    filename = db.Column(db.String(64), index=True)
+
+    def get_json(self):
+        return {
+            'id': self.id,
+            'userId': self.user_id,
+            'filename': self.filename
+        }
+
+    def __repr__(self):
+        return '<Picture {}, user {}, filename {}>'.format(self.id, self.user, self.filename)
