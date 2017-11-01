@@ -50,18 +50,11 @@ def token_auth_error():
     return make_response(jsonify({'login': 'failed'}), 401)
 
 
-# @api.before_request
-# @multi_auth.login_required
-# def before_request():
-#     """Before all request, user must login!"""
-#     if not g.current_user:
-#         return make_response(jsonify({'error': 'login required!'}), 403)
-
-
 @api.route('/token', methods=['GET'])
 @multi_auth.login_required
 def get_token():
     """Generate a new token when token not used"""
     if g.token_used:
         return make_response(jsonify({'token': 'Invalid credentials'}), 405)
-    return make_response(jsonify({'token': g.current_user.generate_auth_token(3600).decode('utf-8'), 'expiration': 3600}), 200)
+    expiration = 3600 * 24 * 30 # 3600 = 1 hour, extend token's expiration to one month
+    return make_response(jsonify({'token': g.current_user.generate_auth_token(expiration=expiration).decode('utf-8'), 'expiration': expiration}), 200)

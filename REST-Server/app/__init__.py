@@ -1,9 +1,11 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_uploads import UploadSet, IMAGES, configure_uploads
 from config import Config
 
 __version__ = 'v0.3.0'
 db = SQLAlchemy()
+photos = UploadSet('PHOTOS', IMAGES)
 
 
 def create_app():
@@ -12,6 +14,7 @@ def create_app():
 
     Config.init_app(app)
     db.init_app(app)
+    configure_uploads(app, photos)
 
     from .api_error import api as api_error_blueprint
     app.register_blueprint(api_error_blueprint)

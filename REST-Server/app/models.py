@@ -95,21 +95,23 @@ class State(db.Model):
 class History(db.Model):
     __tablename__ = 'history'
     id = db.Column(db.Integer, primary_key=True, index=True)
-    date = db.Column(db.Date(), default=datetime.now)
+    userId = db.Column(db.Integer, index=True)
+    date = db.Column(db.String(10), default=datetime.now().strftime('%Y-%m-%d'))
     state = db.Column(db.String(10), index=True, default='')
 
     @staticmethod
     def init():
-        history = History(state='init_state')
+        history = History(userId=0, state='init_state')
         db.session.add(history)
         db.session.commit()
 
     def get_json(self):
         return {
             'id': self.id,
+            'userId': self.userId,
             'date': self.date,
             'state': self.state,
         }
 
     def __repr__(self):
-        return '<History {}>'.format(self.date)
+        return '<History {}, user {}, date {}, state {}>'.format(self.id, self.userId, self.date, self.state)

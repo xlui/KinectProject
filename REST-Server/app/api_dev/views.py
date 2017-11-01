@@ -1,4 +1,4 @@
-from flask import jsonify, request, abort, make_response, url_for
+from flask import jsonify, request, abort, make_response, url_for, g, redirect, render_template
 from sqlalchemy import func
 
 from . import api
@@ -26,21 +26,13 @@ def register():
     return make_response(jsonify({'register': 'success'}), 200)
 
 
-@api.route('/pictures/<name>', methods=['GET'])
-@multi_auth.login_required
-def picture(name):
-    root_url = 'https://nxmup.com'
-    return root_url + url_for('static', filename='images/' + name)
-
-
 @api.route('/latest', methods=['GET'])
 @multi_auth.login_required
 def index():
     """Will only show the latest hand state"""
     latest = db.session.query(func.max(State.id)).first()[0]
     state = State.query.get(latest)
-    from flask import g
-    return make_response(jsonify({'state': state.get_json(), 'userId': str(g.current_user.username)}), 200)
+    return make_response(jsonify({'state': state.get_json(), 'userId': int(g.current_user.username)}), 200)
 
 
 @api.route('/update', methods=['POST'])
@@ -50,7 +42,9 @@ def update():
     if not request.json or not 'state' in request.json:
         abort(400)
     state = State(state=request.json.get('state'))
+    _history = History(userId=int(g.current_user.username), state=request.json.get('state'))
     db.session.add(state)
+    db.session.add(_history)
     db.session.commit()
     return make_response(jsonify({'state': state.get_json()}), 200)
 
@@ -59,5 +53,39 @@ def update():
 @multi_auth.login_required
 def history():
     """show history hand state of user."""
-    histories = [_history.get_json() for _history in History.query.all()]
+    user_id = int(g.current_user.username)
+    user_histories = History.query.filter_by(userId=user_id)
+    histories = [_history.get_json() for _history in user_histories]
     return make_response(jsonify(histories))
+
+
+@api.route('/picture/<name>', methods=['GET'])
+@multi_auth.login_required
+def pictures(name):
+    """Hand state pictures, get by name"""
+    picture_url = url_for('static', filename='images/' + name)
+    return render_template('show.html', url=picture_url)
+
+
+@api.route('/upload', methods=['GET', 'POST'])
+@multi_auth.login_required
+def upload():
+    from .. import photos
+    from datetime import datetime
+    if request.method == 'POST' and 'photo' in request.files:
+        saved_name = 'user_' + str(g.current_user.username) + datetime.now().strftime('_%Y_%m_%d.')
+        filename = photos.save(request.files['photo'], name=saved_name)
+        return redirect(url_for('api_dev.show', name=filename))
+    return render_template('upload.html')
+
+
+@api.route('/photo/<name>', methods=['GET'])
+def show(name):
+    from .. import photos
+    if name is None:
+        abort(404)
+    url = photos.url(name)
+    print(name)
+    print(url)
+    return render_template('show.html', url=url, name=name)
+

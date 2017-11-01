@@ -36,13 +36,14 @@ if __name__ == '__main__':
         def print_history(results):
             for row in results:
                 print('id:', row[0])
-                print('date:', row[1])
-                print('state:', row[2])
+                print('userId', row[1])
+                print('date:', row[2])
+                print('state:', row[3])
                 print()
 
         import sqlite3
         import config
-        connect = sqlite3.connect(config.local_database)
+        connect = sqlite3.connect(config.database)
         cursor = connect.cursor()
 
         print('Data in database [state]:')
