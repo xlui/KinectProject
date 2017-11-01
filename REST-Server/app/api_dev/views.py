@@ -67,16 +67,17 @@ def pictures(name):
     return render_template('show.html', url=picture_url)
 
 
-@api.route('/upload', methods=['GET', 'POST'])
+@api.route('/upload', methods=['POST'])
 @multi_auth.login_required
 def upload():
     from .. import photos
     from datetime import datetime
-    if request.method == 'POST' and 'photo' in request.files:
-        saved_name = 'user_' + str(g.current_user.username) + datetime.now().strftime('_%Y_%m_%d.')
-        filename = photos.save(request.files['photo'], name=saved_name)
-        return redirect(url_for('api_dev.show', name=filename))
-    return render_template('upload.html')
+    saved_name = 'user_' + str(g.current_user.username) + datetime.now().strftime('_%Y_%m_%d.')
+    file = request.files.get('file')
+    if file:
+        filename = photos.save(file, name=saved_name)
+        return jsonify({'upload': 'success', 'imageUrl': photos.url(filename)})
+    return jsonify({'upload': 'failed', 'imageUrl': None})
 
 
 @api.route('/photo/<name>', methods=['GET'])

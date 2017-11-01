@@ -159,11 +159,39 @@ url 示例：https://nxmup.com/api/dev/picture/open_open.png
 
 #### 8. 上传图片（/upload）
 
-version：0.0.1
+version：0.1.0
 
-接受 GET 方法，返回网页，上传在网页进行。
+接受 POST 方法，具体看 Java 示例代码 [SendPicture.java](https://github.com/xlui/KinectProject/blob/master/Samples/JavaClient/src/main/java/com/liuqi/client/SendPicture.java)。
 
-接受经由网页点击提交的 POST 方法，重定向到 /photo/pictureName 显示上传的图片，上传的图片还可以通过 https://nxmup.com/static/uploads/pictureName 获得。
+封装 RequestBody 时这两行是必须的：
+
+```java
+// java
+.setType(MultipartBody.FORM)
+.addFormDataPart("file", file.getName(), fileBody)
+```
+
+`file` 是服务器端从 FORM 中读取文件的标识，如果没有 `file` 服务器端就无从读取文件。
+
+发送文件成功返回：
+
+```json
+{
+  "imageUrl": "图片的地址", 
+  "upload": "success"
+}
+```
+
+失败返回：
+
+```json
+{
+  "upload": "failed", 
+  "imageUrl": 
+}
+```
+
+失败情况未测试。
 
 ## 示例代码
 
