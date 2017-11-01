@@ -7,11 +7,14 @@ import java.io.File;
 
 public class SendPicture {
     public static void main(String[] args) {
-        String url = "http://127.0.0.1:5000/api/dev/upload";
+        String url = "https://nxmup.com/api/dev/upload";
+
         String username = "1";
         String password = "dev";
         String authorization = new BASE64Encoder().encode((username + ":" + password).getBytes());
+
         File file = new File("Hello.jpg");
+        // 图片在项目根目录下
         assert file.exists();
 
         SendPicture sendPicture = new SendPicture();
@@ -23,6 +26,7 @@ public class SendPicture {
 
         OkHttpClient okHttpClient = new OkHttpClient();
         RequestBody requestBody = new MultipartBody.Builder()
+                // 以下两行为必须
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("file", file.getName(), fileBody)
                 .build();

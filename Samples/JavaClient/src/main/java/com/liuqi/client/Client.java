@@ -18,7 +18,7 @@ public class Client {
 
         // JSON 格式化的数据。state 为 key，必需。
         JSONObject handState = new JSONObject();
-        handState.put("state", "close_close");
+        handState.put("state", "lasso_lasso");
 
         Client client = new Client();
 //        client.getLatest(latestUrl, authorization);

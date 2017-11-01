@@ -54,7 +54,7 @@ def update():
 def history():
     """show history hand state of user."""
     user_id = int(g.current_user.username)
-    user_histories = History.query.filter_by(userId=user_id)
+    user_histories = History.query.order_by(History.id.desc()).all()
     histories = [_history.get_json() for _history in user_histories]
     return make_response(jsonify(histories))
 
