@@ -1,4 +1,4 @@
-from flask import jsonify, request, abort, make_response, url_for, g
+from flask import jsonify, request, abort, make_response, url_for, g, redirect, render_template
 from sqlalchemy import func
 
 from . import api
@@ -24,13 +24,6 @@ def register():
     db.session.add(user)
     db.session.commit()
     return make_response(jsonify({'register': 'success'}), 200)
-
-
-@api.route('/pictures/<name>', methods=['GET'])
-@multi_auth.login_required
-def picture(name):
-    root_url = 'https://nxmup.com'
-    return root_url + url_for('static', filename='images/' + name)
 
 
 @api.route('/latest', methods=['GET'])
@@ -64,3 +57,33 @@ def history():
     user_histories = History.query.filter_by(userId=user_id)
     histories = [_history.get_json() for _history in user_histories]
     return make_response(jsonify(histories))
+
+
+@api.route('/picture/<name>', methods=['GET'])
+@multi_auth.login_required
+def pictures(name):
+    """Hand state pictures, get by name"""
+    picture_url = url_for('static', filename='images/' + name)
+    return render_template('show.html', url=picture_url)
+
+
+@api.route('/upload', methods=['GET', 'POST'])
+@multi_auth.login_required
+def upload():
+    from .. import photos
+    if request.method == 'POST' and 'photo' in request.files:
+        filename = photos.save(request.files['photo'])
+        return redirect(url_for('api_dev.show', name=filename))
+    return render_template('upload.html')
+
+
+@api.route('/photo/<name>', methods=['GET'])
+def show(name):
+    from .. import photos
+    if name is None:
+        abort(404)
+    url = photos.url(name)
+    print(name)
+    print(url)
+    return render_template('show.html', url=url, name=name)
+

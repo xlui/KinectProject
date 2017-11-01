@@ -43,7 +43,7 @@ if __name__ == '__main__':
 
         import sqlite3
         import config
-        connect = sqlite3.connect(config.local_database)
+        connect = sqlite3.connect(config.database)
         cursor = connect.cursor()
 
         print('Data in database [state]:')
