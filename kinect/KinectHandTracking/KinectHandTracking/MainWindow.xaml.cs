@@ -21,7 +21,7 @@ namespace KinectHandTracking
         MultiSourceFrameReader _reader;
         IList<Body> _bodies;
         Client client = new Client();
-        
+        System.Timers.Timer t = new System.Timers.Timer(10000);   //实例化Timer类，设置间隔时间为10000毫秒；
 
         private String lastHandState = "-";
         private String AllHandState = "-";
@@ -41,6 +41,7 @@ namespace KinectHandTracking
         {
             //string latestUrl = "http://111.231.1.210/api/dev/latest";
             string updateUrl = "http://111.231.1.210/api/dev/update";
+            String url = "https://nxmup.com/api/dev/upload";
 
             string username = "1", password = "dev";
             string authorization = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(username + ":" + password));
@@ -56,7 +57,7 @@ namespace KinectHandTracking
 
         private void BmpToJpg(Bitmap bmp) //图片转jpg
         {
-            //Thread.Sleep(5000);
+          
             if (!Directory.Exists(" F:\\屏幕截图"))  //判断目录是否存在,不存在就创建 
             {
                 DirectoryInfo directoryInfo = new DirectoryInfo(" F:\\屏幕截图");
@@ -107,9 +108,15 @@ namespace KinectHandTracking
             }
         }
 
+        
+
         void Reader_MultiSourceFrameArrived(object sender, MultiSourceFrameArrivedEventArgs e)
         {
             var reference = e.FrameReference.AcquireFrame();
+               
+            t.Elapsed += new System.Timers.ElapsedEventHandler(theout); //到达时间的时候执行事件；   
+            t.AutoReset = true;   //设置是执行一次（false）还是一直执行(true)；   
+            t.Enabled = true;     //是否执行System.Timers.Timer.Elapsed事件； 
 
             // Color
             using (var frame = reference.ColorFrameReference.AcquireFrame())
@@ -267,21 +274,27 @@ namespace KinectHandTracking
                 }
             }
 
-            //Scrennshot
-            using (var frame = reference.ColorFrameReference.AcquireFrame())
+            void theout(object source, System.Timers.ElapsedEventArgs e1)
             {
-                if (frame != null)
+                //Scrennshot
+                using (var frame = reference.ColorFrameReference.AcquireFrame())
                 {
+                    if (frame != null)
+                    {
 
-                    System.IO.MemoryStream ms = new System.IO.MemoryStream();
-                    BmpBitmapEncoder encoder = new BmpBitmapEncoder();
-                    encoder.Frames.Add(BitmapFrame.Create((BitmapSource)frame.ToBitmap()));
-                    encoder.Save(ms);
-                    Bitmap bp = new Bitmap(ms);
-                    BmpToJpg(bp);
-                    ms.Close();
+                        System.IO.MemoryStream ms = new System.IO.MemoryStream();
+                        BmpBitmapEncoder encoder = new BmpBitmapEncoder();
+                        encoder.Frames.Add(BitmapFrame.Create((BitmapSource)frame.ToBitmap()));
+                        encoder.Save(ms);
+                        Bitmap bp = new Bitmap(ms);
+                        BmpToJpg(bp);
+                        ms.Close();
+                    }
                 }
             }
+
+
+
 
         }
         #endregion
