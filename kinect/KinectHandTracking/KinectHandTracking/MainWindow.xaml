@@ -11,17 +11,21 @@
         </Viewbox>
         <Grid Style="{StaticResource ContainerStyle}">
             <StackPanel Margin="20">
-                <StackPanel>
+                <!--<StackPanel>
                     <TextBlock Text="Right hand state:" Style="{StaticResource TitleStyle}" />
                     <TextBlock Name="tblRightHandState" Text="-" Style="{StaticResource StateStyle}" />
                 </StackPanel>
                 <StackPanel Margin="0,50,0,0">
                     <TextBlock Text="Left hand state:" Style="{StaticResource TitleStyle}" />
                     <TextBlock Name="tblLeftHandState" Text="-" Style="{StaticResource StateStyle}" />
+                </StackPanel>-->
+                <StackPanel Margin="0,35,0,0">
+                    <TextBlock Text="State" Style="{StaticResource TitleStyle}" FontSize="45" Padding="0,0,0,30" />
+                    <TextBlock Name="tblhandState" Text="当前设备处于关闭状态" Style="{StaticResource StateStyle}" FontSize="27" FlowDirection="RightToLeft" />
                 </StackPanel>
-                <StackPanel Margin="0,50,0,0">
-                    <TextBlock Text="State" Style="{StaticResource TitleStyle}" />
-                    <TextBlock Name="tblhandState" Text="-----" Style="{StaticResource StateStyle}" />
+                <StackPanel Margin="0,100,0,0">
+                    <TextBlock Text="Tips" Style="{StaticResource TitleStyle}" FontSize="45" Margin="0,0,0,30" />
+                    <TextBlock x:Name="tbltips" Text="双手打开使设备开启" Style="{StaticResource StateStyle}" FontSize="27" FlowDirection="RightToLeft"/>
                 </StackPanel>
             </StackPanel>
         </Grid>

@@ -17,7 +17,8 @@ namespace KinectHandTracking
             try
             {
                 response = (HttpWebResponse)request.GetResponse();
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 Console.WriteLine(e);
                 return;
@@ -84,5 +85,6 @@ namespace KinectHandTracking
                 Console.WriteLine(e);
             }
         }
+
     }
 }
