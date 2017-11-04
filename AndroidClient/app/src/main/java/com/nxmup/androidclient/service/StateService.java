@@ -17,6 +17,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -30,6 +32,8 @@ public class StateService extends Service {
     private OnStateChangeListener onStateChangeListener;
     private String id;
     private String password;
+
+    private List<String> dangerHandStateList = new LinkedList<>();
 
     public StateService() {
     }
@@ -64,10 +68,12 @@ public class StateService extends Service {
                     try {
                         JSONObject jsonObject = new JSONObject(json);
                         JSONObject state = jsonObject.optJSONObject("state");
+                        boolean isDanger = state.optBoolean("danger");
                         String userId = jsonObject.optString("userId");
                         id = userId;
                         String newState = state.optString("state");
-                        onStateChangeListener.onStateChange(newState);
+                        LogUtil.show(json);
+                        onStateChangeListener.onStateChange(newState, isDanger);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -123,5 +129,9 @@ public class StateService extends Service {
                 }
             }
         });
+    }
+
+    public List<String> getDangerHandStateList() {
+        return dangerHandStateList;
     }
 }

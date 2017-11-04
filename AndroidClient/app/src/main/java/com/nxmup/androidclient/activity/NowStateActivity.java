@@ -1,6 +1,7 @@
 package com.nxmup.androidclient.activity;
 
 import android.content.Intent;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -26,6 +27,7 @@ import com.nxmup.androidclient.listener.OnStateChangeListener;
 import com.nxmup.androidclient.service.StateService;
 import com.nxmup.androidclient.util.HttpUtil;
 import com.nxmup.androidclient.util.LogUtil;
+import com.nxmup.androidclient.util.NotificationUtil;
 import com.nxmup.androidclient.util.PreferenceUtil;
 import com.nxmup.androidclient.util.StateSelector;
 import com.nxmup.androidclient.util.UrlBuilder;
@@ -54,6 +56,7 @@ public class NowStateActivity extends AppCompatActivity implements OnStateChange
     private RecyclerView rvNowStateHistoryStateList;
     private NavigationView nvNowStateNavigationView;
     private TextView tvNowStateUserId;
+    private Vibrator vibrator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +65,7 @@ public class NowStateActivity extends AppCompatActivity implements OnStateChange
         mStateService = AppCache.getStateService();
         mStateService.setOnStateChangeListener(this);
         mStateService.updateStateConstantly();
+        vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
         initViews();
     }
 
@@ -72,7 +76,7 @@ public class NowStateActivity extends AppCompatActivity implements OnStateChange
         if (actionBar != null) {
             actionBar.setTitle(getString(R.string.nowState));
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeAsUpIndicator(R.mipmap.ic_menu);
+            actionBar.setHomeAsUpIndicator(android.R.drawable.ic_menu_more);
         }
 
         dlDrawerLayout = (DrawerLayout) findViewById(R.id.dl_drawer_layout);
@@ -121,6 +125,7 @@ public class NowStateActivity extends AppCompatActivity implements OnStateChange
         View view = nvNowStateNavigationView.getHeaderView(0);
         tvNowStateUserId = view.findViewById(R.id.tv_now_state_user_id);
         nvNowStateNavigationView.setNavigationItemSelectedListener(this);
+
     }
 
     @Override
@@ -132,7 +137,7 @@ public class NowStateActivity extends AppCompatActivity implements OnStateChange
     }
 
     @Override
-    public void onStateChange(final String newState) {
+    public void onStateChange(final String newState, final boolean isDanger) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -150,13 +155,17 @@ public class NowStateActivity extends AppCompatActivity implements OnStateChange
                     }
                     tvUpdateTime.setText("最新手势获取于" + time);
                     tvNowStateUserId.setText("当前用户ID   " + mStateService.getCurrentId());
+                    if (isDanger) {
+                        vibrator.vibrate(2000);
+                        mStateService.getDangerHandStateList().add(time + "@" + newState + "@" + stateDetail);
+                        NotificationUtil.createDangerNotification(NowStateActivity.this, "检测到危险手势！！！",
+                                time + " 检测到危险手势" + newState + " " + stateDetail);
+                    }
                 }
                 Glide.with(NowStateActivity.this).load(UrlBuilder.getStateImageUrl(newState)).into(ivNowStateImage);
             }
         });
-
     }
-
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -168,6 +177,4 @@ public class NowStateActivity extends AppCompatActivity implements OnStateChange
         }
         return true;
     }
-
-
 }
