@@ -1,3 +1,10 @@
+## 0.1.2 (2017-11-04)
+
+features:
+
+- Enrich command line for showing database content
+- use flask log in `wsgi.py`
+
 ## 0.1.1 (2017-11-04)
 
 feature:

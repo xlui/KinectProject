@@ -18,64 +18,32 @@ if __name__ == '__main__':
     manager.add_command('shell', Shell(make_context=make_shell_context))
     manager.add_command('db', MigrateCommand)
 
+    from command import show
+
     @manager.command
-    def show():
-        def print_users(results):
-            for row in results:
-                print('username:', row[0])
-                print('password_hash:', row[1])
-                print()
+    def show_all():
+        show()
 
-        def print_state(results):
-            for row in results:
-                print('id:', row[0])
-                print('state:', row[1])
-                print('time:', row[2])
-                print()
+    @manager.command
+    def show_user():
+        show('users')
 
-        def print_history(results):
-            for row in results:
-                print('id:', row[0])
-                print('userId', row[1])
-                print('date:', row[2])
-                print('state:', row[3])
-                print()
+    @manager.command
+    def show_state():
+        show('state')
 
-        import sqlite3
-        import config
-        connect = sqlite3.connect(config.database)
-        cursor = connect.cursor()
-
-        print('Data in database [state]:')
-        results = cursor.execute("SELECT * FROM state")
-        print_state(results)
-
-        print('Data in database [users]:')
-        results = cursor.execute("SELECT * FROM users")
-        print_users(results)
-
-        print('Data in database [history]:')
-        results = cursor.execute("SELECT * FROM history")
-        print_history(results)
-
-        cursor.close()
-        connect.close()
-
-    def _init(drop=False):
-        if drop:
-            db.drop_all()
-            db.session.commit()
-        db.create_all()
-        User.init()
-        State.init()
-        History.init()
+    @manager.command
+    def show_history():
+        show('history')
 
     @manager.command
     def init():
-        _init()
+        from command import init
+        init(db)
 
     @manager.command
     def drop_init():
-        _init(True)
+        from command import init
+        init(db, True)
 
     manager.run()
