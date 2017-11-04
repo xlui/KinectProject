@@ -28,11 +28,11 @@ def register():
 
 @api.route('/latest', methods=['GET'])
 @multi_auth.login_required
-def index():
+def latest():
     """Will only show the latest hand state"""
-    latest = db.session.query(func.max(State.id)).first()[0]
-    state = State.query.get(latest)
-    return make_response(jsonify({'state': state.get_json(), 'userId': int(g.current_user.username)}), 200)
+    _latest = db.session.query(func.max(State.id)).first()[0]
+    state = State.query.get(_latest)
+    return jsonify({'state': state.get_json(), 'userId': int(g.current_user.username)})
 
 
 @api.route('/update', methods=['POST'])
@@ -41,7 +41,7 @@ def update():
     """update latest hand state"""
     if not request.json or not 'state' in request.json:
         abort(400)
-    state = State(state=request.json.get('state'))
+    state = State(state=request.json.get('state'), danger=request.json.get('danger'))
     _history = History(userId=int(g.current_user.username), state=request.json.get('state'))
     db.session.add(state)
     db.session.add(_history)

@@ -3,7 +3,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_uploads import UploadSet, IMAGES, configure_uploads
 from config import Config
 
-__version__ = 'v0.3.0'
 db = SQLAlchemy()
 photos = UploadSet('PHOTOS', IMAGES)
 

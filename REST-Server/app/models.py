@@ -54,6 +54,7 @@ class State(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     state = db.Column(db.String(10), index=True, default='')
     timestamp = db.Column(db.DateTime(), default=datetime.now)
+    danger = db.Column(db.Boolean, default=False)
 
     @staticmethod
     def init():
@@ -88,6 +89,7 @@ class State(db.Model):
             'id': self.id,
             'state': self.state,
             'time': self.timestamp,
+            'danger': self.danger,
         }
 
     def __repr__(self):
