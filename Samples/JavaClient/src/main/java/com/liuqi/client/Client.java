@@ -8,6 +8,7 @@ import java.io.IOException;
 
 public class Client {
     public static void main(String[] args) {
+//        String rootUrl = "http://127.0.0.1:5000";
         String rootUrl = "https://nxmup.com";
         String latestUrl = rootUrl + "/api/dev/latest";
         String updateUrl = rootUrl + "/api/dev/update";
@@ -21,8 +22,8 @@ public class Client {
         handState.put("state", "lasso_lasso");
 
         Client client = new Client();
-//        client.getLatest(latestUrl, authorization);
-        client.post(updateUrl, handState, authorization);
+        client.getLatest(latestUrl, authorization);
+//        client.post(updateUrl, handState, authorization);
     }
 
     private void getLatest(String url, String authorization) {

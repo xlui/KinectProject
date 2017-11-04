@@ -101,3 +101,10 @@ def current_picture():
     if not _picture:
         abort(404)
     return render_template('show.html', url=photos.url(_picture.filename))
+
+
+@api.route('/pics', methods=['GET'])
+def pics():
+    _pics = Picture.query.order_by(Picture.id.desc())
+    _pics = [_pic.get_json() for _pic in _pics]
+    return jsonify(_pics)
