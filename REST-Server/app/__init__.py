@@ -1,7 +1,10 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_uploads import UploadSet, IMAGES, configure_uploads
-from config import Config
+import logging
+from logging.handlers import RotatingFileHandler
+
+from config import Config, log_file
 
 db = SQLAlchemy()
 photos = UploadSet('PHOTOS', IMAGES)
@@ -21,5 +24,12 @@ def create_app():
     app.register_blueprint(api_stable_blueprint, url_prefix='/api/s')
     from .api_dev import api as api_dev_blueprint
     app.register_blueprint(api_dev_blueprint, url_prefix='/api/dev')
+
+    handler = RotatingFileHandler(log_file, maxBytes=10 * 1000, backupCount=1)
+    handler.setFormatter(logging.Formatter(
+        '[%(asctime)s] [%(levelname)s]: %(message)s [in %(pathname)s:%(lineno)d]'
+    ))
+    app.logger.setLevel(logging.DEBUG)
+    app.logger.addHandler(handler)
 
     return app

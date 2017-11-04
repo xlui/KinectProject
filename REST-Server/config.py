@@ -16,6 +16,8 @@ database = _windows_database if 'Windows' in _platform else _linux_database
 _linux_uploads = '/var/www/static/uploads'
 _windows_uploads = reduce(os.path.join, [_basedir, 'app', 'static', 'uploads'])
 uploads = _windows_uploads if 'Windows' in _platform else _linux_uploads
+# log file
+log_file = os.path.join(os.path.split(os.path.split(_basedir)[0])[0], 'record.log')
 
 
 class Config:

@@ -1,4 +1,4 @@
-from flask import jsonify, request, abort, make_response, url_for, g, redirect, render_template
+from flask import jsonify, request, abort, make_response, url_for, g, render_template
 from sqlalchemy import func
 
 from . import api
@@ -54,7 +54,7 @@ def update():
 def history():
     """show history hand state of user."""
     user_id = int(g.current_user.username)
-    user_histories = History.query.order_by(History.id.desc()).all()
+    user_histories = History.query.filter_by(userId=user_id).order_by(History.id.desc()).all()
     histories = [_history.get_json() for _history in user_histories]
     return make_response(jsonify(histories))
 
