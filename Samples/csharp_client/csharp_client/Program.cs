@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
+//using Newtonsoft.Json;
 
 namespace csharp_client
 {
@@ -24,7 +24,7 @@ namespace csharp_client
                 { "state", "open_open" },
             };
             // 转换成 Json 格式。注：服务器仅接受 Json 格式的数据，其他格式数据会返回错误
-            string json = JsonConvert.SerializeObject(state);
+            //string json = JsonConvert.SerializeObject(state);
 
             // 以下几个函数的实现细节在 Client.cs 中
             // 获取最新手势
@@ -32,7 +32,7 @@ namespace csharp_client
             // 向服务器发送新手势
             //client.Post(updateUrl, json, authorization);
             // 发送图片
-            String filename = @"D:\Hello.jpg";
+            String filename = @"F:\屏幕截图\hello.png";
             client.SendPicture(uploadUrl, filename, authorization);
         }
     }
