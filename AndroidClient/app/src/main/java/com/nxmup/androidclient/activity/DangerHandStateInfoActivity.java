@@ -22,7 +22,7 @@ public class DangerHandStateInfoActivity extends AppCompatActivity {
         setSupportActionBar(toolBar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setTitle("手势说明");
+            actionBar.setTitle("危险记录");
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 

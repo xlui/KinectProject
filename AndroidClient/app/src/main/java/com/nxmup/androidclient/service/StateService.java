@@ -72,7 +72,6 @@ public class StateService extends Service {
                         String userId = jsonObject.optString("userId");
                         id = userId;
                         String newState = state.optString("state");
-                        LogUtil.show(json);
                         onStateChangeListener.onStateChange(newState, isDanger);
                     } catch (JSONException e) {
                         e.printStackTrace();

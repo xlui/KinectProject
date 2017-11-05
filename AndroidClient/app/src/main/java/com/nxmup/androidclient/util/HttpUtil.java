@@ -32,6 +32,10 @@ public class HttpUtil {
         sendRequest(token, callback, UrlBuilder.getHistoryStateUrl());
     }
 
+    public static void getPicture(String token, Callback callback) {
+        sendRequest(token, callback, UrlBuilder.getPictureUrl());
+    }
+
 //    public static void register(String id, String password, Callback callback) {
 //        final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 //        final String registerUrl = UrlBuilder.getRegisterUrl();

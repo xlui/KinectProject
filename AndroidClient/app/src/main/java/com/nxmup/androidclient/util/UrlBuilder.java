@@ -24,4 +24,8 @@ public class UrlBuilder {
     public static String getHistoryStateUrl() {
         return "https://nxmup.com/api/dev/history";
     }
+
+    public static String getPictureUrl() {
+        return "https://nxmup.com/api/dev/latest_picture";
+    }
 }

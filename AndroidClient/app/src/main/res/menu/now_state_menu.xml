@@ -11,4 +11,9 @@
         android:title="转换到康复计划"
         android:icon="@android:drawable/ic_menu_send" />
 
+    <item
+        android:id="@+id/look_man_state"
+        android:title="查看当前状态"
+        android:icon="@android:drawable/ic_menu_my_calendar"
+        />
 </menu>

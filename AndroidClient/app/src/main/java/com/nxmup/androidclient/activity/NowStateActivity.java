@@ -58,6 +58,8 @@ public class NowStateActivity extends AppCompatActivity implements OnStateChange
     private TextView tvNowStateUserId;
     private Vibrator vibrator;
 
+    private String lastString = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -165,6 +167,7 @@ public class NowStateActivity extends AppCompatActivity implements OnStateChange
                 Glide.with(NowStateActivity.this).load(UrlBuilder.getStateImageUrl(newState)).into(ivNowStateImage);
             }
         });
+
     }
 
     @Override
@@ -173,6 +176,9 @@ public class NowStateActivity extends AppCompatActivity implements OnStateChange
         switch (item.getItemId()) {
             case R.id.all_state_info:
                 startActivity(new Intent(this, HandStateInfoActivity.class));
+                break;
+            case R.id.look_man_state:
+                startActivity(new Intent(this, ManStateActivity.class));
                 break;
         }
         return true;
