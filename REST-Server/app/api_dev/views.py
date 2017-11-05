@@ -103,6 +103,7 @@ def latest_picture():
         max_id = db.session.query(func.max(Picture.id)).first()[0]
     except Exception as e:
         current_app.logger.debug(e)
+        abort(404)
     _picture = Picture.query.get(max_id)
     if not _picture:
         abort(404)

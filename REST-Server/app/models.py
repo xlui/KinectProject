@@ -132,8 +132,9 @@ class Picture(db.Model):
         return {
             'id': self.id,
             'userId': self.user_id,
-            'filename': self.filename
+            'filename': self.filename,
+            'date': self.date,
         }
 
     def __repr__(self):
-        return '<Picture {}, user {}, filename {}>'.format(self.id, self.user, self.filename)
+        return '<Picture {}, user {}, filename {}, date {}>'.format(self.id, self.user, self.filename, self.date)

@@ -16,6 +16,7 @@ https://nxmup.com/api/dev/update|更新手势
 https://nxmup.com/api/dev/history|历史记录
 https://nxmup.com/api/dev/picture/name|显示手势对应图片，name 是图片名字
 https://nxmup.com/api/dev/upload|上传图片
+https://nxmup.com/api/dev/latest_picture|最新图片
 
 ## 使用
 
@@ -193,6 +194,23 @@ version：0.1.0
 
 失败情况未测试。
 
+#### 9. 最新图片（/latest_picture）
+
+服务器端保存了从 kinect 上传的最新的图片
+
+成功返回：
+
+```json
+{
+  "date": "2017-11-05 12:31", 
+  "url": "https://nxmup.com/_uploads/PHOTOS/user_1_2017_11_05_12_34.jpg"
+}
+```
+
+如果图片不存在，即服务器端未有任何上传图片的记录会返回 404 或者 500 错误。
+
+对返回数据的说明：url 是图片链接，通过此链接可以直接下载图片，我在本地使用 Samples/JavaClient 中的 GetPicture 成功进行测试。
+
 ## 示例代码
 
 C#： [主程序 Program.cs](https://github.com/xlui/KinectProject/blob/master/Samples/csharp_client/csharp_client/Program.cs)&nbsp;&nbsp;&nbsp;&nbsp;
@@ -200,5 +218,3 @@ C#： [主程序 Program.cs](https://github.com/xlui/KinectProject/blob/master/S
 Java:  
 [Client.java](https://github.com/xlui/KinectProject/blob/master/Samples/JavaClient/src/main/java/com/liuqi/client/Client.java) &nbsp;&nbsp; [Register.java](https://github.com/xlui/KinectProject/blob/master/Samples/JavaClient/src/main/java/com/liuqi/client/Register.java) &nbsp;&nbsp;[GetPicture.java](https://github.com/xlui/KinectProject/blob/master/Samples/JavaClient/src/main/java/com/liuqi/client/GetPicture.java) &nbsp;&nbsp; [TokenLogin.java](https://github.com/xlui/KinectProject/blob/master/Samples/JavaClient/src/main/java/com/liuqi/client/TokenLogin.java)  
 需要引用 json 包，在 GitHub 上下载相应的 [JSON-java](https://github.com/stleary/JSON-java) 包，然后作为本地包导入。
-
-

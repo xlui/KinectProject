@@ -1,3 +1,11 @@
+# Develop History
+
+## 0.1.4 (2017-11-05)
+
+feature:
+
+- API `latest_picture`
+
 ## 0.1.3 (2017-11-04)
 
 feature:
