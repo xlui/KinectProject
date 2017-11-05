@@ -126,6 +126,7 @@ class Picture(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     filename = db.Column(db.String(64), index=True)
+    date = db.Column(db.String(10), default=datetime.now().strftime('%Y-%m-%d %H:%M'))
 
     def get_json(self):
         return {

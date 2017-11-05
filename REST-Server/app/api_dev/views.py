@@ -1,4 +1,4 @@
-from flask import jsonify, request, abort, make_response, url_for, g, render_template
+from flask import jsonify, request, abort, make_response, url_for, g, render_template, current_app
 from sqlalchemy import func
 
 from . import api
@@ -93,14 +93,21 @@ def show(name):
     return render_template('show.html', url=url, name=name)
 
 
-@api.route('/current_picture', methods=['GET'])
+@api.route('/latest_picture', methods=['GET'])
 @multi_auth.login_required
-def current_picture():
+def latest_picture():
+    """Get the latest picture uploaded through kinect"""
     from .. import photos
-    _picture = Picture.query.order_by(Picture.filename.desc()).first()
+    max_id = 0
+    try:
+        max_id = db.session.query(func.max(Picture.id)).first()[0]
+    except Exception as e:
+        current_app.logger.debug(e)
+    _picture = Picture.query.get(max_id)
     if not _picture:
         abort(404)
-    return render_template('show.html', url=photos.url(_picture.filename))
+    return jsonify({'url': photos.url(_picture.filename),
+                    'date': _picture.date})
 
 
 @api.route('/pics', methods=['GET'])
