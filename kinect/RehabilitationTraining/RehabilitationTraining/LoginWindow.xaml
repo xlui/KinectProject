@@ -1,0 +1,48 @@
+﻿<Window x:Class="RehabilitationTraining.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="LoginWindow" Height="300" Width="400" WindowStyle="None" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="80"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="40"/>
+        </Grid.ColumnDefinitions>
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                <GradientStop Color="#10BBFD" Offset="0.0"/>
+                <GradientStop Color="#10BBFD" Offset="0.2"/>
+                <GradientStop Color="#10BBFD" Offset="0.4"/>
+                <GradientStop Color="#00BBFD" Offset="0.6"/>
+                <GradientStop Color="#00BDFF" Offset="0.8"/>
+                <GradientStop Color="#00BDFF" Offset="1.0"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <TextBlock Grid.Row="2" Grid.ColumnSpan="3" 
+                   Text="骨骼康复训练客户端" TextAlignment="Center" 
+                   VerticalAlignment="Center" FontSize="25" FontFamily="STXihei"></TextBlock>
+        <TextBlock Grid.Row="3" TextAlignment="Right"  VerticalAlignment="Center"
+                   Text="用户名:"/>
+        <TextBox Grid.Row="3" Grid.Column="1" Height="27" Margin="5 0 5 0" 
+                 Name="txt_UserName" FontSize="16" />
+        <TextBlock Grid.Row="4" TextAlignment="Right" VerticalAlignment="Center"
+                   Text="密  码:"/>
+        <PasswordBox Grid.Row="4" Grid.Column="1" Height="27" Margin="5 0 5 0"
+                     Name="txt_Pwd" FontSize="16"/>
+        <StackPanel Grid.Row="5" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="登录" Width="70" Margin="0 0 0 0" Height="30" BorderBrush="Gray"
+                    Name="btn_login" Click="btn_login_Click" Foreground="#F0F0FF" FontSize="18" Background="Transparent" IsDefault="True"/>
+            <Button Content="退出" Width="70" Margin="80 0 0 0" Height="30" BorderBrush="Gray"
+                    Name="btn_exit" Click="btn_exit_Click" Background="Transparent" Foreground="#F0F0FF" FontSize="18"/>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -6,6 +6,8 @@ using Newtonsoft.Json;
 using System.Drawing;
 using System.IO;
 using System.Windows.Media.Imaging;
+using RehabilitationTraining;
+
 //using System.Net;
 //using System.Text;
 //using System.Net.Http;
@@ -250,6 +252,7 @@ namespace KinectHandTracking
                                 }
 
 
+                                // leftHandStateCode == 3 && rightHandStateCode == 1 时切换至康复训练
                                 if (leftHandStateCode == 1 && rightHandStateCode == 1)
                                 {
                                     tbltips.Text = "双手做剪刀动作使设备关闭";
@@ -279,9 +282,15 @@ namespace KinectHandTracking
                                 else if (leftHandStateCode == 3 && rightHandStateCode == 1)
                                 {
                                     AllHandState = "lasso_open";
+
+                                    this.Hide();
+                                    RehabilitationTraining.MainWindow mainWindow = new RehabilitationTraining.MainWindow();
+                                    this.Close();
+                                    mainWindow.Show();
                                 }
                                 else if (leftHandStateCode == 3 && rightHandStateCode == 2)
                                 {
+                                    
                                     AllHandState = "lasso_close";
                                 }
                                 else if (leftHandStateCode == 3 && rightHandStateCode == 3)

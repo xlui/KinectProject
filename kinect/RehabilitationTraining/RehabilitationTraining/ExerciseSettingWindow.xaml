@@ -1,0 +1,42 @@
+﻿<Window x:Class="RehabilitationTraining.ExerciseSettingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="训练课程设置" Height="327.733" Width="370.934" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <ListBox x:Name="listBox" HorizontalAlignment="Left" Height="222" Margin="26,23,0,0" VerticalAlignment="Top" Width="104" SelectionChanged="listBox_SelectionChanged">
+
+            <RadioButton Content="颈部训练" Name="item_Neck"/>
+            <RadioButton Content="肩部训练" Name="item_Shoulder"/>
+            <RadioButton Content="肘部训练" Name="item_Elbow"/>
+            <RadioButton Content="腰部训练" Name="item_Loin"/>
+            <RadioButton Content="腿部训练" Name="item_Leg"/>
+            <RadioButton Content="膝部训练" Name="item_Knee"/>
+        </ListBox>
+        <GroupBox x:Name="groupBox" Header="训练计划" HorizontalAlignment="Left" Margin="168,23,0,0" VerticalAlignment="Top" Height="222" Width="160">
+            <StackPanel>
+                <Label x:Name="label" Content="训练项目：" FontSize="10"/>
+                <StackPanel>
+                    <CheckBox x:Name="checkBox" Content="左肩训练"/>
+                    <CheckBox x:Name="checkBox1" Content="右肩训练" Margin="0,5,0,0"/>
+                </StackPanel>
+
+                <Label x:Name="label1" Content="单次时常：" FontSize="10" Margin="0,10,0,0"/>
+                <ComboBox Margin="0,0,79.2,0">
+                    <ListBoxItem Content="10分钟"/>
+                </ComboBox>
+                <Label x:Name="label2" Content="训练次数：" FontSize="10" Margin="0,10,0,0"/>
+                <ComboBox Margin="0,0,79.2,0">
+                    <ListBoxItem Content="8次"/>
+                </ComboBox>
+
+            </StackPanel>
+
+        </GroupBox>
+        <Button x:Name="button" Content="确认" HorizontalAlignment="Left" Margin="253,258,0,0" VerticalAlignment="Top" Width="75" Click="button_Click"/>
+
+
+    </Grid>
+</Window>

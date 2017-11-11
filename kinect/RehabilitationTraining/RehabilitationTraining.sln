@@ -3,9 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KinectHandTracking", "KinectHandTracking\KinectHandTracking.csproj", "{FABBE412-AAE6-4EDB-9AF6-4DC16F9BD08D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RehabilitationTraining", "..\RehabilitationTraining\RehabilitationTraining\RehabilitationTraining.csproj", "{D05FD850-7219-48C3-A02E-DD48609E984A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RehabilitationTraining", "RehabilitationTraining\RehabilitationTraining.csproj", "{D05FD850-7219-48C3-A02E-DD48609E984A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,10 +11,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{FABBE412-AAE6-4EDB-9AF6-4DC16F9BD08D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FABBE412-AAE6-4EDB-9AF6-4DC16F9BD08D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FABBE412-AAE6-4EDB-9AF6-4DC16F9BD08D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FABBE412-AAE6-4EDB-9AF6-4DC16F9BD08D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D05FD850-7219-48C3-A02E-DD48609E984A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D05FD850-7219-48C3-A02E-DD48609E984A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D05FD850-7219-48C3-A02E-DD48609E984A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -26,6 +20,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {F04816F8-E862-46E3-9E47-CBF19234ED6A}
+		SolutionGuid = {7E24AD87-95D7-4C4C-94F5-BE0788B4CE8C}
 	EndGlobalSection
 EndGlobal
