@@ -4,7 +4,7 @@ from sqlalchemy import func
 from . import api
 from .authentication import multi_auth
 from .. import db
-from ..models import User, State, Picture
+from ..models import User, State, Picture, Train
 
 
 @api.route('/login', methods=['GET'])
@@ -34,7 +34,7 @@ def register():
 @multi_auth.login_required
 def latest():
     """Will only show the latest hand state"""
-    _latest = State.query.filter_by(user_id=g.user_id).order_by(State.id.desc()).first()
+    _latest = g.current_user.state.order_by(State.id.desc()).first()
     return jsonify({'state': _latest.get_json(), 'user_id': g.user_id})
 
 
@@ -44,7 +44,7 @@ def update():
     """update latest gesture state"""
     if not request.json or not 'state' in request.json:
         abort(400)
-    state = State(state=request.json.get('state'), danger=request.json.get('danger'), user_id=g.user_id)
+    state = State(state=request.json.get('state'), danger=request.json.get('danger'), user=g.current_user)
     db.session.add(state)
     db.session.commit()
     return jsonify({'state': state.get_json()})
@@ -54,17 +54,9 @@ def update():
 @multi_auth.login_required
 def history():
     """show history hand state of user."""
-    user_histories = State.query.filter_by(user_id=g.user_id).order_by(State.id.desc()).all()
-    histories = [_history.get_json() for _history in user_histories]
-    return jsonify(histories)
-
-
-@api.route('/picture/<name>', methods=['GET'])
-@multi_auth.login_required
-def pictures(name):
-    """Hand state pictures, get by name"""
-    picture_url = url_for('static', filename='images/' + name)
-    return render_template('show.html', url=picture_url)
+    _histories = g.current_user.state.order_by(State.id.desc()).all()
+    _json_history = [_history.get_json() for _history in _histories]
+    return jsonify(_json_history)
 
 
 @api.route('/upload', methods=['POST'])
@@ -82,36 +74,37 @@ def upload():
     return jsonify({'upload': 'failed', 'imageUrl': None})
 
 
-@api.route('/photo/<name>', methods=['GET'])
-def show(name):
-    """Show images"""
-    from .. import photos
-    if name is None:
-        abort(404)
-    url = photos.url(name)
-    return render_template('show.html', url=url, name=name)
-
-
 @api.route('/latest_picture', methods=['GET'])
 @multi_auth.login_required
 def latest_picture():
     """Get the latest picture uploaded through kinect"""
     from .. import photos
-    max_id = 0
     try:
-        max_id = db.session.query(func.max(Picture.id)).first()[0]
+        _pic = g.current_user.picture.order_by(Picture.id.desc()).first()
+        if not _pic:
+            abort(404)
+        return jsonify({'url': photos.url(_pic.filename),
+                        'date': _pic.date})
     except Exception as e:
         current_app.logger.debug(e)
         abort(404)
-    _picture = Picture.query.get(max_id)
-    if not _picture:
-        abort(404)
-    return jsonify({'url': photos.url(_picture.filename),
-                    'date': _picture.date})
 
 
-@api.route('/pics', methods=['GET'])
-def pics():
-    _pics = Picture.query.order_by(Picture.id.desc())
-    _pics = [_pic.get_json() for _pic in _pics]
-    return jsonify(_pics)
+@api.route('/train', methods=['GET', 'POST'])
+@multi_auth.login_required
+def train():
+    if request.method == 'POST':
+        if not request.json:
+            abort(400)
+        else:
+            result = request.json.get('result')
+            if result:
+                train_result = Train(result=result, user=g.current_user)
+                db.session.add(train_result)
+                db.session.commit()
+                return jsonify(train_result.get_json())
+            else:
+                abort(400)
+    _trains = User.query.filter_by(username=g.user_id).first().train.order_by(Train.id.desc()).all()
+    _train_results = [_t.get_json() for _t in _trains]
+    return jsonify({'train': _train_results})

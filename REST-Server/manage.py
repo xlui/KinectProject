@@ -2,7 +2,7 @@ from flask_script import Manager, Shell
 from flask_migrate import Migrate, MigrateCommand
 
 from app import create_app, db
-from app.models import State, User, Picture
+from app.models import State, User, Picture, Train
 
 
 app = create_app()
@@ -11,7 +11,7 @@ migrate = Migrate(app, db)
 
 
 def make_shell_context():
-    return dict(app=app, db=db, State=State, User=User, Picture=Picture, )
+    return dict(app=app, db=db, State=State, User=User, Picture=Picture, Train=Train, )
 
 
 if __name__ == '__main__':
@@ -26,7 +26,7 @@ if __name__ == '__main__':
 
     @manager.command
     def show_user():
-        show('users')
+        show('user')
 
     @manager.command
     def show_state():

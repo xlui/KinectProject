@@ -1,4 +1,4 @@
-from app.models import State, User, Picture
+from app.models import State, User, Picture, Train
 
 
 def init(db, drop=False):
@@ -9,6 +9,7 @@ def init(db, drop=False):
     User.init()
     State.init()
     Picture.init()
+    Train.init()
 
 
 def print_users(results):

@@ -17,6 +17,7 @@ https://nxmup.com/api/dev/history|历史记录
 https://nxmup.com/api/dev/picture/name|显示手势对应图片，name 是图片名字
 https://nxmup.com/api/dev/upload|上传图片
 https://nxmup.com/api/dev/latest_picture|最新图片
+https://nxmup.com/api/dev/train|上传或拉取训练结果
 
 ## 使用
 
@@ -46,136 +47,81 @@ token 认证类似：
 .addHeader("Authorization", "Dev " + token)
 ```
 
-#### 1. 注册（/register），仅支持 POST 方法
+#### 10. 训练结果（/train）
 
-Java 示例代码在 [Register.java](https://github.com/xlui/KinectProject/blob/master/Samples/JavaClient/src/main/java/com/liuqi/client/Register.java)
+接受 GET 和 POST 方法。
 
-注册 API 仅接收 json 格式的 request body。
-
-成功时返回：
+对于 GET 方法，本 API 会返回当前登录用户所有的训练记录：
 
 ```json
 {
-  "register": "success"
+  "train": [
+    {
+      "date": "2017-11-12 19:51", 
+      "id": 3, 
+      "result": "Great", 
+      "user_id": 1
+    }, 
+    {
+      "date": "2017-11-12 19:51", 
+      "id": 2, 
+      "result": "Good", 
+      "user_id": 1
+    }
+  ]
 }
 ```
 
-失败时（用户名已存在）返回：
+其中 `user_id` 字段即为用户名，考虑到兼容性，不作改动。
+
+对于 POST 方法，提交数据格式必须是 json。对于以下代码进行的提交：
+
+```java
+String rootUrl = "https://nxmup.com";
+String updateUrl = rootUrl + "/api/dev/train";
+
+String username = "1";
+String password = "dev";
+String authorization = new BASE64Encoder().encode((username + ":" + password).getBytes());
+
+// JSON 格式化的数据。state 为 key，必需。
+JSONObject handState = new JSONObject();
+handState.put("result", "Very Good");
+
+// Client 类的具体实现参考实例代码
+Client client = new Client();
+client.post(updateUrl, handState, authorization);
+```
+
+API 会返回提交的数据：
 
 ```json
 {
-  "reason": "username already exists!", 
-  "register": "failed"
+  "date": "2017-11-12 19:59", 
+  "id": 4, 
+  "result": "Very Good", 
+  "user_id": 1
 }
 ```
 
-如果发送的 request body 不是 json 格式的会返回 `400 Error`。
+其中 `user_id` 字段即为用户名，考虑到兼容性，不作改动。
 
-#### 2. 登录（/login），仅接受 GET 方法
+#### 9. 最新图片（/latest_picture）
+
+服务器端保存了从 kinect 上传的最新的图片
 
 成功返回：
 
 ```json
 {
-  "login": "success"
+  "date": "2017-11-05 12:31", 
+  "url": "https://nxmup.com/_uploads/PHOTOS/user_1_2017_11_05_12_34.jpg"
 }
 ```
 
-失败返回 401 错误：
+如果图片不存在，即服务器端未有任何上传图片的记录会返回 404 或者 500 错误。
 
-```json
-{
-  "login": "failed"
-}
-```
-
-#### 3. 获取 token（/token），仅接受 GET 方法
-
-token 的默认有效期是一个月。
-
-获取成功返回：
-
-```json
-{
-  "expiration": 2592000,
-  "token": "token字符串"
-}
-
-```
-
-token 只能在用户名密码登录情况下获取，token 登录情况下尝试获取 token 会得到 405 错误：
-
-```json
-{"token": "Invalid credentials"}
-```
-
-#### 4. 最新手势（/latest），仅接受 GET 方法
-
-获取成功返回：
-
-```json
-{
-  "state": {
-    "danger": false, 
-    "date": "2017-11-12 17:14", 
-    "id": 2, 
-    "state": "open_close", 
-    "user_id": 1
-  }, 
-  "user_id": 1
-}
-```
-
-#### 5. 更新手势（/update），仅接受 POST 方法
-
-更新请求的 request body 必须是 json 格式，如果不是会返回 400 错误。
-
-更新成功返回：
-
-```json
-{
-  "state": {
-    "danger": false, 
-    "date": "2017-11-12 17:19", 
-    "id": 5, 
-    "state": "lasso_lasso", 
-    "user_id": 1
-  }
-}
-```
-
-#### 6. 历史记录（/history），仅接受 GET 方法
-
-历史记录会自动按照用户区分，即只显示当前用户的历史记录
-
-获取成功返回：
-
-```json
-[
-  {
-    "danger": false, 
-    "date": "2017-11-12 17:19", 
-    "id": 5, 
-    "state": "lasso_lasso", 
-    "user_id": 1
-  }, 
-  {
-    "danger": false, 
-    "date": "2017-11-12 17:14", 
-    "id": 2, 
-    "state": "open_close", 
-    "user_id": 1
-  }
-]
-```
-
-#### 7. 手势对应图片（/picture/name），仅接受 GET 方法。
-
-显示 name 对应的手势图片。
-
-url 示例：https://nxmup.com/api/dev/picture/open_open.png
-
-该 API 暂未启用
+对返回数据的说明：url 是图片链接，通过此链接可以直接下载图片，我在本地使用 Samples/JavaClient 中的 GetPicture 成功进行测试。
 
 #### 8. 上传图片（/upload）
 
@@ -211,22 +157,136 @@ url 示例：https://nxmup.com/api/dev/picture/open_open.png
 
 失败情况未测试。
 
-#### 9. 最新图片（/latest_picture）
+#### 7. 手势对应图片（/picture/name），仅接受 GET 方法。
 
-服务器端保存了从 kinect 上传的最新的图片
+显示 name 对应的手势图片。
+
+url 示例：https://nxmup.com/api/dev/picture/open_open.png
+
+该 API 暂未启用
+
+#### 6. 历史记录（/history），仅接受 GET 方法
+
+历史记录会自动按照用户区分，即只显示当前用户的历史记录
+
+获取成功返回：
+
+```json
+[
+  {
+    "danger": false, 
+    "date": "2017-11-12 17:19", 
+    "id": 5, 
+    "state": "lasso_lasso", 
+    "user_id": 1
+  }, 
+  {
+    "danger": false, 
+    "date": "2017-11-12 17:14", 
+    "id": 2, 
+    "state": "open_close", 
+    "user_id": 1
+  }
+]
+```
+
+#### 5. 更新手势（/update），仅接受 POST 方法
+
+更新请求的 request body 必须是 json 格式，如果不是会返回 400 错误。
+
+更新成功返回：
+
+```json
+{
+  "state": {
+    "danger": false, 
+    "date": "2017-11-12 17:19", 
+    "id": 5, 
+    "state": "lasso_lasso", 
+    "user_id": 1
+  }
+}
+```
+
+#### 4. 最新手势（/latest），仅接受 GET 方法
+
+获取成功返回：
+
+```json
+{
+  "state": {
+    "danger": false, 
+    "date": "2017-11-12 17:14", 
+    "id": 2, 
+    "state": "open_close", 
+    "user_id": 1
+  }, 
+  "user_id": 1
+}
+```
+
+#### 3. 获取 token（/token），仅接受 GET 方法
+
+token 的默认有效期是一个月。
+
+获取成功返回：
+
+```json
+{
+  "expiration": 2592000,
+  "token": "token字符串"
+}
+
+```
+
+token 只能在用户名密码登录情况下获取，token 登录情况下尝试获取 token 会得到 405 错误：
+
+```json
+{"token": "Invalid credentials"}
+```
+
+#### 2. 登录（/login），仅接受 GET 方法
 
 成功返回：
 
 ```json
 {
-  "date": "2017-11-05 12:31", 
-  "url": "https://nxmup.com/_uploads/PHOTOS/user_1_2017_11_05_12_34.jpg"
+  "login": "success"
 }
 ```
 
-如果图片不存在，即服务器端未有任何上传图片的记录会返回 404 或者 500 错误。
+失败返回 401 错误：
 
-对返回数据的说明：url 是图片链接，通过此链接可以直接下载图片，我在本地使用 Samples/JavaClient 中的 GetPicture 成功进行测试。
+```json
+{
+  "login": "failed"
+}
+```
+
+#### 1. 注册（/register），仅支持 POST 方法
+
+Java 示例代码在 [Register.java](https://github.com/xlui/KinectProject/blob/master/Samples/JavaClient/src/main/java/com/liuqi/client/Register.java)
+
+注册 API 仅接收 json 格式的 request body。
+
+成功时返回：
+
+```json
+{
+  "register": "success"
+}
+```
+
+失败时（用户名已存在）返回：
+
+```json
+{
+  "reason": "username already exists!", 
+  "register": "failed"
+}
+```
+
+如果发送的 request body 不是 json 格式的会返回 `400 Error`。
 
 ## 示例代码
 

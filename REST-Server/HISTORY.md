@@ -1,10 +1,20 @@
 # Develop History
 
+## 0.2.1 (2017-11-12)
+
+feature:
+
+- API `train`, get result of train throught HTTP POST, also provides HTTP GET to read results. 
+
+bugfix:
+
+- fix logical of API `latest` `update` `history` and `latest_picture`
+
 ## 0.2.0 (2017-11-12)
 
 refactor:
 
-- devastating refactor, change some API interface but optimize code structure
+- devastating refactor, change some API and optimize code structure
 
 ## 0.1.4 (2017-11-05)
 

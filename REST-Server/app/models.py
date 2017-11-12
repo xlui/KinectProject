@@ -16,6 +16,7 @@ class User(db.Model):
 
     state = db.relationship('State', backref='user', lazy='dynamic')
     picture = db.relationship('Picture', backref='user', lazy='dynamic')
+    train = db.relationship('Train', backref='user', lazy='dynamic')
 
     @staticmethod
     def init():
@@ -63,7 +64,7 @@ class State(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.String(16), default=datetime.now().strftime("%Y-%m-%d %H:%M"))
 
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.username'))
 
     state = db.Column(db.String(10), index=True, default='')
     danger = db.Column(db.Boolean, default=False)
@@ -94,18 +95,27 @@ class State(db.Model):
 
 
 class Picture(db.Model):
+    """Table picture: save picture name for upload, picture url can get by:
+    ```
+    photos = UploadSet('PHOTOS', IMAGES)
+    photos.url(filename)
+    ```
+
+    """
     __tablename__ = 'picture'
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.String(10), default=datetime.now().strftime('%Y-%m-%d %H:%M'))
 
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.username'))
 
     filename = db.Column(db.String(64), index=True)
 
     @staticmethod
     def init():
-        picture = Picture(filename='user_1_2017_11_12_16_25', user_id=0)
-        db.session.add(picture)
+        picture1 = Picture(filename='user_1_2017_11_12_16_25.jpg', user_id=0)
+        picture2 = Picture(filename='user_1_2017_11_12_16_25.jpg', user_id=1)
+        db.session.add(picture1)
+        db.session.add(picture2)
         db.session.commit()
 
     def get_json(self):
@@ -117,4 +127,35 @@ class Picture(db.Model):
         }
 
     def __repr__(self):
-        return 'Picture(id={}, date={}, filename={}, user_id={}'.format(self.id, self.date, self.filename, self.user_id)
+        return 'Picture(id={}, date={}, filename={}, user_id={})'.format(self.id, self.date, self.filename, self.user_id)
+
+
+class Train(db.Model):
+    """Table: train"""
+    __tablename__ = 'train'
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.String(16), default=datetime.now().strftime('%Y-%m-%d %H:%M'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.username'))
+
+    result = db.Column(db.Text, default='')
+
+    @staticmethod
+    def init():
+        train1 = Train(result='Well', user_id=0)
+        train2 = Train(result='Good', user_id=1)
+        train3 = Train(result='Great', user_id=1)
+        db.session.add(train1)
+        db.session.add(train2)
+        db.session.add(train3)
+        db.session.commit()
+
+    def get_json(self):
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'date': self.date,
+            'result': self.result,
+        }
+
+    def __repr__(self):
+        return 'Train(user_id={}, result={})'.format(self.user_id, self.result)
