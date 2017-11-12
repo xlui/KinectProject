@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/change_to_now_state"
+        android:icon="@android:drawable/ic_menu_send"
+        android:title="转换到实时监控" />
+
+</menu>

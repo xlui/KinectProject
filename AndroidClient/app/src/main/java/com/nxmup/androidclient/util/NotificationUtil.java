@@ -20,6 +20,7 @@ public class NotificationUtil {
         Notification notification = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.mipmap.ic_launcher_round)
                 .setContentTitle(title)
+                .setAutoCancel(true)
                 .setContentIntent(pendingIntent)
                 .setContentText(message).build();
         notifyManager.notify(notificationId++, notification);
