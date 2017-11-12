@@ -1,7 +1,7 @@
 ﻿<Window x:Class="RehabilitationTraining.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="康复训练客户端" Height="800" Width="1210" Closing="Window_Closing" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" >
+        Title="康复训练客户端" Height="800" Width="1200" Closing="Window_Closing" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" >
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
@@ -21,26 +21,20 @@
                 <MenuItem Header="本地课程"/>
                 <MenuItem Header="获取更多课程"/>
             </MenuItem>
-            <MenuItem Header="_关于">
-                <MenuItem Header="_使用教程">
-                    <MenuItem Header="本地教程"/>
-                    <MenuItem Header="获取更多教程"/>
-                </MenuItem>
-                <MenuItem Header="关于康复训练系统"/>
-            </MenuItem>
         </Menu>
         <Viewbox Grid.Row="1">
-            <Grid x:Name="Layout" Width="1210" Height="540">
+            <Grid x:Name="Layout" Width="1210" Height="748">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="960*"/>
+                    <ColumnDefinition Width="750*"/>
+                    <ColumnDefinition Width="143*"/>
+                    <ColumnDefinition Width="66*"/>
                     <ColumnDefinition Width="250*"/>
                 </Grid.ColumnDefinitions>
-                <Image x:Name="colorImage" Height="540" Width="960" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Visible" Grid.Column="0"/>
-                <Canvas Name="CanvasBody" Width="960" Height="540" Grid.Column="0" />
+                <Image x:Name="colorImage" Height="900" Width="1210" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Visible" Grid.Column="0" Grid.ColumnSpan="4" Margin="0,10,-0.4,-72"/>
+                <Canvas Name="CanvasBody" Width="960" Height="788" Grid.Column="0" VerticalAlignment="Bottom" Grid.ColumnSpan="4" RenderTransformOrigin="0.513,0.525" Margin="10,0,239.6,-41" />
 
-                <Canvas Name="CanvasOther" Height="540" Width="200" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1">
-                    <Label x:Name="lbl_Tips" Content="" Canvas.Left="25" Canvas.Top="194" Width="151" Height="99"/>
-                    <Label x:Name="lbl_Angle" Content="" Canvas.Left="25" Canvas.Top="325" Width="151" Height="99"/>
+                <Canvas Name="CanvasOther" Height="738" Width="230" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="3" Margin="10.395,10,9.729,0">
+                    <Label x:Name="lbl_Tips" Content="" Canvas.Left="-153" Canvas.Top="186" Width="373" Height="107" FontSize="28" RenderTransformOrigin="0.5,0.5"/>
                 </Canvas>
             </Grid>
         </Viewbox>

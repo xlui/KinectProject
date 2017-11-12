@@ -252,7 +252,7 @@ namespace KinectHandTracking
                                 }
 
 
-                                // leftHandStateCode == 3 && rightHandStateCode == 1 时切换至康复训练
+                                //leftHandStateCode == 3 && rightHandStateCode == 1 时切换至康复训练
                                 if (leftHandStateCode == 1 && rightHandStateCode == 1)
                                 {
                                     tbltips.Text = "双手做剪刀动作使设备关闭";
