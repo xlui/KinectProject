@@ -4,59 +4,59 @@ from sqlalchemy import func
 from . import api
 from .authentication import multi_auth
 from .. import db
-from ..models import User, State, History, Picture
+from ..models import User, State, Picture
 
 
 @api.route('/login', methods=['GET'])
 @multi_auth.login_required
 def login():
-    """client login"""
+    """client login: username:password or token"""
     return make_response(jsonify({'login': 'success'}), 200)
 
 
 @api.route('/register', methods=['POST'])
 def register():
-    """user register"""
-    if not request.json or not 'username' in request.json:
+    """user register: json format data only"""
+    if not request.json or 'username' not in request.json:
         abort(400)
-    user = User(username=request.json.get('username'),
-                password=request.json.get('password'))
-    db.session.add(user)
-    db.session.commit()
-    return make_response(jsonify({'register': 'success'}), 200)
+    user = User.query.get(request.json.get('username'))
+    if user:
+        return jsonify({'register': 'failed', 'reason': 'username already exists!'})
+    else:
+        user = User(username=request.json.get('username'),
+                    password=request.json.get('password'))
+        db.session.add(user)
+        db.session.commit()
+        return jsonify({'register': 'success'})
 
 
 @api.route('/latest', methods=['GET'])
 @multi_auth.login_required
 def latest():
     """Will only show the latest hand state"""
-    _latest = db.session.query(func.max(State.id)).first()[0]
-    state = State.query.get(_latest)
-    return jsonify({'state': state.get_json(), 'userId': int(g.current_user.username)})
+    _latest = State.query.filter_by(user_id=g.user_id).order_by(State.id.desc()).first()
+    return jsonify({'state': _latest.get_json(), 'user_id': g.user_id})
 
 
 @api.route('/update', methods=['POST'])
 @multi_auth.login_required
 def update():
-    """update latest hand state"""
+    """update latest gesture state"""
     if not request.json or not 'state' in request.json:
         abort(400)
-    state = State(state=request.json.get('state'), danger=request.json.get('danger'))
-    _history = History(userId=int(g.current_user.username), state=request.json.get('state'))
+    state = State(state=request.json.get('state'), danger=request.json.get('danger'), user_id=g.user_id)
     db.session.add(state)
-    db.session.add(_history)
     db.session.commit()
-    return make_response(jsonify({'state': state.get_json()}), 200)
+    return jsonify({'state': state.get_json()})
 
 
 @api.route('/history', methods=['GET'])
 @multi_auth.login_required
 def history():
     """show history hand state of user."""
-    user_id = int(g.current_user.username)
-    user_histories = History.query.filter_by(userId=user_id).order_by(History.id.desc()).all()
+    user_histories = State.query.filter_by(user_id=g.user_id).order_by(State.id.desc()).all()
     histories = [_history.get_json() for _history in user_histories]
-    return make_response(jsonify(histories))
+    return jsonify(histories)
 
 
 @api.route('/picture/<name>', methods=['GET'])
@@ -72,7 +72,7 @@ def pictures(name):
 def upload():
     from .. import photos
     from datetime import datetime
-    saved_name = 'user_' + str(g.current_user.username) + datetime.now().strftime('_%Y_%m_%d_%H_%M.')
+    saved_name = 'user_' + str(g.user_id) + datetime.now().strftime('_%Y_%m_%d_%H_%M.')
     file = request.files.get('file')
     if file:
         filename = photos.save(file, name=saved_name)
@@ -84,12 +84,11 @@ def upload():
 
 @api.route('/photo/<name>', methods=['GET'])
 def show(name):
+    """Show images"""
     from .. import photos
     if name is None:
         abort(404)
     url = photos.url(name)
-    print(name)
-    print(url)
     return render_template('show.html', url=url, name=name)
 
 

@@ -60,6 +60,15 @@ Java 示例代码在 [Register.java](https://github.com/xlui/KinectProject/blob/
 }
 ```
 
+失败时（用户名已存在）返回：
+
+```json
+{
+  "reason": "username already exists!", 
+  "register": "failed"
+}
+```
+
 如果发送的 request body 不是 json 格式的会返回 `400 Error`。
 
 #### 2. 登录（/login），仅接受 GET 方法
@@ -67,13 +76,17 @@ Java 示例代码在 [Register.java](https://github.com/xlui/KinectProject/blob/
 成功返回：
 
 ```json
-{"login": "success"}
+{
+  "login": "success"
+}
 ```
 
 失败返回 401 错误：
 
 ```json
-{"login": "failed"}
+{
+  "login": "failed"
+}
 ```
 
 #### 3. 获取 token（/token），仅接受 GET 方法
@@ -103,11 +116,13 @@ token 只能在用户名密码登录情况下获取，token 登录情况下尝�
 ```json
 {
   "state": {
-    "id": 4, 
-    "state": "close_close", 
-    "time": "Mon, 30 Oct 2017 21:12:19 GMT"
+    "danger": false, 
+    "date": "2017-11-12 17:14", 
+    "id": 2, 
+    "state": "open_close", 
+    "user_id": 1
   }, 
-  "userId": 1
+  "user_id": 1
 }
 ```
 
@@ -120,9 +135,11 @@ token 只能在用户名密码登录情况下获取，token 登录情况下尝�
 ```json
 {
   "state": {
+    "danger": false, 
+    "date": "2017-11-12 17:19", 
     "id": 5, 
-    "state": "close_close", 
-    "time": "Wed, 01 Nov 2017 16:12:42 GMT"
+    "state": "lasso_lasso", 
+    "user_id": 1
   }
 }
 ```
@@ -136,16 +153,18 @@ token 只能在用户名密码登录情况下获取，token 登录情况下尝�
 ```json
 [
   {
-    "date": "2017-10-30", 
-    "id": 2, 
-    "state": "close_close", 
-    "userId": 1
+    "danger": false, 
+    "date": "2017-11-12 17:19", 
+    "id": 5, 
+    "state": "lasso_lasso", 
+    "user_id": 1
   }, 
   {
-    "date": "2017-11-01", 
-    "id": 3, 
-    "state": "close_close", 
-    "userId": 1
+    "danger": false, 
+    "date": "2017-11-12 17:14", 
+    "id": 2, 
+    "state": "open_close", 
+    "user_id": 1
   }
 ]
 ```
@@ -159,8 +178,6 @@ url 示例：https://nxmup.com/api/dev/picture/open_open.png
 该 API 暂未启用
 
 #### 8. 上传图片（/upload）
-
-version：0.1.0
 
 接受 POST 方法，具体看 Java 示例代码 [SendPicture.java](https://github.com/xlui/KinectProject/blob/master/Samples/JavaClient/src/main/java/com/liuqi/client/SendPicture.java)。
 

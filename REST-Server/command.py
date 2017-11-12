@@ -1,4 +1,4 @@
-from app.models import State, User, History, Picture
+from app.models import State, User, Picture
 
 
 def init(db, drop=False):
@@ -8,7 +8,7 @@ def init(db, drop=False):
     db.create_all()
     User.init()
     State.init()
-    History.init()
+    Picture.init()
 
 
 def print_users(results):
@@ -24,15 +24,6 @@ def print_state(results):
         print('id:', row[0])
         print('state:', row[1])
         print('time:', row[2])
-        print()
-
-
-def print_history(results):
-    for row in results:
-        print('id:', row[0])
-        print('userId', row[1])
-        print('date:', row[2])
-        print('state:', row[3])
         print()
 
 
@@ -53,18 +44,12 @@ def show(database=''):
     if database == 'state':
         _result = _common(database)
         print_state(_result)
-    if database == 'history':
-        _result = _common(database)
-        print_history(_result)
     if not database:
         users_results = _common('users')
         print_users(users_results)
 
         state_results = _common('state')
         print_state(state_results)
-
-        history_results = _common('history')
-        print_history(history_results)
 
     cursor.close()
     connect.close()

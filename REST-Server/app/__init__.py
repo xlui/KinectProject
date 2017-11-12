@@ -25,11 +25,12 @@ def create_app():
     from .api_dev import api as api_dev_blueprint
     app.register_blueprint(api_dev_blueprint, url_prefix='/api/dev')
 
-    handler = RotatingFileHandler(log_file, maxBytes=10 * 1000, backupCount=1)
+    handler = RotatingFileHandler(log_file, maxBytes=10 * 1000 * 1000, backupCount=3)
     handler.setFormatter(logging.Formatter(
         '[%(asctime)s] [%(levelname)s]: %(message)s [in %(pathname)s:%(lineno)d]'
     ))
     app.logger.setLevel(logging.DEBUG)
     app.logger.addHandler(handler)
+    app.debug = True
 
     return app

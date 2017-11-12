@@ -1,5 +1,11 @@
 # Develop History
 
+## 0.2.0 (2017-11-12)
+
+refactor:
+
+- devastating refactor, change some API interface but optimize code structure
+
 ## 0.1.4 (2017-11-05)
 
 feature:
