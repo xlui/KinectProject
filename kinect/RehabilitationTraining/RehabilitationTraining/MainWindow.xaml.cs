@@ -370,8 +370,7 @@ namespace RehabilitationTraining
                 this._KinectDevice.Close();
                 CanvasBody.Children.Clear();
                 StartEx.Header = "开始训练";
-                colorImage.Source = null;
-                lbl_Angle.Content = "";
+                colorImage.Source = null;              
                 lbl_Tips.Content = "";
 
             }
@@ -430,9 +429,7 @@ namespace RehabilitationTraining
                     Joint handRight = _PrimaryBody.Joints[JointType.HandRight];
                     Joint spineMid = _PrimaryBody.Joints[JointType.SpineMid];
 
-                    _Angele = Calc.GetAngle(spineShoulder, spineMid, shoulderLeft, elbowLeft);
-
-                    lbl_Angle.Content = _Angele;
+                    _Angele = Calc.GetAngle(spineShoulder, spineMid, shoulderLeft, elbowLeft);             
 
                     if (_Angele < 10.0)
                     {

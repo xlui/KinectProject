@@ -1,6 +1,7 @@
 package com.nxmup.androidclient.activity;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.nxmup.androidclient.R;
@@ -47,6 +49,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 public class NowStateActivity extends AppCompatActivity implements OnStateChangeListener, NavigationView.OnNavigationItemSelectedListener {
+
     private DrawerLayout dlDrawerLayout;
     private TextView tvNowStateInfo;
     private ImageView ivNowStateImage;
@@ -57,8 +60,8 @@ public class NowStateActivity extends AppCompatActivity implements OnStateChange
     private NavigationView nvNowStateNavigationView;
     private TextView tvNowStateUserId;
     private Vibrator vibrator;
-
-    private String lastString = "";
+    private Handler handler = new Handler();
+    private boolean canFinish = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -180,7 +183,34 @@ public class NowStateActivity extends AppCompatActivity implements OnStateChange
             case R.id.look_man_state:
                 startActivity(new Intent(this, ManStateActivity.class));
                 break;
+            case R.id.change_to_recover_task:
+                startActivity(new Intent(this, RecoverTaskActivity.class));
+                finish();
         }
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (dlDrawerLayout.isDrawerOpen(Gravity.START)) {
+            dlDrawerLayout.closeDrawers();
+        } else if (canFinish) {
+            System.exit(0);
+        } else if (!canFinish) {
+            canFinish = true;
+            Toast.makeText(this, "再次点击退出应用", Toast.LENGTH_SHORT).show();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    canFinish = false;
+                }
+            }, 3000);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mStateService.stopUpdateState();
     }
 }
