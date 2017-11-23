@@ -431,7 +431,7 @@ namespace RehabilitationTraining
 
                     _Angele = Calc.GetAngle(spineShoulder, spineMid, shoulderLeft, elbowLeft);             
 
-                    if (_Angele < 10.0)
+                    if (_Angele < 15.0)
                     {
                         lbl_Tips.Content = "现在，请慢慢抬起您的手臂";
                     }

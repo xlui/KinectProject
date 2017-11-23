@@ -20,6 +20,7 @@
                     <TextBlock x:Name="tbltips" Text="双手打开使设备开启" Style="{StaticResource StateStyle}" FontSize="28" FlowDirection="RightToLeft"/>
                 </StackPanel>
             </StackPanel>
+            <Button Content="切换复健" HorizontalAlignment="Left" Margin="135,687,0,0" VerticalAlignment="Top" Width="153" Height="63" Click="button_Click" FontSize="25"/>
         </Grid>
     </Grid>
 </Window>

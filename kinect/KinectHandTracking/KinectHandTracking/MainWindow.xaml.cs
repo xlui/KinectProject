@@ -8,10 +8,6 @@ using System.IO;
 using System.Windows.Media.Imaging;
 using RehabilitationTraining;
 
-//using System.Net;
-//using System.Text;
-//using System.Net.Http;
-
 namespace KinectHandTracking
 {
     /// <summary>
@@ -23,7 +19,7 @@ namespace KinectHandTracking
 
         KinectSensor _sensor;
         MultiSourceFrameReader _reader;
-        private int flag = 0;           //开启屏幕和关闭屏幕的变量, 1为开启，0为关闭                         
+        private int flag = 1;           //开启屏幕和关闭屏幕的变量, 1为开启，0为关闭                         
 
         private String leftHandState = "---";     
         private String rightHandState = "---";
@@ -79,30 +75,30 @@ namespace KinectHandTracking
         private void BmpToJpg(Bitmap bmp) //位图转png
         {
 
-            if (!Directory.Exists(" F:/屏幕截图"))  //判断目录是否存在,不存在就创建 
+            if (!Directory.Exists("D:/屏幕截图"))  //判断目录是否存在,不存在就创建 
             {
-                DirectoryInfo directoryInfo = new DirectoryInfo(" F:/屏幕截图");
+                DirectoryInfo directoryInfo = new DirectoryInfo(" D:/屏幕截图");
                 directoryInfo.Create();
             }
 
             String time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:fff");//获得系统时间
             time = System.Text.RegularExpressions.Regex.Replace(time, @"[^0-9]+", "");//提取数字
             String fileName = time + ".bmp"; //创建文件名
-            bmp.Save("F:/屏幕截图/" + fileName); //保存为文件.
+            bmp.Save("D:/屏幕截图/" + fileName); //保存为文件.
             bmp.Dispose(); //关闭对象
 
-            String BMPFiles = "F:/屏幕截图/" + fileName;
+            String BMPFiles = "D:/屏幕截图/" + fileName;
             BitmapImage BitImage = new BitmapImage(new Uri(BMPFiles, UriKind.Absolute));
             JpegBitmapEncoder encoder = new JpegBitmapEncoder();
             encoder.Frames.Add(BitmapFrame.Create(BitImage));
             String JpegImage = time + ".png";
 
             //JPG文件件路径
-            FileStream fileStream = new FileStream("F:/屏幕截图/" + JpegImage, FileMode.Create, FileAccess.ReadWrite);
+            FileStream fileStream = new FileStream("D:/屏幕截图/" + JpegImage, FileMode.Create, FileAccess.ReadWrite);
             encoder.Save(fileStream);
             fileStream.Close();
 
-            Send_Img("F:/屏幕截图/" + JpegImage);
+            //Send_Img("D:/屏幕截图/" + JpegImage);
         }
         #region Event handlers
 
@@ -132,6 +128,13 @@ namespace KinectHandTracking
             }
         }
 
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+            this.Hide();
+            RehabilitationTraining.MainWindow mainWindow = new RehabilitationTraining.MainWindow();
+            this.Close();
+            mainWindow.Show();
+        }
 
         void Reader_MultiSourceFrameArrived(object sender, MultiSourceFrameArrivedEventArgs e)
         {
@@ -283,10 +286,10 @@ namespace KinectHandTracking
                                 {
                                     AllHandState = "lasso_open";
 
-                                    this.Hide();
-                                    RehabilitationTraining.MainWindow mainWindow = new RehabilitationTraining.MainWindow();
-                                    this.Close();
-                                    mainWindow.Show();
+                                    //this.Hide();
+                                    //RehabilitationTraining.MainWindow mainWindow = new RehabilitationTraining.MainWindow();
+                                    //this.Close();
+                                    //mainWindow.Show();
                                 }
                                 else if (leftHandStateCode == 3 && rightHandStateCode == 2)
                                 {
@@ -325,7 +328,7 @@ namespace KinectHandTracking
                         encoder.Save(ms);
                         Bitmap bp = new Bitmap(ms);
                         BmpToJpg(bp);
-
+                         
                         ms.Close();
                     }
                 }
