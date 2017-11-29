@@ -1,4 +1,7 @@
-# 认证模块
+"""
+认证模块，对用户身份进行认证
+"""
+
 from flask import g, jsonify, make_response, current_app, abort
 from flask_httpauth import HTTPBasicAuth, HTTPTokenAuth, MultiAuth
 import sqlite3
@@ -16,7 +19,12 @@ multi_auth = MultiAuth(basic_auth, token_auth)
 
 @basic_auth.verify_password
 def verify_password(username, password):
-    """用户名密码验证"""
+    """用户名密码认证
+
+    :param username: 用户名
+    :param password: 密码
+    :return: true or false
+    """
     if username == '':
         return False
     user = None
@@ -52,21 +60,22 @@ def verify_token(token):
 
 @basic_auth.error_handler
 def basic_auth_error():
-    """username-password auth Error handler"""
+    """用户名密码验证错误返回"""
     return make_response(jsonify({'login': 'failed'}), 401)
 
 
 @token_auth.error_handler
 def token_auth_error():
-    """token auth error handler"""
+    """token 验证错误返回"""
     return make_response(jsonify({'login': 'failed'}), 401)
 
 
 @api.route('/token', methods=['GET'])
 @multi_auth.login_required
 def get_token():
-    """Generate a new token when login without token"""
+    """生成 token"""
     if g.token_used:
+        # 如果使用 token 登录，拒绝申请
         return make_response(jsonify({'token': 'Invalid credentials'}), 405)
     expiration = 3600 * 24 * 30  # 3600 = 1 hour, extend token's expiration to one month
     return jsonify({'token': g.current_user.generate_auth_token(expiration=expiration).decode('utf-8'),
