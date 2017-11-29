@@ -21,13 +21,13 @@ import com.nxmup.androidclient.service.StateService;
 
 public class RecoverTaskActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
     private DrawerLayout dlRTDrawerLayout;
-    private RecyclerView rvHistoryTrainState;
+    //private RecyclerView rvHistoryTrainState;
     private NavigationView nvRecoverTaskNavigationView;
     private TextView tvNowStateUserId;
     private Handler handler = new Handler();
     private boolean canFinish = false;
     private StateService mStateService;
-    private SwipeRefreshLayout srlRefreshLayout;
+    //private SwipeRefreshLayout srlRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,9 +47,9 @@ public class RecoverTaskActivity extends AppCompatActivity implements SwipeRefre
             actionBar.setHomeAsUpIndicator(android.R.drawable.ic_menu_more);
         }
         dlRTDrawerLayout = (DrawerLayout) findViewById(R.id.dl_rt_drawer_layout);
-        rvHistoryTrainState = (RecyclerView) findViewById(R.id.rv_history_train_state);
-        srlRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.srl_refresh_layout);
-        srlRefreshLayout.setOnRefreshListener(this);
+//        rvHistoryTrainState = (RecyclerView) findViewById(R.id.rv_history_train_state);
+//        srlRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.srl_refresh_layout);
+//        srlRefreshLayout.setOnRefreshListener(this);
 
         nvRecoverTaskNavigationView = (NavigationView) findViewById(R.id.nv_recover_task_navigation_view);
         View view = nvRecoverTaskNavigationView.getHeaderView(0);
@@ -85,7 +85,7 @@ public class RecoverTaskActivity extends AppCompatActivity implements SwipeRefre
 
     @Override
     public void onRefresh() {
-        srlRefreshLayout.setRefreshing(true);
-        srlRefreshLayout.setRefreshing(false);
+//        srlRefreshLayout.setRefreshing(true);
+//        srlRefreshLayout.setRefreshing(false);
     }
 }
