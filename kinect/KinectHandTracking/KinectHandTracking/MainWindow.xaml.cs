@@ -19,7 +19,7 @@ namespace KinectHandTracking
 
         KinectSensor _sensor;
         MultiSourceFrameReader _reader;
-        private int flag = 1;           //开启屏幕和关闭屏幕的变量, 1为开启，0为关闭                         
+        private int flag = 0;           //开启屏幕和关闭屏幕的变量, 1为开启，0为关闭                         
 
         private String leftHandState = "---";     
         private String rightHandState = "---";
@@ -98,7 +98,7 @@ namespace KinectHandTracking
             encoder.Save(fileStream);
             fileStream.Close();
 
-            //Send_Img("D:/屏幕截图/" + JpegImage);
+            Send_Img("D:/屏幕截图/" + JpegImage);
         }
         #region Event handlers
 
@@ -157,7 +157,7 @@ namespace KinectHandTracking
             }
             else
             {
-                camera.Source = null;
+                    camera.Source = null;
             }
 
 
@@ -301,6 +301,12 @@ namespace KinectHandTracking
                                     tbltips.Text = "双手打开使设备开启";
                                     AllHandState = "lasso_lasso";
                                     flag = 0;
+
+                                    if (MessageBox.Show("检测到退出手势，确认退出？", "退出", MessageBoxButton.YesNo) == MessageBoxResult.OK)
+                                    {
+                                        Application.Current.Shutdown();
+                                       
+                                    }
                                 }
 
 
