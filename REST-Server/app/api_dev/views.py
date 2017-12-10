@@ -45,7 +45,7 @@ def latest():
 @multi_auth.login_required
 def update():
     """kinect 端更新手势状态"""
-    if not request.json or not 'state' in request.json:
+    if not request.json or 'state' not in request.json:
         abort(400)
     state = State(state=request.json.get('state'), danger=request.json.get('danger'), user=g.current_user)
     db.session.add(state)
@@ -94,22 +94,33 @@ def latest_picture():
         abort(404)
 
 
-@api.route('/train', methods=['GET', 'POST'])
+@api.route('/train_target', methods=['GET', 'POST'])
 @multi_auth.login_required
-def train():
-    """训练结果"""
+def train_target():
     if request.method == 'POST':
-        if not request.json:
+        current_app.logger.info('set train target')
+        if not request.json or 'target' not in request.json:
             abort(400)
-        else:
-            result = request.json.get('result')
-            if result:
-                train_result = Train(result=result, user=g.current_user)
-                db.session.add(train_result)
-                db.session.commit()
-                return jsonify(train_result.get_json())
-            else:
-                abort(400)
-    _trains = User.query.filter_by(username=g.user_id).first().train.order_by(Train.id.desc()).all()
-    _train_results = [_t.get_json() for _t in _trains]
-    return jsonify({'train': _train_results})
+        train = Train(target=request.json.get('target'), user=g.current_user)
+        db.session.add(train)
+        db.session.commit()
+    train = g.current_user.train.order_by(Train.id.desc()).first()
+    return jsonify({'target': train.target, 'date': train.date, 'user_id': g.user_id})
+
+
+@api.route('/train_result', methods=['GET', 'POST'])
+@multi_auth.login_required
+def train_result():
+    train = g.current_user.train.order_by(Train.id.desc()).first()
+    if request.method == 'POST':
+        current_app.logger.info('set train result')
+        if not request.json or 'result' not in request.json:
+            abort(400)
+        train.result = request.json.get('result')
+        db.session.add(train)
+        db.session.commit()
+    if len(train.result) != 0:
+        return jsonify({'target': train.target, 'result': train.result})
+    else:
+        return jsonify({'target': train.target, 'result': 'Have no data for this target'})
+

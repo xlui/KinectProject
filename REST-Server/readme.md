@@ -17,7 +17,8 @@ https://nxmup.com/api/dev/history|历史记录
 https://nxmup.com/api/dev/picture/name|显示手势对应图片，name 是图片名字
 https://nxmup.com/api/dev/upload|上传图片
 https://nxmup.com/api/dev/latest_picture|最新图片
-https://nxmup.com/api/dev/train|上传或拉取训练结果
+https://nxmup.com/api/dev/train_target|训练目标
+https://nxmup.com/api/dev/train_result|训练结果|
 
 ## 使用
 
@@ -47,38 +48,33 @@ token 认证类似：
 .addHeader("Authorization", "Dev " + token)
 ```
 
-#### 10. 训练结果（/train）
+#### 11. 训练结果（/train_result）
 
 接受 GET 和 POST 方法。
 
-对于 GET 方法，本 API 会返回当前登录用户所有的训练记录：
+对于 GET 方法，API返回最新的训练结果：
 
 ```json
 {
-  "train": [
-    {
-      "date": "2017-11-12 19:51", 
-      "id": 3, 
-      "result": "Great", 
-      "user_id": 1
-    }, 
-    {
-      "date": "2017-11-12 19:51", 
-      "id": 2, 
-      "result": "Good", 
-      "user_id": 1
-    }
-  ]
+  "result": "nice", 
+  "target": 13
 }
 ```
 
-其中 `user_id` 字段即为用户名，考虑到兼容性，不作改动。
+对于只有训练目标，没有训练结果的项目返回：
 
-对于 POST 方法，提交数据格式必须是 json。对于以下代码进行的提交：
+```json
+{
+  "result": "Have no data for this target", 
+  "target": 13
+}
+```
+
+对于 POST 方法，只接受如下形式代码的提交：
 
 ```java
 String rootUrl = "https://nxmup.com";
-String updateUrl = rootUrl + "/api/dev/train";
+String updateUrl = rootUrl + "/api/dev/train_result";
 
 String username = "1";
 String password = "dev";
@@ -86,7 +82,64 @@ String authorization = new BASE64Encoder().encode((username + ":" + password).ge
 
 // JSON 格式化的数据。state 为 key，必需。
 JSONObject handState = new JSONObject();
-handState.put("result", "Very Good");
+handState.put("result", "test result");
+
+// Client 类的具体实现参考实例代码
+Client client = new Client();
+client.post(updateUrl, handState, authorization);
+```
+
+默认训练结果针对最新的训练目标，所以，对于 `/train_result` 返回结果：
+
+```json
+{
+  "result": "Have no data for this target", 
+  "target": 13
+}
+```
+
+的用户进行上述java代码类似的post，会得到回应：
+
+```json
+{
+  "result": "test result", 
+  "target": 13
+}
+```
+
+整体的逻辑是：**对于需要训练模块的用户，需要现在安卓端设置训练次数，同时打开kinect后自动刷新拉取安卓设置的训练目标，进行训练，结束后kinect发送训练评价到服务器。如果没有在安卓设置训练次数，则默认每次训练更新最新训练目标的训练结果**
+
+#### 10. 训练目标（/train_target）
+
+接受 GET 和 POST 方法。
+
+对于 GET 方法，本 API 会返回当前登录用户**最新的训练目标**以及设置时间：
+
+```json
+{
+  "date": "2017-12-10 23:16", 
+  "target": 3, 
+  "user_id": 1
+}
+```
+
+其中 `user_id` 字段即为用户名，考虑到兼容性，不作改动。
+
+`target` 是目标次数。
+
+对于 POST 方法，提交数据格式必须是 json。对于以下代码进行的提交：
+
+```java
+String rootUrl = "https://nxmup.com";
+String updateUrl = rootUrl + "/api/dev/train_target";
+
+String username = "1";
+String password = "dev";
+String authorization = new BASE64Encoder().encode((username + ":" + password).getBytes());
+
+// JSON 格式化的数据。state 为 key，必需。
+JSONObject handState = new JSONObject();
+handState.put("target", "10");
 
 // Client 类的具体实现参考实例代码
 Client client = new Client();
@@ -97,14 +150,13 @@ API 会返回提交的数据：
 
 ```json
 {
-  "date": "2017-11-12 19:59", 
-  "id": 4, 
-  "result": "Very Good", 
+  "date": "2017-12-10 23:16", 
+  "target": 10, 
   "user_id": 1
 }
 ```
 
-其中 `user_id` 字段即为用户名，考虑到兼容性，不作改动。
+表明已经成功提交了训练目标。
 
 #### 9. 最新图片（/latest_picture）
 

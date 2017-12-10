@@ -137,16 +137,15 @@ class Train(db.Model):
     date = db.Column(db.String(16), default=datetime.now().strftime('%Y-%m-%d %H:%M'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.username'))
 
+    target = db.Column(db.Integer)
     result = db.Column(db.Text, default='')
 
     @staticmethod
     def init():
-        train1 = Train(result='Well', user_id=0)
-        train2 = Train(result='Good', user_id=1)
-        train3 = Train(result='Great', user_id=1)
+        train1 = Train(result='Well', target=0, user_id=0)
+        train2 = Train(result='Good', target=0, user_id=1)
         db.session.add(train1)
         db.session.add(train2)
-        db.session.add(train3)
         db.session.commit()
 
     def get_json(self):
