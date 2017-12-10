@@ -49,6 +49,15 @@ namespace RehabilitationTraining
         //主要玩家数据
         private Body _PrimaryBody;
 
+        //抬手总次数
+        private int count = 0;
+        
+        //用户是否抬起
+        Boolean up = false;
+
+        //用户是否放下
+        Boolean down = false;
+
         //画骨架图颜色uint[]
         private Brush[] ColorBody = new Brush[]{
             Brushes.Red,Brushes.Green,Brushes.Pink,Brushes.Blue,Brushes.Yellow,Brushes.Orange
@@ -395,6 +404,7 @@ namespace RehabilitationTraining
         /// <param name="colorFrame">彩色框架</param>
         protected void LeftArmExercise(BodyFrame bodyFrame, ColorFrame colorFrame)
         {
+            
             //骨骼帧和彩色帧都不为空
             if (bodyFrame != null && colorFrame != null)
             {
@@ -433,12 +443,29 @@ namespace RehabilitationTraining
 
                     if (_Angele < 15.0)
                     {
+                        
                         lbl_Tips.Content = "现在，请慢慢抬起您的手臂";
+                        down = true;
+                        //up = false;
+
                     }
                     else if (_Angele > 87)
                     {
                         lbl_Tips.Content = "很好，请慢慢放下您的手臂";
+                        up = true;
+                        down = false;
                     }
+
+                    if(down == true && up == true)
+                    {
+                        count++;                        
+                        lbl_Sum.Content = "次数：" + count.ToString();
+                        up = false;
+                        down = false;
+                        
+                    }
+
+                    
                 }
             }
         }

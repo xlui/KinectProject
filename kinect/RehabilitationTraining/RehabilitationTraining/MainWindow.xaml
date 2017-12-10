@@ -35,6 +35,7 @@
 
                 <Canvas Name="CanvasOther" Height="738" Width="230" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="3" Margin="10.395,10,9.729,0">
                     <Label x:Name="lbl_Tips" Content="" Canvas.Left="-153" Canvas.Top="186" Width="373" Height="107" FontSize="28" RenderTransformOrigin="0.5,0.5"/>
+                    <Label x:Name="lbl_Sum" Content="" Canvas.Left="-153" Canvas.Top="261" Width="373" Height="107" FontSize="28" RenderTransformOrigin="0.5,0.5"/>
                 </Canvas>
             </Grid>
         </Viewbox>
