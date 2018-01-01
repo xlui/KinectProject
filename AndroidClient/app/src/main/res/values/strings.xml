@@ -1,17 +1,3 @@
 <resources>
     <string name="app_name">Kinect</string>
-    <string name="lastId">Lastid</string>
-    <string name="emptyIdError">账号不能为空</string>
-    <string name="emptyPasswordError">密码不能为空</string>
-    <string name="idInputTypeError">账号只能为数字</string>
-    <string name="errorIdOrPassword">账号密码不正确</string>
-    <string name="historyState">历史手势</string>
-    <string name="login">登录</string>
-    <string name="register">新用户?去注册</string>
-    <string name="userId">账号</string>
-    <string name="password">密码</string>
-    <string name="nowState">实时监控</string>
-    <string name="recoveryTask">康复计划</string>
-    <string name="success">success</string>
-    <string name="failed">failed</string>
 </resources>

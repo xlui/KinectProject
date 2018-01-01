@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:id="@+id/group">
+
+        <item
+            android:id="@+id/hand_state_introduction"
+            android:icon="@mipmap/hand_state_introduction"
+            android:title="全手势说明" />
+        <item
+            android:id="@+id/history_hand_state"
+            android:icon="@mipmap/history"
+            android:title="历史手势" />
+
+    </group>
+    <group android:id="@+id/group1">
+        <item
+            android:id="@+id/skip"
+            android:icon="@mipmap/skip"
+            android:title="转到康复计划" />
+    </group>
+    <item
+        android:id="@+id/quit"
+        android:icon="@mipmap/quit"
+        android:title="登出" />
+</menu>
