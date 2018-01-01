@@ -130,7 +130,6 @@ public class StatePresenter extends BasePresenter<StateActivity>
                     final String detail = StateSelector.getHandDetail(newState);
 
                     final String imageUrl = UrlBuilder.getStateImageUrl(newState);
-                    LogUtils.show(imageUrl);
 
                     boolean isDanger = state.optBoolean("danger");
                     String checkDanger = "安全";

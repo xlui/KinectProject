@@ -10,6 +10,7 @@ import com.totoro.xkf.androidclient.R;
 import com.totoro.xkf.androidclient.app.AppCache;
 import com.totoro.xkf.androidclient.base.BasePresenter;
 import com.totoro.xkf.androidclient.util.HttpUtils;
+import com.totoro.xkf.androidclient.util.LogUtils;
 import com.totoro.xkf.androidclient.util.PreferenceUtils;
 import com.totoro.xkf.androidclient.view.LoginActivity;
 import com.totoro.xkf.androidclient.view.StateActivity;
@@ -59,8 +60,6 @@ public class LoginPresenter extends BasePresenter<LoginActivity> implements View
                                     if (result.equals("success")) {
                                         AppCache.setId(account);
                                         saveToken(account, password);
-                                        mView.startActivity(new Intent(mView, StateActivity.class));
-                                        mView.finish();
                                     } else if (result.equals("failed")) {
                                         mView.runOnUiThread(new Runnable() {
                                             @Override
@@ -105,6 +104,8 @@ public class LoginPresenter extends BasePresenter<LoginActivity> implements View
                     JSONObject jsonObject = new JSONObject(json);
                     String token = jsonObject.optString("token");
                     PreferenceUtils.saveToken(token);
+                    mView.startActivity(new Intent(mView, StateActivity.class));
+                    mView.finish();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

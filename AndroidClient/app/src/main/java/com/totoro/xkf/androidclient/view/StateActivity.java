@@ -77,4 +77,10 @@ public class StateActivity extends BaseActivity<StatePresenter> {
             System.exit(0);
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.stopUpdate();
+    }
 }
