@@ -13,8 +13,8 @@
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="80"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="84.8"/>
+            <ColumnDefinition/>
             <ColumnDefinition Width="40"/>
         </Grid.ColumnDefinitions>
         <Grid.Background>
@@ -29,16 +29,16 @@
         </Grid.Background>
         <TextBlock Grid.Row="2" Grid.ColumnSpan="3" 
                    Text="骨骼康复训练客户端" TextAlignment="Center" 
-                   VerticalAlignment="Center" FontSize="25" FontFamily="STXihei"></TextBlock>
+                   VerticalAlignment="Center" FontSize="25" FontFamily="STXihei" Height="35" Margin="0,12.4,-0.4,12.6"></TextBlock>
         <TextBlock Grid.Row="3" TextAlignment="Right"  VerticalAlignment="Center"
-                   Text="用户名:"/>
-        <TextBox Grid.Row="3" Grid.Column="1" Height="27" Margin="5 0 5 0" 
+                   Text="用户名:" Grid.ColumnSpan="2" Height="15" Margin="0,12.4,268.6,12.6"/>
+        <TextBox Grid.Row="3" Grid.Column="1" Margin="7.2,6.4,4.6,6.6" 
                  Name="txt_UserName" FontSize="16" />
         <TextBlock Grid.Row="4" TextAlignment="Right" VerticalAlignment="Center"
-                   Text="密  码:"/>
-        <PasswordBox Grid.Row="4" Grid.Column="1" Height="27" Margin="5 0 5 0"
+                   Text="密  码:" Grid.ColumnSpan="2" Height="15" Margin="0,12.4,268.6,12.6"/>
+        <PasswordBox Grid.Row="4" Grid.Column="1" Margin="7.2,6.4,4.6,6.6"
                      Name="txt_Pwd" FontSize="16"/>
-        <StackPanel Grid.Row="5" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Center">
+        <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Center" Grid.Column="1" Margin="2.2,0.4,45.6,39.6" Grid.RowSpan="2" Width="221">
             <Button Content="登录" Width="70" Margin="0 0 0 0" Height="30" BorderBrush="Gray"
                     Name="btn_login" Click="btn_login_Click" Foreground="#F0F0FF" FontSize="18" Background="Transparent" IsDefault="True"/>
             <Button Content="退出" Width="70" Margin="80 0 0 0" Height="30" BorderBrush="Gray"

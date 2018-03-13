@@ -14,6 +14,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Kinect;
 using System.IO;
+using Newtonsoft.Json;
+
 namespace RehabilitationTraining
 {
     /// <summary>
@@ -57,6 +59,18 @@ namespace RehabilitationTraining
 
         //用户是否放下
         Boolean down = false;
+
+        //训练目标
+        String train_target = "https://nxmup.com/api/dev/train_target";
+
+        //训练结果
+        String train_result = "https://nxmup.com/api/dev/train_result";
+
+        //设置训练目标
+        int set_count = 0;
+
+        Client client = new Client();
+
 
         //画骨架图颜色uint[]
         private Brush[] ColorBody = new Brush[]{
@@ -364,6 +378,7 @@ namespace RehabilitationTraining
         /// <param name="e"></param>
         private void StartEx_Click(object sender, RoutedEventArgs e)
         {
+            
             //训练操作
             if (StartEx.Header.ToString() == "开始训练")
             {
@@ -371,16 +386,26 @@ namespace RehabilitationTraining
                 this._KinectDevice.Open();
                 StartEx.Header = "终止训练";
                 colorImage.Source = this._ColorBitmap;
+
             }
 
             //终止训练操作
             else if (StartEx.Header.ToString() == "终止训练")
             {
+
+                Send_Train(count.ToString(), train_result, "result");
+
+                if (MessageBox.Show("已终止训练", "停止", MessageBoxButton.YesNo) == MessageBoxResult.OK)
+                {  
+                    Application.Current.Shutdown();
+                }
+
                 this._KinectDevice.Close();
                 CanvasBody.Children.Clear();
                 StartEx.Header = "开始训练";
-                colorImage.Source = null;              
+                colorImage.Source = null;
                 lbl_Tips.Content = "";
+                lbl_Sum.Content = "";
 
             }
             //出错
@@ -439,15 +464,13 @@ namespace RehabilitationTraining
                     Joint handRight = _PrimaryBody.Joints[JointType.HandRight];
                     Joint spineMid = _PrimaryBody.Joints[JointType.SpineMid];
 
-                    _Angele = Calc.GetAngle(spineShoulder, spineMid, shoulderLeft, elbowLeft);             
+                    _Angele = Calc.GetAngle(spineShoulder, spineMid, shoulderLeft, elbowLeft);
 
+                 
                     if (_Angele < 15.0)
                     {
-                        
                         lbl_Tips.Content = "现在，请慢慢抬起您的手臂";
-                        down = true;
-                        //up = false;
-
+                        down = true;                        
                     }
                     else if (_Angele > 87)
                     {
@@ -461,11 +484,28 @@ namespace RehabilitationTraining
                         count++;                        
                         lbl_Sum.Content = "次数：" + count.ToString();
                         up = false;
-                        down = false;
-                        
-                    }
+                        down = false;                        
+                    }   
 
-                    
+                    if(count == set_count)
+                    {
+                        Send_Train(count.ToString(), train_result, "result");
+                        count = 0;
+
+                        if (MessageBox.Show("已完成设定目标，若还需训练，请转至设置", "结束", MessageBoxButton.YesNo) == MessageBoxResult.OK)
+                        {
+                            Application.Current.Shutdown();
+                        }
+
+                        count = 0;
+                        this._KinectDevice.Close();
+                        CanvasBody.Children.Clear();
+                        StartEx.Header = "开始训练";
+                        colorImage.Source = null;
+                        lbl_Tips.Content = "";
+                        lbl_Sum.Content = "";
+
+                    }
                 }
             }
         }
@@ -477,12 +517,39 @@ namespace RehabilitationTraining
         /// <param name="e"></param>
         private void ExSetting_Click(object sender, RoutedEventArgs e)
         {
-            ExerciseSettingWindow exSettingWindow = new ExerciseSettingWindow();
+            ExerciseSettingWindow exSettingWindow = new ExerciseSettingWindow();            
             exSettingWindow.ShowDialog();
+
+            set_count = Convert.ToInt32(exSettingWindow.Train_time.Text);
+
+            if (set_count > 0)
+            {
+                Send_Train(set_count.ToString(), train_target, "target");
+            }
+            else
+            {
+                int error = -1;
+                Send_Train(error.ToString(), train_target, "target");
+            }
+
         }
 
-        #endregion
+        private void Send_Train(String train, String updateUrl, String name)
+        {
+            String username = "1", password = "dev";
+            String authorization = "Basic " + Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(username + ":" + password));
 
+            // 对要发送给服务器的数据进行包装
+            Dictionary<String, object> state = new Dictionary<String, object>();
+            state.Add(name, train);
+            
+            // 转换成 Json 格式。
+            string json = JsonConvert.SerializeObject(state);
+            // 向服务器发送新手势
+            client.Post(updateUrl, json, authorization);
+        }
+
+         #endregion
 
     }
 }

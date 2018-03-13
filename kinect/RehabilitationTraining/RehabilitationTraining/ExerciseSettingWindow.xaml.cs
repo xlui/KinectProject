@@ -25,8 +25,8 @@ namespace RehabilitationTraining
         }
 
         private void button_Click(object sender, RoutedEventArgs e)
-        {
-
+        {     
+            this.Hide();
         }
 
         private void listBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
