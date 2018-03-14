@@ -45,11 +45,10 @@ namespace KinectHandTracking
 
         private void Send_State(String HandState)
         {
-            String updateUrl = "http://111.231.1.210/api/dev/update";
-            String latestUrl = "https://nxmup.com/api/dev/latest";  //没啥用，，仅用于方便查看State是否上传
+            String updateUrl = Config.BASE_URL + "/update";
+            String latestUrl = Config.BASE_URL + "/latest";  //没啥用，，仅用于方便查看State是否上传
 
-            String username = "1", password = "dev";
-            String authorization = "Basic " + Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(username + ":" + password));
+            String authorization = "Basic " + Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(Config.USERNAME + ":" + Config.PASSWORD));
 
             // 对要发送给服务器的数据进行包装
             Dictionary<String, object> state = new Dictionary<String, object>();
@@ -63,11 +62,9 @@ namespace KinectHandTracking
 
         private void Send_Img(String filePath)
         {
-            String uploadUrl = "https://nxmup.com/api/dev/upload";
-            String test = "https://nxmup.com/api/dev/pics";    //没啥用，，仅用于方便查看图片是否上传
-            String username = "1";
-            String password = "dev";
-            String authorization = "Basic " + Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(username + ":" + password));
+            String uploadUrl = Config.BASE_URL + "/upload";
+            String test = Config.BASE_URL + "/pics";    //没啥用，，仅用于方便查看图片是否上传
+            String authorization = "Basic " + Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(Config.USERNAME + ":" + Config.PASSWORD));
 
             client.SendPicture(uploadUrl, filePath, authorization);
         }
