@@ -301,7 +301,6 @@ namespace KinectHandTracking
                                     if (MessageBox.Show("检测到退出手势，确认退出？", "退出", MessageBoxButton.YesNo) == MessageBoxResult.OK)
                                     {
                                         Application.Current.Shutdown();
-                                       
                                     }
                                 }
 
