@@ -119,8 +119,8 @@ def train_result():
         train.result = request.json.get('result')
         db.session.add(train)
         db.session.commit()
-    if len(train.result) != 0:
-        if train.target > train.result:
+    if train.result != 0:
+        if int(train.target) > int(train.result):
             desc = '没有完成设置的目标，请继续努力！'
         else:
             desc = '已经完成训练目标，加油！'
