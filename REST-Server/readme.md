@@ -8,17 +8,17 @@ RESTful 服务器端，提供给 C# 端更新数据和安卓端查询数据的 A
 
 API|说明
 ---|---
-https://nxmup.com/api/dev/register|注册
-https://nxmup.com/api/dev/login|登录
-https://nxmup.com/api/dev/token|获取 token，默认 token 有效期是 30 天
-https://nxmup.com/api/dev/latest|获取最新手势
-https://nxmup.com/api/dev/update|更新手势
-https://nxmup.com/api/dev/history|历史记录
-https://nxmup.com/api/dev/picture/name|显示手势对应图片，name 是图片名字
-https://nxmup.com/api/dev/upload|上传图片
-https://nxmup.com/api/dev/latest_picture|最新图片
-https://nxmup.com/api/dev/train_target|训练目标
-https://nxmup.com/api/dev/train_result|训练结果|
+<https://nxmup.com/api/dev/register>|注册
+<https://nxmup.com/api/dev/login>|登录
+<https://nxmup.com/api/dev/token>|获取 token，默认 token 有效期是 30 天
+<https://nxmup.com/api/dev/latest>|获取最新手势
+<https://nxmup.com/api/dev/update>|更新手势
+<https://nxmup.com/api/dev/history>|历史记录
+<https://nxmup.com/api/dev/picture/name>|显示手势对应图片，name 是图片名字
+<https://nxmup.com/api/dev/upload>|上传图片
+<https://nxmup.com/api/dev/latest_picture>|最新图片
+<https://nxmup.com/api/dev/train_target>|训练目标
+<https://nxmup.com/api/dev/train_result>|训练结果
 
 ## 使用
 
@@ -48,7 +48,7 @@ token 认证类似：
 .addHeader("Authorization", "Dev " + token)
 ```
 
-#### 11. 训练结果（/train_result）
+## 11. 训练结果（/train_result）
 
 接受 GET 和 POST 方法。
 
@@ -56,8 +56,17 @@ token 认证类似：
 
 ```json
 {
-  "result": "nice", 
-  "target": 13
+  "result": 14,
+  "target": 13,
+  "desc": "已经完成训练目标，加油！"
+}
+```
+
+```json
+{
+  "result": 1,
+  "target": 13,
+  "desc": "没有完成设置的目标，请继续努力！"
 }
 ```
 
@@ -65,51 +74,13 @@ token 认证类似：
 
 ```json
 {
-  "result": "Have no data for this target", 
-  "target": 13
+  "result": "Have no data for this target",
+  "target": 13,
+  "desc": "Have no data for this target"
 }
 ```
 
-对于 POST 方法，只接受如下形式代码的提交：
-
-```java
-String rootUrl = "https://nxmup.com";
-String updateUrl = rootUrl + "/api/dev/train_result";
-
-String username = "1";
-String password = "dev";
-String authorization = new BASE64Encoder().encode((username + ":" + password).getBytes());
-
-// JSON 格式化的数据。state 为 key，必需。
-JSONObject handState = new JSONObject();
-handState.put("result", "test result");
-
-// Client 类的具体实现参考实例代码
-Client client = new Client();
-client.post(updateUrl, handState, authorization);
-```
-
-默认训练结果针对最新的训练目标，所以，对于 `/train_result` 返回结果：
-
-```json
-{
-  "result": "Have no data for this target", 
-  "target": 13
-}
-```
-
-的用户进行上述java代码类似的post，会得到回应：
-
-```json
-{
-  "result": "test result", 
-  "target": 13
-}
-```
-
-整体的逻辑是：**对于需要训练模块的用户，需要现在安卓端设置训练次数，同时打开kinect后自动刷新拉取安卓设置的训练目标，进行训练，结束后kinect发送训练评价到服务器。如果没有在安卓设置训练次数，则默认每次训练更新最新训练目标的训练结果**
-
-#### 10. 训练目标（/train_target）
+## 10. 训练目标（/train_target）
 
 接受 GET 和 POST 方法。
 
@@ -158,7 +129,7 @@ API 会返回提交的数据：
 
 表明已经成功提交了训练目标。
 
-#### 9. 最新图片（/latest_picture）
+## 9. 最新图片（/latest_picture）
 
 服务器端保存了从 kinect 上传的最新的图片
 
@@ -175,7 +146,7 @@ API 会返回提交的数据：
 
 对返回数据的说明：url 是图片链接，通过此链接可以直接下载图片，我在本地使用 Samples/JavaClient 中的 GetPicture 成功进行测试。
 
-#### 8. 上传图片（/upload）
+## 8. 上传图片（/upload）
 
 接受 POST 方法，具体看 Java 示例代码 [SendPicture.java](https://github.com/xlui/KinectProject/blob/master/Samples/JavaClient/src/main/java/com/liuqi/client/SendPicture.java)。
 
@@ -193,7 +164,7 @@ API 会返回提交的数据：
 
 ```json
 {
-  "imageUrl": "图片的地址", 
+  "imageUrl": "图片的地址",
   "upload": "success"
 }
 ```
@@ -202,22 +173,22 @@ API 会返回提交的数据：
 
 ```json
 {
-  "upload": "failed", 
-  "imageUrl": 
+  "upload": "failed",
+  "imageUrl":
 }
 ```
 
 失败情况未测试。
 
-#### 7. 手势对应图片（/picture/name），仅接受 GET 方法。
+## 7. 手势对应图片（/picture/name），仅接受 GET 方法。
 
 显示 name 对应的手势图片。
 
-url 示例：https://nxmup.com/api/dev/picture/open_open.png
+url 示例：<https://nxmup.com/api/dev/picture/open_open.png>
 
 该 API 暂未启用
 
-#### 6. 历史记录（/history），仅接受 GET 方法
+## 6. 历史记录（/history），仅接受 GET 方法
 
 历史记录会自动按照用户区分，即只显示当前用户的历史记录
 
@@ -226,23 +197,23 @@ url 示例：https://nxmup.com/api/dev/picture/open_open.png
 ```json
 [
   {
-    "danger": false, 
-    "date": "2017-11-12 17:19", 
-    "id": 5, 
-    "state": "lasso_lasso", 
+    "danger": false,
+    "date": "2017-11-12 17:19",
+    "id": 5,
+    "state": "lasso_lasso",
     "user_id": 1
-  }, 
+  },
   {
-    "danger": false, 
-    "date": "2017-11-12 17:14", 
-    "id": 2, 
-    "state": "open_close", 
+    "danger": false,
+    "date": "2017-11-12 17:14",
+    "id": 2,
+    "state": "open_close",
     "user_id": 1
   }
 ]
 ```
 
-#### 5. 更新手势（/update），仅接受 POST 方法
+## 5. 更新手势（/update），仅接受 POST 方法
 
 更新请求的 request body 必须是 json 格式，如果不是会返回 400 错误。
 
@@ -251,33 +222,33 @@ url 示例：https://nxmup.com/api/dev/picture/open_open.png
 ```json
 {
   "state": {
-    "danger": false, 
-    "date": "2017-11-12 17:19", 
-    "id": 5, 
-    "state": "lasso_lasso", 
+    "danger": false,
+    "date": "2017-11-12 17:19",
+    "id": 5,
+    "state": "lasso_lasso",
     "user_id": 1
   }
 }
 ```
 
-#### 4. 最新手势（/latest），仅接受 GET 方法
+## 4. 最新手势（/latest），仅接受 GET 方法
 
 获取成功返回：
 
 ```json
 {
   "state": {
-    "danger": false, 
-    "date": "2017-11-12 17:14", 
-    "id": 2, 
-    "state": "open_close", 
+    "danger": false,
+    "date": "2017-11-12 17:14",
+    "id": 2,
+    "state": "open_close",
     "user_id": 1
-  }, 
+  },
   "user_id": 1
 }
 ```
 
-#### 3. 获取 token（/token），仅接受 GET 方法
+## 3. 获取 token（/token），仅接受 GET 方法
 
 token 的默认有效期是一个月。
 
@@ -288,16 +259,17 @@ token 的默认有效期是一个月。
   "expiration": 2592000,
   "token": "token字符串"
 }
-
 ```
 
 token 只能在用户名密码登录情况下获取，token 登录情况下尝试获取 token 会得到 405 错误：
 
 ```json
-{"token": "Invalid credentials"}
+{
+  "token": "Invalid credentials"
+}
 ```
 
-#### 2. 登录（/login），仅接受 GET 方法
+## 2. 登录（/login），仅接受 GET 方法
 
 成功返回：
 
@@ -315,9 +287,7 @@ token 只能在用户名密码登录情况下获取，token 登录情况下尝�
 }
 ```
 
-#### 1. 注册（/register），仅支持 POST 方法
-
-Java 示例代码在 [Register.java](https://github.com/xlui/KinectProject/blob/master/Samples/JavaClient/src/main/java/com/liuqi/client/Register.java)
+## 1. 注册（/register），仅支持 POST 方法
 
 注册 API 仅接收 json 格式的 request body。
 
@@ -333,17 +303,9 @@ Java 示例代码在 [Register.java](https://github.com/xlui/KinectProject/blob/
 
 ```json
 {
-  "reason": "username already exists!", 
+  "reason": "username already exists!",
   "register": "failed"
 }
 ```
 
-如果发送的 request body 不是 json 格式的会返回 `400 Error`。
-
-## 示例代码
-
-C#： [主程序 Program.cs](https://github.com/xlui/KinectProject/blob/master/Samples/csharp_client/csharp_client/Program.cs)&nbsp;&nbsp;&nbsp;&nbsp;
-[具体实现（需和主程序在同一 namespace）](https://github.com/xlui/KinectProject/blob/master/Samples/csharp_client/csharp_client/Client.cs)  
-Java:  
-[Client.java](https://github.com/xlui/KinectProject/blob/master/Samples/JavaClient/src/main/java/com/liuqi/client/Client.java) &nbsp;&nbsp; [Register.java](https://github.com/xlui/KinectProject/blob/master/Samples/JavaClient/src/main/java/com/liuqi/client/Register.java) &nbsp;&nbsp;[GetPicture.java](https://github.com/xlui/KinectProject/blob/master/Samples/JavaClient/src/main/java/com/liuqi/client/GetPicture.java) &nbsp;&nbsp; [TokenLogin.java](https://github.com/xlui/KinectProject/blob/master/Samples/JavaClient/src/main/java/com/liuqi/client/TokenLogin.java)  
-需要引用 json 包，在 GitHub 上下载相应的 [JSON-java](https://github.com/stleary/JSON-java) 包，然后作为本地包导入。
+如果发送的 request body 不是 json 格式的则会返回 `400 Error`。

@@ -120,7 +120,11 @@ def train_result():
         db.session.add(train)
         db.session.commit()
     if len(train.result) != 0:
-        return jsonify({'target': train.target, 'result': train.result})
+        if train.target > train.result:
+            desc = '没有完成设置的目标，请继续努力！'
+        else:
+            desc = '已经完成训练目标，加油！'
+        return jsonify({'target': train.target, 'result': train.result, 'desc': desc})
     else:
-        return jsonify({'target': train.target, 'result': 'Have no data for this target'})
+        return jsonify({'target': train.target, 'result': 'Have no data for this target', 'desc': 'Have no data for this target'})
 
