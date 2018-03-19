@@ -9,11 +9,8 @@
         <ListBox x:Name="listBox" HorizontalAlignment="Left" Height="222" Margin="26,23,0,0" VerticalAlignment="Top" Width="104" SelectionChanged="listBox_SelectionChanged">
 
             <RadioButton Content="颈部训练" Name="item_Neck"/>
-            <RadioButton Content="肩部训练" Name="item_Shoulder"/>
-            <RadioButton Content="肘部训练" Name="item_Elbow"/>
-            <RadioButton Content="腰部训练" Name="item_Loin"/>
-            <RadioButton Content="腿部训练" Name="item_Leg"/>
-            <RadioButton Content="膝部训练" Name="item_Knee"/>
+            <RadioButton Content="肩部训练" Name="item_Shoulder"/>        
+            <RadioButton Content="腰部训练" Name="item_Loin"/>       
         </ListBox>
         <GroupBox x:Name="groupBox" Header="训练计划" HorizontalAlignment="Left" Margin="168,23,0,0" VerticalAlignment="Top" Height="222" Width="160">
             <StackPanel>
@@ -22,15 +19,16 @@
                     <CheckBox x:Name="checkBox" Content="左肩训练"/>
                     <CheckBox x:Name="checkBox1" Content="右肩训练" Margin="0,5,0,0"/>
                 </StackPanel>
-
+                <!--
                 <Label x:Name="label1" Content="单次时常：" FontSize="10" Margin="0,10,0,0"/>
                 <ComboBox Margin="0,0,79.2,0">
                     <ListBoxItem Content="10分钟"/>
                 </ComboBox>
-                <Label x:Name="label2" Content="训练次数：" FontSize="10" Margin="0,10,0,0"/>
-                <ComboBox Margin="0,0,79.2,0">
-                    <ListBoxItem Content="8次"/>
-                </ComboBox>
+                -->
+                <Label x:Name="time_label" Content="训练次数：" FontSize="10" Margin="0,10,0,0"/>
+                <TextBox Height="24"  
+                 x:Name="Train_time" Margin="0,0,80.2,0" RenderTransformOrigin="0.455,0.421"  />
+
 
             </StackPanel>
 

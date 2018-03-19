@@ -10,16 +10,13 @@
         <Menu Grid.Row="0" Height="25" FontSize="16">
             <MenuItem Header="_训练">
                 <MenuItem Header="开始训练" Name="StartEx" Click="StartEx_Click"/>
-
                 <MenuItem Header="训练进度检查"/>
             </MenuItem>
             <MenuItem Header="_设置">
                 <MenuItem Header="训练项目设置" Name="ExSetting" Click="ExSetting_Click"/>
-                <MenuItem Header="个人资料设置"/>
             </MenuItem>
-            <MenuItem Header="_训练课程">
-                <MenuItem Header="本地课程"/>
-                <MenuItem Header="获取更多课程"/>
+            <MenuItem Header="关于">
+                <MenuItem Header="帮助"/>
             </MenuItem>
         </Menu>
         <Viewbox Grid.Row="1">
@@ -31,9 +28,18 @@
                     <ColumnDefinition Width="250*"/>
                 </Grid.ColumnDefinitions>
                 <Image x:Name="colorImage" Height="900" Width="1210" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Visible" Grid.Column="0" Grid.ColumnSpan="4" Margin="0,10,-0.4,-72"/>
-                <Canvas Name="CanvasBody" Width="960" Height="788" Grid.Column="0" VerticalAlignment="Bottom" Grid.ColumnSpan="4" RenderTransformOrigin="0.513,0.525" Margin="10,0,239.6,-41" />
+                <Canvas Name="CanvasBody" Height="750" Grid.Column="0" VerticalAlignment="Bottom" Grid.ColumnSpan="4" RenderTransformOrigin="0.513,0.525" Margin="0,0,244.6,-2" >
+                    <Canvas.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="-0.134"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Canvas.RenderTransform>
+                </Canvas>
 
-                <Canvas Name="CanvasOther" Height="738" Width="230" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="3" Margin="10.395,10,9.729,0">
+                <Canvas Name="CanvasOther" Height="748" Width="240" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="3" Margin="10.8,0,-0.4,0">
                     <Label x:Name="lbl_Tips" Content="" Canvas.Left="-153" Canvas.Top="186" Width="373" Height="107" FontSize="28" RenderTransformOrigin="0.5,0.5"/>
                     <Label x:Name="lbl_Sum" Content="" Canvas.Left="-153" Canvas.Top="261" Width="373" Height="107" FontSize="28" RenderTransformOrigin="0.5,0.5"/>
                 </Canvas>

@@ -138,12 +138,12 @@ class Train(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.username'))
 
     target = db.Column(db.Integer)
-    result = db.Column(db.Text, default='')
+    result = db.Column(db.Integer, default=0)
 
     @staticmethod
     def init():
-        train1 = Train(result='Well', target=0, user_id=0)
-        train2 = Train(result='Good', target=0, user_id=1)
+        train1 = Train(result=0, target=0, user_id=0)
+        train2 = Train(result=0, target=0, user_id=1)
         db.session.add(train1)
         db.session.add(train2)
         db.session.commit()
