@@ -1,5 +1,6 @@
 package com.totoro.xkf.androidclient.util;
 
+import android.net.Uri;
 import android.util.Base64;
 
 import okhttp3.Callback;
@@ -31,25 +32,13 @@ public class HttpUtils {
         sendRequest(token, callback, UrlBuilder.getPictureUrl());
     }
 
-//    public static void register(String id, String password, Callback callback) {
-//        final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-//        final String registerUrl = UrlBuilder.getRegisterUrl();
-//        int userId = Integer.parseInt(id);
-//        JSONObject user = new JSONObject();
-//        try {
-//            user.put("username", userId);
-//            user.put("password", password);
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//        OkHttpClient client = new OkHttpClient();
-//        RequestBody body = RequestBody.create(JSON, user.toString());
-//        Request request = new Request.Builder()
-//                .url(registerUrl)
-//                .post(body)
-//                .build();
-//        client.newCall(request).enqueue(callback);
-//    }
+    public static void getTrainTarget(String token, Callback callback) {
+        sendRequest(token, callback, UrlBuilder.getTrainTargetUrl());
+    }
+
+    public static void getTrainResult(String token, Callback callback) {
+        sendRequest(token, callback, UrlBuilder.getTrainResultUrl());
+    }
 
     private static void sendRequest(String id, String password, Callback callback, String url) {
         String str = id + ":" + password;

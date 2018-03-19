@@ -30,7 +30,9 @@
         <activity
             android:name=".view.HistoryHandStateActivity"
             android:parentActivityName=".view.StateActivity" />
-
+        <activity android:name=".view.TrainActivity"
+            android:parentActivityName=".view.StateActivity"
+            />
     </application>
 
 </manifest>

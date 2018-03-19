@@ -28,6 +28,7 @@ import com.totoro.xkf.androidclient.view.AllHandStateActivity;
 import com.totoro.xkf.androidclient.view.HistoryHandStateActivity;
 import com.totoro.xkf.androidclient.view.LoginActivity;
 import com.totoro.xkf.androidclient.view.StateActivity;
+import com.totoro.xkf.androidclient.view.TrainActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -93,6 +94,10 @@ public class StatePresenter extends BasePresenter<StateActivity>
                 mView.startActivity(new Intent(mView, LoginActivity.class));
                 PreferenceUtils.saveToken(null);
                 mView.finish();
+                break;
+            case R.id.skip:
+                mView.startActivity(new Intent(mView, TrainActivity.class));
+                break;
         }
         return true;
     }
@@ -126,6 +131,7 @@ public class StatePresenter extends BasePresenter<StateActivity>
 
                 final String date = state.optString("date");
                 if (!date.equals(lastDate)) {
+                    lastDate = date;
                     final String info = StateSelector.getState(newState);
                     final String detail = StateSelector.getHandDetail(newState);
 
@@ -134,8 +140,9 @@ public class StatePresenter extends BasePresenter<StateActivity>
                     boolean isDanger = state.optBoolean("danger");
                     String checkDanger = "安全";
                     if (isDanger) {
+                        LogUtils.show("111");
                         checkDanger = "危险";
-                        vibrator.vibrate(2000);
+                        //vibrator.vibrate(2000);
                         NotificationUtils.createDangerNotification(mView, "检测到危险手势！！！",
                                 "检测到危险手势" + info);
                     }

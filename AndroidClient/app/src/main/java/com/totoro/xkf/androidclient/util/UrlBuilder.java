@@ -28,4 +28,12 @@ public class UrlBuilder {
     public static String getPictureUrl() {
         return "https://nxmup.com/api/dev/latest_picture";
     }
+
+    public static String getTrainTargetUrl() {
+        return "https://nxmup.com/api/dev/train_target";
+    }
+
+    public static String getTrainResultUrl() {
+        return "https://nxmup.com/api/dev/train_result";
+    }
 }

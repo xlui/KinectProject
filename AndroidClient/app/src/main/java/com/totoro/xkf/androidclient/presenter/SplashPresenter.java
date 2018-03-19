@@ -7,6 +7,7 @@ import android.view.animation.Animation;
 
 import com.totoro.xkf.androidclient.base.BasePresenter;
 import com.totoro.xkf.androidclient.util.HttpUtils;
+import com.totoro.xkf.androidclient.util.LogUtils;
 import com.totoro.xkf.androidclient.util.PreferenceUtils;
 import com.totoro.xkf.androidclient.view.LoginActivity;
 import com.totoro.xkf.androidclient.view.SplashActivity;
@@ -45,6 +46,7 @@ public class SplashPresenter extends BasePresenter<SplashActivity> implements An
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     String json = response.body().string();
+                    LogUtils.show(json);
                     JSONObject jsonObject = null;
                     try {
                         jsonObject = new JSONObject(json);
