@@ -113,18 +113,22 @@ def train_target():
 def train_result():
     train = g.current_user.train.order_by(Train.id.desc()).first()
     if request.method == 'POST':
+        from datetime import datetime
+
         current_app.logger.info('set train result')
         if not request.json or 'result' not in request.json:
             abort(400)
         train.result = request.json.get('result')
+        train.date = datetime.now().strftime('%Y-%m-%d %H:%M')
         db.session.add(train)
         db.session.commit()
+    ret = train.get_json()  # type: dict
     if train.result != 0:
         if int(train.target) > int(train.result):
             desc = '没有完成设置的目标，请继续努力！'
         else:
             desc = '已经完成训练目标，加油！'
-        return jsonify({'target': train.target, 'result': train.result, 'desc': desc})
+        ret['desc'] = desc
     else:
-        return jsonify({'target': train.target, 'result': 'Have no data for this target', 'desc': 'Have no data for this target'})
-
+        ret['desc'] = '当前没有结果供显示！'
+    return jsonify(ret)
