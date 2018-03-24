@@ -95,7 +95,7 @@ namespace KinectHandTracking
             encoder.Save(fileStream);
             fileStream.Close();
 
-            Send_Img("D:/屏幕截图/" + JpegImage);
+            //Send_Img("D:/屏幕截图/" + JpegImage);
         }
         #region Event handlers
 
@@ -308,7 +308,7 @@ namespace KinectHandTracking
                                 if (!AllHandState.Equals(lastHandState) && 1 == flag)
                                 {
                                     lastHandState = AllHandState;
-                                    Send_State(AllHandState);
+                                    //Send_State(AllHandState);
                                 }
                             }
                         }
@@ -328,7 +328,7 @@ namespace KinectHandTracking
                         encoder.Frames.Add(BitmapFrame.Create((BitmapSource)frame.ToBitmap()));
                         encoder.Save(ms);
                         Bitmap bp = new Bitmap(ms);
-                        BmpToJpg(bp);
+                        //BmpToJpg(bp);
                          
                         ms.Close();
                     }
