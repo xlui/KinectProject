@@ -142,7 +142,7 @@ public class StatePresenter extends BasePresenter<StateActivity>
                     if (isDanger) {
                         LogUtils.show("111");
                         checkDanger = "危险";
-                        //vibrator.vibrate(2000);
+                        vibrator.vibrate(2000);
                         NotificationUtils.createDangerNotification(mView, "检测到危险手势！！！",
                                 "检测到危险手势" + info);
                     }
