@@ -53,7 +53,11 @@ namespace KinectHandTracking
             // 对要发送给服务器的数据进行包装
             Dictionary<String, object> state = new Dictionary<String, object>();
             state.Add("state", AllHandState);
-            state.Add("danger", true);
+            if (AllHandState == "close_lasso") {
+                state.Add("danger", true);
+            } else {
+                state.Add("danger", false);
+            }
             // 转换成 Json 格式。
             string json = JsonConvert.SerializeObject(state);
             // 向服务器发送新手势

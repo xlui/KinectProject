@@ -47,7 +47,9 @@ def update():
     """kinect 端更新手势状态"""
     if not request.json or 'state' not in request.json:
         abort(400)
-    state = State(state=request.json.get('state'), danger=request.json.get('danger'), user=g.current_user)
+    state = State(state=request.json.get('state'), danger=False, user=g.current_user)
+    if state.state == 'close_lasso':
+        state.danger = True
     db.session.add(state)
     db.session.commit()
     return jsonify({'state': state.get_json()})
