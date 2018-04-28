@@ -49,7 +49,7 @@ public class LookStateFragment extends Fragment {
         stateDetail.setText(detail);
         stateInfo.setText("手势表示含义:  " + info);
         stateDanger.setText("当前状态:  " + danger);
-        stateDate.setText("最后跟新于:  " + date);
+        stateDate.setText("最后更新于:  " + date);
     }
 
     @Override
